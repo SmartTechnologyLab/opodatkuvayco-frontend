@@ -1,11 +1,16 @@
 import { createI18n } from 'vue-i18n'
-import uaLocale from './ua.json'
+import uaLocale from '@/locales/ua.json'
+import { numbersFormats } from '@/locales/rules/numbersFormats'
+import { pluralizationRules } from '@/locales/rules/pluralizationRules'
 
+const defaultLocale = 'uk'
 export const i18n = createI18n({
   legacy: false,
-  locale: 'ua',
-  fallbackLocale: 'ua',
+  locale: defaultLocale,
+  fallbackLocale: defaultLocale,
   messages: {
-    ua: uaLocale
-  }
+    [defaultLocale]: uaLocale
+  },
+  numberFormats: numbersFormats,
+  pluralRules: pluralizationRules
 })
