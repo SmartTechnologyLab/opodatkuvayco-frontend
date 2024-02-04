@@ -1,14 +1,12 @@
-<script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import { ref } from 'vue'
-
-const { t } = useI18n()
-
-const msg = ref(t('Hello'))
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <div>{{ msg }}</div>
+  <div>{{ $t('main.hello') }}</div>
+  <div>{{ $t('main.dollar', { n: 2 }) }}</div>
+  <div>{{ $t('main.dollar', { n: 0 }) }}</div>
+  <div>{{ $t('main.dollar', { n: 100 }) }}</div>
+  <p>{{ $d(new Date(), 'short', 'uk') }}</p>
+  <p>{{ $d(new Date(), 'long', 'uk') }}</p>
 </template>
 
 <style scoped></style>
