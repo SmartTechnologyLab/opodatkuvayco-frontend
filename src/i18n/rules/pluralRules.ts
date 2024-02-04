@@ -1,5 +1,5 @@
-export const pluralizationRules = {
-  ua: function (choice: number, choicesLength: number) {
+export const pluralRules = {
+  uk: function (choice: number, choicesLength: number) {
     if (choice === 0) {
       return 0
     }

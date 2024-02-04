@@ -1,7 +1,7 @@
 import { createI18n } from 'vue-i18n'
 import uk from '@/i18n/locales/uk.json'
 import { numbersFormats } from '@/i18n/rules/numbersFormats'
-import { pluralizationRules } from '@/i18n/rules/pluralizationRules'
+import { pluralRules } from '@/i18n/rules/pluralRules'
 import { datetimeFormats } from '@/i18n/rules/datetimeFormats'
 
 const defaultLocale = import.meta.env.VITE_DEFAULT_LOCALE
@@ -16,8 +16,6 @@ export const i18n = createI18n({
     uk
   },
   numbersFormats,
-  pluralRules: pluralizationRules,
+  pluralRules,
   datetimeFormats
 })
-
-i18n.global.locale.value = defaultLocale
