@@ -1,6 +1,4 @@
-import type { I18nOptions } from 'vue-i18n'
-
-export const datetimeFormats: I18nOptions['datetimeFormats'] = {
+export const datetimeFormats = {
   uk: {
     short: {
       year: 'numeric',
