@@ -1,4 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useTypedI18n } from '@/customHooks/useTypedI18n'
+
+const { $t, $d } = useTypedI18n()
+</script>
 
 <template>
   <div>{{ $t('main.hello') }}</div>
