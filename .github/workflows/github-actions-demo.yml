@@ -26,3 +26,11 @@ jobs:
         run: npm run build-storybook
       - name: linter
         run: npm run lint
+      - name: Generate Changelog
+        run: |
+          npm install -g conventional-changelog-cli
+          conventional-changelog -p vue -i CHANGELOG.md -s
+          if [ -n "$(git status --porcelain CHANGELOG.md)" ]; then
+            git add CHANGELOG.md
+            git commit -m "chore: update changelog"
+          fi
