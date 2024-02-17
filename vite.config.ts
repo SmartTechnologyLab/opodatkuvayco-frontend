@@ -8,7 +8,10 @@ import checker from 'vite-plugin-checker'
 export default defineConfig({
   plugins: [
     vue(),
-    eslint(),
+    eslint({
+      emitWarning: true,
+      exclude: [/virtual:/, /node_modules/, /sb-preview/],
+    }),
     checker({ typescript: true })
   ],
   resolve: {
