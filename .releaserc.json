@@ -1,5 +1,5 @@
 {
-  "branches": ["main", "test-ci", "fork-test-ci"],
+  "branches": ["main"],
   "plugins": [
     ["@semantic-release/npm"],
     [

@@ -2,7 +2,8 @@ name: PullRequest
 on:
   pull_request:
     branches:
-      - test-ci
+      - development
+      - main
 
 permissions:
   contents: read # for checkout
