@@ -1,4 +1,6 @@
 import type { Preview } from '@storybook/vue3'
+import { setup } from '@storybook/vue3'
+import generalConfig from '../src/config'
 
 const preview: Preview = {
   parameters: {
@@ -11,5 +13,9 @@ const preview: Preview = {
     }
   }
 }
+
+setup((app) => {
+  generalConfig(app)
+})
 
 export default preview
