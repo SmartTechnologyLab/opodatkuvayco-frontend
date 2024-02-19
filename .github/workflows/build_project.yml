@@ -1,0 +1,22 @@
+name: Build Project
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  build_project:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+      - name: Install dependencies
+        run: npm ci
+      - name: Build Project
+        run: npm run build
+    outputs:
+      dist-path: ./dist
