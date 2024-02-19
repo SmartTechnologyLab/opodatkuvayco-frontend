@@ -29,7 +29,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-  build_storybook:
+  build_and_deploy_storybook:
     needs: setup
     runs-on: ubuntu-latest
     steps:
@@ -46,15 +46,6 @@ jobs:
         run: npm ci
       - name: Build Storybook
         run: npm run build-storybook
-    outputs:
-      storybook-path: ./storybook-static
-
-  deploy_storybook:
-    needs: build_storybook
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
       - name: rsync deploy storybook
         uses: burnett01/rsync-deployments@5.2.1
         with:
@@ -65,7 +56,7 @@ jobs:
           remote_key: ${{ secrets.DEV_REMOTE_KEY }}
           remote_path: ${{ secrets.DEV_STORYBOOK_PATH }}
 
-  build_project:
+  build_and_deploy_project:
     needs: setup
     runs-on: ubuntu-latest
     steps:
@@ -82,15 +73,6 @@ jobs:
         run: npm ci
       - name: Build Project
         run: npm run build
-    outputs:
-      dist-path: ./dist
-
-  deploy_project:
-    needs: build_project
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
       - name: rsync deploy project
         uses: burnett01/rsync-deployments@5.2.1
         with:
