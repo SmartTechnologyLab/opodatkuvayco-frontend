@@ -1,0 +1,100 @@
+export enum FormatType {
+  Date,
+  Number,
+  CurrencyUAH,
+  CurrencyUSD,
+  Percent
+}
+export const resultHeaders: { header: string; field: string; type?: FormatType }[] = [
+  {
+    header: 'Тікер',
+    field: 'ticker'
+  },
+  {
+    header: 'Дата покупки',
+    field: 'purchase.date',
+    type: FormatType.Date
+  },
+  {
+    header: 'Кількість',
+    field: 'quantity',
+    type: FormatType.Number
+  },
+  {
+    header: 'Ціна ($)',
+    field: 'purchase.price',
+    type: FormatType.CurrencyUSD
+  },
+  {
+    header: 'Сума ($)',
+    field: 'purchase.sum',
+    type: FormatType.CurrencyUSD
+  },
+  {
+    header: 'Комісія ($)',
+    field: 'purchase.commission',
+    type: FormatType.CurrencyUSD
+  },
+  {
+    header: '$',
+    field: 'purchase.rate',
+    type: FormatType.CurrencyUAH
+  },
+  {
+    header: 'Покупка (грн)',
+    field: 'purchase.uah',
+    type: FormatType.CurrencyUAH
+  },
+  {
+    header: 'Дата продажу',
+    field: 'sale.date',
+    type: FormatType.Date
+  },
+  {
+    header: 'Ціна ($)',
+    field: 'sale.price',
+    type: FormatType.CurrencyUSD
+  },
+  {
+    header: 'Сума ($)',
+    field: 'sale.sum',
+    type: FormatType.CurrencyUSD
+  },
+  {
+    header: 'Комісія ($)',
+    field: 'sale.commission',
+    type: FormatType.CurrencyUSD
+  },
+  {
+    header: '$',
+    field: 'sale.rate',
+    type: FormatType.CurrencyUAH
+  },
+  {
+    header: 'Продаж (грн)',
+    field: 'sale.uah',
+    type: FormatType.CurrencyUAH
+  },
+  {
+    header: 'Всього',
+    field: 'total',
+    type: FormatType.CurrencyUAH
+  },
+  {
+    header: '%',
+    field: 'percent',
+    type: FormatType.Percent
+  }
+  // {
+  //   header: 'Результат',
+  //   field: 'result'
+  // },
+  // {
+  //   header: 'ПДФО',
+  //   field: 'pit.'
+  // },
+  // {
+  //   header: 'ВЗ',
+  //   field: 'mct'
+  // }
+]
