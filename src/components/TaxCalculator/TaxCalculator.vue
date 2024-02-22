@@ -40,9 +40,9 @@ const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement
   const files = target.files
   if (files) {
-    for (let i = 0; i < files.length; i++) {
-      selectedFiles.value.push(files[i])
-    }
+    Array.from(files).forEach((file) => {
+      selectedFiles.value.push(file)
+    })
   }
 }
 
@@ -115,7 +115,7 @@ const handleDeleteFile = (file: File) => {
 @import '@/assets/utils/variables.scss';
 
 .calc {
-  padding: 5%;
+  padding: 2em;
   background: $calc-background;
   border-radius: 10px;
   display: flex;
