@@ -14,7 +14,7 @@ defineEmits(['file-selected'])
 </template>
 
 <style lang="scss">
-@import '@/assets/utils/variables.scss';
+$calc-input-background: #384648;
 
 .file-input {
   outline: none;

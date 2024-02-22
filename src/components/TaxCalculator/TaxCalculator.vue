@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import CustomButton from '@/components/CustomButton/CustomButton.vue'
 import FileInput from '@/components/FileInput/FileInput.vue'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -40,9 +41,7 @@ const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement
   const files = target.files
   if (files) {
-    Array.from(files).forEach((file) => {
-      selectedFiles.value.push(file)
-    })
+    selectedFiles.value.push(...files)
   }
 }
 
@@ -70,7 +69,7 @@ const handleDeleteFile = (file: File) => {
             {{ file.name.slice(0, 12) + '...' }}
           </span>
 
-          <button @click="handleDeleteFile(file)" class="calc__file-delete">X</button>
+          <CustomButton @click="handleDeleteFile(file)" :icon="'pi pi-times'" />
         </li>
       </ul>
       <div class="calc__toggle" />
@@ -112,15 +111,25 @@ const handleDeleteFile = (file: File) => {
 </template>
 
 <style scoped lang="scss">
-@import '@/assets/utils/variables.scss';
+$calc-background: $secondary-background;
+
+$calc-text-color: $secondary-text-color;
+
+$calc-input-background: #384648;
+
+$toggle-background-main: #1c2022;
+
+$toggle-background-secondary: #6691a1;
+
+$equal-background: #8cd0d0;
 
 .calc {
-  padding: 2em;
+  padding: 1rem;
   background: $calc-background;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  gap: 1em;
+  gap: 1rem;
   width: 60%;
   max-width: 720px;
 
@@ -141,7 +150,7 @@ const handleDeleteFile = (file: File) => {
     border: 1px solid #628c9c;
     border-radius: 18px;
     width: 20%;
-    background: linear-gradient(to right, #1c2022 70%, #6691a1 70%);
+    background: linear-gradient(to right, $toggle-background-main 70%, $toggle-background-secondary 70%);
   }
 
   &__example-title {
@@ -151,17 +160,18 @@ const handleDeleteFile = (file: File) => {
   &__file {
     display: flex;
     align-items: center;
-    gap: 1em;
+    gap: 0.3rem;
   }
 
   &__files-list {
     display: flex;
-    flex-direction: column;
-    gap: 1em;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
   }
 
   &__file-delete {
-    background: $turquoise-color;
+    background: $equal-background;
     height: 14px;
     width: 14px;
   }
@@ -203,7 +213,7 @@ const handleDeleteFile = (file: File) => {
       height: 100%;
 
       &:nth-child(2) {
-        background: $turquoise-color;
+        background: $equal-background;
         color: $main-text-color;
       }
     }
