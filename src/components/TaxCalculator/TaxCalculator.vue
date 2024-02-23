@@ -39,7 +39,7 @@ const calculate = () => {
 
 const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement
-  const files = target.files
+  const files = target?.files
   if (files) {
     selectedFiles.value.push(...files)
   }
@@ -66,10 +66,10 @@ const handleDeleteFile = (file: File) => {
       <ul v-else class="calc__files-list">
         <li class="calc__file" v-for="file in selectedFiles" :key="file.lastModified">
           <span class="calc__file-name">
-            {{ file.name.slice(0, 12) + '...' }}
+            {{ file.name?.slice(0, 12) + '...' }}
           </span>
 
-          <CustomButton @click="handleDeleteFile(file)" :icon="'pi pi-times'" />
+          <CustomButton @click="handleDeleteFile(file)" />
         </li>
       </ul>
       <div class="calc__toggle" />

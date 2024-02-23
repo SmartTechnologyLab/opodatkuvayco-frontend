@@ -1,13 +1,31 @@
 <script setup lang="ts">
 import Button from 'primevue/button'
+import { severities } from '@/components/CustomButton/utils/assets'
 
-const props = defineProps({
+const { icon, severity, label, rounded, outlined } = defineProps({
   icon: {
     type: String,
-    required: true
+    required: false
   },
   severity: {
     type: String,
+    required: false,
+    default: severities.help
+  },
+  label: {
+    type: String,
+    required: false
+  },
+  rounded: {
+    type: Boolean,
+    required: false
+  },
+  outlined: {
+    type: Boolean,
+    required: false
+  },
+  raised: {
+    type: Boolean,
     required: false
   }
 })
@@ -16,7 +34,5 @@ defineEmits(['click-button'])
 </script>
 
 <template>
-  <Button :icon="props.icon" :severity="props.severity" />
+  <Button :icon="icon" :severity="severity" :rounded="rounded" :label="label" :outlined="outlined" :raised="raised" />
 </template>
-
-<style scoped lang="scss"></style>
