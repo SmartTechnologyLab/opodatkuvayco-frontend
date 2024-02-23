@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import Button from 'primevue/button'
-import { severities } from '@/components/CustomButton/utils/assets'
+import { icons, severities } from '@/components/CustomButton/utils/assets'
 
 const { icon, severity, label, rounded, outlined } = defineProps({
   icon: {
     type: String,
-    required: false
+    required: false,
+    default: icons.cross
   },
   severity: {
     type: String,
     required: false,
-    default: severities.help
+    default: severities.secondary
   },
   label: {
     type: String,
