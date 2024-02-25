@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import CustomButton from '@/components/CustomButton/CustomButton.vue'
 import FileInput from '@/components/FileInput/FileInput.vue'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import UIButton from '@/components/UIButton/UIButton.vue'
+import { Icons, Severities } from '@/components/UIButton/constants'
 
 const selectedFiles = ref<File[]>([])
 const numbers = ref<Array<number | string>>([1, 2, 3, 4, 5, 6, 7, 8, 9, '+/-', 0, '.'])
@@ -69,7 +70,7 @@ const handleDeleteFile = (file: File) => {
             {{ file.name?.slice(0, 12) + '...' }}
           </span>
 
-          <CustomButton @click="handleDeleteFile(file)" />
+          <UIButton :icon="Icons.CROSS" @click="handleDeleteFile(file)" />
         </li>
       </ul>
       <div class="calc__toggle" />

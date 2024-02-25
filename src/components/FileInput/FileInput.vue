@@ -13,7 +13,7 @@ defineEmits(['file-selected'])
   </label>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 $calc-input-background: #384648;
 
 .file-input {
