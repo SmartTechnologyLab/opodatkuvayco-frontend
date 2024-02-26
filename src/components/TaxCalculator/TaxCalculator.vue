@@ -3,7 +3,7 @@ import FileInput from '@/components/FileInput/FileInput.vue'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import UIButton from '@/components/UIButton/UIButton.vue'
-import { Icons, Severities } from '@/components/UIButton/constants'
+import { Icons } from '@/components/UIButton/constants'
 
 const selectedFiles = ref<File[]>([])
 const numbers = ref<Array<number | string>>([1, 2, 3, 4, 5, 6, 7, 8, 9, '+/-', 0, '.'])
