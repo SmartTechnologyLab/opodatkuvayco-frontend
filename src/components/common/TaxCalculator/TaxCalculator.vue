@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import FileInput from '@/components/FileInput/FileInput.vue'
+import FileInput from '@/components/common/FileInput/FileInput.vue'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import UIButton from '@/components/UIButton/UIButton.vue'

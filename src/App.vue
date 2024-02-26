@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import HelloWorld from '@/components/HelloWorld.vue'
-import TaxCalculatorVue from './components/TaxCalculator/TaxCalculator.vue'
+import TaxCalculatorVue from '@/components/common/TaxCalculator/TaxCalculator.vue'
 </script>
 
 <template>
