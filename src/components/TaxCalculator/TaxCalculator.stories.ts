@@ -1,11 +1,12 @@
 import TaxCalculator from '@/components/TaxCalculator/TaxCalculator.vue'
+import type { Meta, StoryFn } from '@storybook/vue3'
 
 export default {
   title: 'Components/TaxCalculator',
   component: TaxCalculator
-}
+} as Meta<typeof TaxCalculator>
 
-const Template = () => ({
+const Template: StoryFn<typeof TaxCalculator> = () => ({
   components: { TaxCalculator },
   template: '<TaxCalculator />'
 })
