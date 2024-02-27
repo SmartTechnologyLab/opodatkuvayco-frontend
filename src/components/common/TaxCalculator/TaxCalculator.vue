@@ -49,11 +49,37 @@ const handleFileChange = (event: Event) => {
 const handleDeleteFile = (file: File) => {
   selectedFiles.value = selectedFiles.value.filter((selectedFile) => selectedFile !== file)
 }
+
+const isValidInput = (value: string) => {
+  const chars = '1234567890+-'
+
+  for (const char of value) {
+    if (!chars.includes(char)) {
+      return false
+    }
+  }
+
+  return true
+}
+
+const handleInput = (event: Event) => {
+  const inputValue = (event.target as HTMLInputElement).value
+
+  if (!isValidInput(inputValue)) {
+    result.value = result.value.slice(0, -1)
+  }
+}
 </script>
 
 <template>
   <div class="calc">
-    <input v-if="result.length || isCalculating" type="text" class="calc__result" v-model="result" />
+    <input
+      v-if="result.length || isCalculating"
+      type="text"
+      class="calc__result"
+      v-model="result"
+      @input="handleInput"
+    />
 
     <template v-else>
       <FileInput @change="handleFileChange" />
@@ -187,8 +213,9 @@ $equal-background: #8cd0d0;
     border: none;
     height: 60px;
     border-radius: 10px;
-    padding-left: 10%;
+    padding-right: 10%;
     font-size: 20px;
+    text-align: right;
   }
 
   &__numbers-grid {
