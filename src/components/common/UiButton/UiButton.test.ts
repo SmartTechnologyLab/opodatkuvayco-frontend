@@ -1,13 +1,13 @@
 import { VueWrapper, shallowMount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import UIButton from './UIButton.vue'
+import UiButton from './UiButton.vue'
 import { Icons, Severities } from './constants'
 
 describe('UIButton', () => {
   let wrapper: VueWrapper
 
   beforeEach(() => {
-    wrapper = shallowMount(UIButton)
+    wrapper = shallowMount(UiButton)
   })
 
   afterEach(() => {
@@ -27,7 +27,7 @@ describe('UIButton', () => {
       raised: true
     }
 
-    const wrapper = shallowMount(UIButton, {
+    const wrapper = shallowMount(UiButton, {
       props: buttonProps
     })
 

@@ -1,20 +1,21 @@
 <script setup lang="ts">
 import Button from 'primevue/button'
 import { Icons, Severities } from './constants'
+import { useAttrs } from 'vue'
 
-defineProps<{
+const attrs = useAttrs()
+
+const props = defineProps<{
   icon?: Icons
   severity?: Severities
   rounded?: boolean
   outlined?: boolean
   raised?: boolean
 }>()
-
-defineEmits(['click'])
 </script>
 
 <template>
-  <Button v-bind="$props" @click="$emit('click')">
-    <slot></slot>
+  <Button v-bind="{ ...props, ...attrs }">
+    <slot />
   </Button>
 </template>

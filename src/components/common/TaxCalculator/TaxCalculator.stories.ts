@@ -1,4 +1,4 @@
-import TaxCalculator from '@/components/common/TaxCalculator/TaxCalculator.vue'
+import TaxCalculator from './TaxCalculator.vue'
 import type { Meta, StoryFn } from '@storybook/vue3'
 
 export default {
