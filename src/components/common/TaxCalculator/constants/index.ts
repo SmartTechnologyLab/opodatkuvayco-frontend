@@ -1,1 +1,1 @@
-export const validChars = '0123456789+-/*'
+export const validChars = '0123456789+-/*.'
