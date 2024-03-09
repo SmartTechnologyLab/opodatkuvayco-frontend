@@ -96,33 +96,33 @@ const handleCheckInput = (value: string) => {
 
     <div class="calc__container">
       <div class="calc__numbers-grid">
-        <button v-for="num in numbers" :key="num" class="calc__numbers" @click="addToResult(num)">
+        <UIButton v-for="num in numbers" :key="num" class="calc__numbers" @click="addToResult(num)">
           {{ num }}
-        </button>
+        </UIButton>
       </div>
 
       <div class="calc__wrapper">
         <div class="calc__operations-grid">
-          <button
+          <UIButton
             v-for="operation in operations"
             @click="addToResult(operation)"
             :key="operation"
             class="calc__numbers"
           >
             {{ operation }}
-          </button>
+          </UIButton>
         </div>
 
         <div class="calc__submit-grid">
-          <button class="calc__numbers calc__numbers--equal" @click="reset">C</button>
+          <UIButton class="calc__numbers calc__numbers--equal" @click="reset">C</UIButton>
 
-          <button
+          <UIButton
             class="calc__numbers calc__numbers--equal"
             @click="calculate"
             :type="selectedFiles.length && !result.length ? 'submit' : 'button'"
           >
             =
-          </button>
+          </UIButton>
         </div>
       </div>
     </div>
@@ -149,7 +149,7 @@ $equal-background: #8cd0d0;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  width: 60%;
+  width: 80%;
   max-width: 720px;
 
   &__container {
@@ -215,7 +215,7 @@ $equal-background: #8cd0d0;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 8% 10%;
     width: 100%;
-    height: 15em;
+    height: 15rem;
   }
 
   &__numbers {
@@ -226,7 +226,10 @@ $equal-background: #8cd0d0;
     border: none;
     cursor: pointer;
     width: 100%;
-    height: 100%;
+    height: 2.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &--equal {
       width: 43%;
