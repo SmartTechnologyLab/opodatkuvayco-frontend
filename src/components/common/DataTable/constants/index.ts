@@ -1,11 +1,5 @@
-export enum FormatType {
-  Date,
-  Number,
-  CurrencyUAH,
-  CurrencyUSD,
-  Percent
-}
-export const resultHeaders: { header: string; field: string; type?: FormatType }[] = [
+import { FormatType, type TableHeaders } from '../types'
+export const resultHeaders: TableHeaders[] = [
   {
     header: 'Тікер',
     field: 'ticker'
@@ -85,16 +79,4 @@ export const resultHeaders: { header: string; field: string; type?: FormatType }
     field: 'percent',
     type: FormatType.Percent
   }
-  // {
-  //   header: 'Результат',
-  //   field: 'result'
-  // },
-  // {
-  //   header: 'ПДФО',
-  //   field: 'pit.'
-  // },
-  // {
-  //   header: 'ВЗ',
-  //   field: 'mct'
-  // }
 ]
