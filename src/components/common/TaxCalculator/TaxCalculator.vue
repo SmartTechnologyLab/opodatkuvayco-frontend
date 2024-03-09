@@ -4,6 +4,7 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import UIButton from '@/components/common/UiButton/UiButton.vue'
 import { Icons } from '@/components/common/UiButton/constants'
+import { validChars } from './constants'
 
 const selectedFiles = ref<File[]>([])
 const numbers = ref<Array<number | string>>([1, 2, 3, 4, 5, 6, 7, 8, 9, '+/-', 0, '.'])
@@ -50,24 +51,15 @@ const handleDeleteFile = (file: File) => {
   selectedFiles.value = selectedFiles.value.filter((selectedFile) => selectedFile !== file)
 }
 
-const isValidInput = (value: string) => {
-  const chars = '1234567890+-'
+const checkIsValid = (value: string) => validChars.includes(value)
 
-  for (const char of value) {
-    if (!chars.includes(char)) {
-      return false
-    }
-  }
+const handleCheckInput = (value: string) => {
+  const arrayChars = value
+    .split('')
+    .filter((char) => checkIsValid(char))
+    .join('')
 
-  return true
-}
-
-const handleInput = (event: Event) => {
-  const inputValue = (event.target as HTMLInputElement).value
-
-  if (!isValidInput(inputValue)) {
-    result.value = result.value.slice(0, -1)
-  }
+  result.value = arrayChars
 }
 </script>
 
@@ -78,7 +70,7 @@ const handleInput = (event: Event) => {
       type="text"
       class="calc__result"
       v-model="result"
-      @input="handleInput"
+      @input="handleCheckInput(result)"
     />
 
     <template v-else>

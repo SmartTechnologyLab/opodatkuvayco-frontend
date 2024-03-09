@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Button from 'primevue/button'
-import { Icons, Severities } from './constants'
 import { useAttrs } from 'vue'
+import type { Icons, Severities } from './constants'
 
 const attrs = useAttrs()
 
