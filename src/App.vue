@@ -1,16 +1,11 @@
 <script setup lang="ts">
-import HelloWorld from '@/components/HelloWorld.vue'
-import UIInput from './components/common/UIInput/UIInput.vue'
 import { RouterView } from 'vue-router'
+import NavBar from './components/NavBar/NavBar.vue'
 </script>
 
 <template>
-  <div>
-    <HelloWorld />
-
-    <UIInput />
-    <RouterView />
-  </div>
+  <nav-bar />
+  <RouterView />
 </template>
 
 <style scoped></style>

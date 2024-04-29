@@ -1,7 +1,17 @@
 <script setup lang="ts">
-import TaxCalculatorVue from '@/components/common/TaxCalculator/TaxCalculator.vue'
+import TaxCalculator from '@/components/common/TaxCalculator/TaxCalculator.vue'
 </script>
 
 <template>
-  <TaxCalculatorVue />
+  <main class="main">
+    <TaxCalculator />
+  </main>
 </template>
+
+<style scoped lang="scss">
+.main {
+  display: flex;
+  justify-content: center;
+  margin-inline: 2rem;
+}
+</style>
