@@ -1,10 +1,12 @@
-import AuthPage from '@/pages/AuthPage.vue'
-import HomePage from '@/pages/HomePage.vue'
-import PolicyPage from '@/pages/PolicyPage.vue'
+import { defineAsyncComponent } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
 
+const AsyncPolicyPage = defineAsyncComponent(() => import('@/pages/PolicyPage.vue'))
+const AsyncAuthPage = defineAsyncComponent(() => import('@/pages/AuthPage.vue'))
+const AsyncHomePage = defineAsyncComponent(() => import('@/pages/HomePage.vue'))
+
 export const routes: readonly RouteRecordRaw[] = [
-  { path: '/', component: HomePage },
-  { path: '/register', component: AuthPage },
-  { path: '/policy', component: PolicyPage }
+  { path: '/', component: AsyncHomePage },
+  { path: '/register', component: AsyncAuthPage },
+  { path: '/policy', component: AsyncPolicyPage }
 ]

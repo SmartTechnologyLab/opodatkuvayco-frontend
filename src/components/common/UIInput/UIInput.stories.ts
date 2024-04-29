@@ -1,12 +1,12 @@
 import type { Meta, StoryFn } from '@storybook/vue3'
-import UIInput from './UIInput.vue'
+import UiInput from './UiInput.vue'
 
 export default {
-  component: UIInput
-} as Meta<typeof UIInput>
+  component: UiInput
+} as Meta<typeof UiInput>
 
-const Template: StoryFn<typeof UIInput> = () => ({
-  components: { UIInput }
+const Template: StoryFn<typeof UiInput> = () => ({
+  components: { UiInput }
 })
 
 export const Default = Template.bind({})

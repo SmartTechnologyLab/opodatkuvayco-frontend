@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
+import UiImage from '../common/UiImage/UiImage.vue'
 import logo from '/fake-logo.png'
+import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 </script>
 
 <template>
   <nav class="nav-bar">
-    <img :src="logo" :alt="$t('navBar.logo-alt')" class="nav-bar__logo" />
+    <UiImage :src="logo" :alt="$t('navBar.logo-alt')" class="nav-bar__logo" />
 
     <h1 class="nav-bar__title">
       {{ t('navBar.companyName') }}
