@@ -6,5 +6,5 @@ const attrs = useAttrs()
 </script>
 
 <template>
-  <Password v-bind="{ ...attrs }" class="i" />
+  <Password v-bind="{ ...attrs }" />
 </template>

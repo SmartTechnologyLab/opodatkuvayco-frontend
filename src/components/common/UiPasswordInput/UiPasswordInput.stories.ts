@@ -1,12 +1,13 @@
 import type { Meta, StoryFn } from '@storybook/vue3'
-import UiTextInput from './UiTextInput.vue'
+import UiPasswordInput from './UiPasswordInput.vue'
 import FloatLabel from 'primevue/floatlabel'
 
 export default {
-  component: UiTextInput,
+  component: UiPasswordInput,
   args: {
     invalid: false,
     disabled: false,
+    toggleMask: false,
     label: 'Password',
     variant: 'default',
     placeholder: 'Password'
@@ -18,30 +19,32 @@ export default {
       description: 'Choose the variant of filled input'
     }
   }
-} as Meta<typeof UiTextInput>
+} as Meta<typeof UiPasswordInput>
 
-const Template: StoryFn<typeof UiTextInput> = (args) => ({
-  components: { UiTextInput },
+const Template: StoryFn<typeof UiPasswordInput> = (args) => ({
+  components: { UiPasswordInput },
   setup() {
     return { args }
   },
   template: `
-    <UiTextInput v-bind="args" />
+    <div style="display: flex; justify-content: center;">
+      <UiPasswordInput v-bind="args" />
+    </div>
   `
 })
 
 export const Default = Template.bind({})
 
-const InputWithLabel: StoryFn<typeof UiTextInput> = (args) => ({
-  components: { UiTextInput, FloatLabel },
+const InputWithLabel: StoryFn<typeof UiPasswordInput> = (args) => ({
+  components: { UiPasswordInput, FloatLabel },
   setup() {
     return { args }
   },
   template: `
-    <div>
+    <div style="display: flex; justify-content: center;">
       <FloatLabel>
-        <UiTextInput id="name" v-bind="args" placeholder='' />
-        <label for="name">{{ args.label }}</label>
+        <UiPasswordInput id="test" />
+        <label for="test">{{args.label}}</label>
       </FloatLabel>
     </div>
   `
