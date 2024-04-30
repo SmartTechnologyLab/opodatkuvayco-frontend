@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import UiImage from '../common/UiImage/UiImage.vue'
+import UiImage from '@/components/common/UiImage/UiImage.vue'
 import logo from '/fake-logo.png'
 import { useI18n } from 'vue-i18n'
 

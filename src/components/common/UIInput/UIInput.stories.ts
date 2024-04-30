@@ -1,5 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/vue3'
-import UiInput from './UIInput.vue'
+import UiInput from './UiInput.vue'
 
 export default {
   component: UiInput
