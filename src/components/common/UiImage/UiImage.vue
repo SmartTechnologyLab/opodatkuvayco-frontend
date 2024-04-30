@@ -2,8 +2,8 @@
 import { useAttrs } from 'vue'
 
 const props = defineProps<{
-  src: string
-  alt: string
+  src?: string
+  alt?: string
 }>()
 
 const attrs = useAttrs()
