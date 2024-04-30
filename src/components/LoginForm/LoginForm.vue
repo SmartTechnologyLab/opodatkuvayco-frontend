@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import UiTextInput from '@/components/common/UiTextInput/UiTextInput.vue'
+import UiTextInput from '@/components/common/UiInput/UiInput.vue'
 import UiButton from '@/components/common/UiButton/UiButton.vue'
 import { useI18n } from 'vue-i18n'
 

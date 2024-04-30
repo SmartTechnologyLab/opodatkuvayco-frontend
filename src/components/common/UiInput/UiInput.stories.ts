@@ -1,5 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/vue3'
-import UiTextInput from './UiTextInput.vue'
+import UiTextInput from './UiInput.vue'
 import FloatLabel from 'primevue/floatlabel'
 
 export default {
@@ -9,13 +9,18 @@ export default {
     disabled: false,
     label: 'Password',
     variant: 'default',
-    placeholder: 'Password'
+    placeholder: 'Username',
+    type: 'text'
   },
   argTypes: {
     variant: {
       control: 'radio',
       options: ['default', 'filled'],
       description: 'Choose the variant of filled input'
+    },
+    type: {
+      control: 'radio',
+      options: ['text', 'password']
     }
   }
 } as Meta<typeof UiTextInput>
@@ -26,7 +31,10 @@ const Template: StoryFn<typeof UiTextInput> = (args) => ({
     return { args }
   },
   template: `
-    <UiTextInput v-bind="args" />
+    <UiTextInput 
+      v-bind="args" 
+      :placeholder="args.type === 'text' ? 'Username' : 'Password'"
+    />
   `
 })
 

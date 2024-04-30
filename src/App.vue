@@ -1,11 +1,16 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
+import { RouterView, useRoute } from 'vue-router'
 import NavBar from '@/components/NavBar/NavBar.vue'
-import { Routes } from '@/router/routes'
+import { computed } from 'vue'
+import { Routes } from './router/common'
+
+const route = useRoute()
+
+const showNavBar = computed(() => (route.path === Routes.REGISTER_PAGE ? false : true))
 </script>
 
 <template>
-  <NavBar v-if="$route.path !== Routes.REGISTER_PAGE" />
+  <NavBar v-if="showNavBar" />
   <RouterView />
 </template>
 
