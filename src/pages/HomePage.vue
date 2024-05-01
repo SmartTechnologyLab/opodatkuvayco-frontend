@@ -26,11 +26,11 @@ const lastWord = splitedTitle.at(-1)
         {{ lastWord }}
       </h2>
 
-      <RouterLink to="/register">
-        <UiButton class="main-page__btn">
-          {{ t('main.register-btn') }}
-        </UiButton>
-      </RouterLink>
+      <!-- <RouterLink to="/register"> -->
+      <UiButton class="main-page__btn" to="/register">
+        {{ t('main.register-btn') }}
+      </UiButton>
+      <!-- </RouterLink> -->
 
       <TaxCalculator />
     </main>
@@ -39,7 +39,7 @@ const lastWord = splitedTitle.at(-1)
   </Suspense>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 $h2-marked-color: #6af6ff;
 $register-btn-color: #8cd0d0;
 
