@@ -1,0 +1,5 @@
+@mixin h1-mixin {
+  color: $main-text-color;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+}
