@@ -6,7 +6,7 @@
       "file-download": "Завантажити файл",
       "file-example": "Приклад файлу"
     },
-    "motto": "Рахувати податки з інвестицій легко! Спробуй",
+    "motto": "<span class='main-page__title--marked'>Рахувати</span> податки з інвестицій <span class='main-page__title--marked'>легко</span>! Спробуй",
     "register-btn": "Зареєструватись"
   },
   "table": {

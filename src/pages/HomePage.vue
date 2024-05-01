@@ -4,27 +4,12 @@ import UiButton from '@/components/common/UiButton/UiButton.vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
-
-const splitedTitle: string[] = t('main.motto').split(' ')
-
-const firstWord = splitedTitle[0]
-const restWords = splitedTitle.slice(1, 4).join(' ')
-const fourthWord = splitedTitle[4]
-const lastWord = splitedTitle.at(-1)
 </script>
 
 <template>
   <Suspense>
     <main class="main-page">
-      <h2 class="main-page__title">
-        <span class="main-page__title--marked">{{ firstWord }}</span>
-        {{ restWords }}
-
-        <span class="main-page__title--marked">{{ fourthWord }}</span>
-
-        <br />
-        {{ lastWord }}
-      </h2>
+      <h2 class="main-page__title" v-html="t('main.motto')"></h2>
 
       <RouterLink to="/register">
         <UiButton class="main-page__btn">
@@ -39,7 +24,7 @@ const lastWord = splitedTitle.at(-1)
   </Suspense>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 $h2-marked-color: #6af6ff;
 $register-btn-color: #8cd0d0;
 
