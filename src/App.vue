@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import HelloWorld from '@/components/HelloWorld.vue'
-import TaxCalculatorVue from '@/components/common/TaxCalculator/TaxCalculator.vue'
+import { RouterView } from 'vue-router'
+import NavBar from './components/NavBar/NavBar.vue'
 </script>
 
 <template>
-  <div>
-    <HelloWorld />
-    <TaxCalculatorVue />
-  </div>
+  <NavBar />
+  <RouterView />
 </template>
 
 <style scoped></style>
