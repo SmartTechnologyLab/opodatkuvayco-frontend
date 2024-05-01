@@ -6,7 +6,8 @@ export default {
 } as Meta<typeof UiInput>
 
 const Template: StoryFn<typeof UiInput> = () => ({
-  components: { UiInput }
+  components: { UiInput },
+  template: '<UiInput />'
 })
 
 export const Default = Template.bind({})
