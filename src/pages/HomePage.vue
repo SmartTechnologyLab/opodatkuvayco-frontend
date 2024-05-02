@@ -26,11 +26,9 @@ const lastWord = splitedTitle.at(-1)
         {{ lastWord }}
       </h2>
 
-      <!-- <RouterLink to="/register"> -->
       <UiButton class="main-page__btn" to="/register">
         {{ t('main.register-btn') }}
       </UiButton>
-      <!-- </RouterLink> -->
 
       <TaxCalculator />
     </main>
