@@ -3,6 +3,7 @@ import UiTextInput from '@/components/common/UiInput/UiInput.vue'
 import UiButton from '@/components/common/UiButton/UiButton.vue'
 import googleIcon from '@/assets/icons/google-icon.svg'
 import { useI18n } from 'vue-i18n'
+import UiImage from '../common/UiImage/UiImage.vue'
 
 const { t } = useI18n()
 </script>
@@ -18,7 +19,7 @@ const { t } = useI18n()
     </UiButton>
 
     <UiButton class="login-form__icon">
-      <img :src="googleIcon" :alt="t('registration.googleIcon')" />
+      <UiImage :src="googleIcon" :alt="t('registration.googleIcon')" />
     </UiButton>
   </form>
 </template>
