@@ -6,7 +6,11 @@
       "file-download": "Завантажити файл",
       "file-example": "Приклад файлу"
     },
-    "motto": "<span class='main-page__title--marked'>Рахувати</span> податки з інвестицій <span class='main-page__title--marked'>легко</span>! Спробуй",
+    "motto": {
+      "count": "Рахувати ",
+      "info": "{action} податки з інвестицій {difficulty}! Спробуй",
+      "easy": "легко"
+    },
     "register-btn": "Зареєструватись"
   },
   "table": {

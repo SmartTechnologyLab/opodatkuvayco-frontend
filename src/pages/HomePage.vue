@@ -9,7 +9,14 @@ const { t } = useI18n()
 <template>
   <Suspense>
     <main class="main-page">
-      <h2 class="main-page__title" v-html="t('main.motto')"></h2>
+      <i18n-t keypath="main.motto.info" class="main-page__title" tag="h2">
+        <template v-slot:action>
+          <span class="main-page__title--marked">{{ t('main.motto.count') }}</span>
+        </template>
+        <template v-slot:difficulty>
+          <span class="main-page__title--marked">{{ t('main.motto.easy') }}</span>
+        </template>
+      </i18n-t>
 
       <RouterLink to="/register">
         <UiButton class="main-page__btn">
@@ -24,7 +31,7 @@ const { t } = useI18n()
   </Suspense>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 $h2-marked-color: #6af6ff;
 $register-btn-color: #8cd0d0;
 
