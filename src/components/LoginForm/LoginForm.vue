@@ -24,7 +24,7 @@ const { t } = useI18n()
   </form>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 .login-form {
   display: flex;
   flex-direction: column;
