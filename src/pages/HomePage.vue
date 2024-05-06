@@ -10,10 +10,10 @@ const { t } = useI18n()
   <Suspense>
     <main class="main-page">
       <i18n-t keypath="main.motto.info" class="main-page__title" tag="h2">
-        <template v-slot:action>
+        <template #action>
           <span class="main-page__title--marked">{{ t('main.motto.count') }}</span>
         </template>
-        <template v-slot:difficulty>
+        <template #difficulty>
           <span class="main-page__title--marked">{{ t('main.motto.easy') }}</span>
         </template>
       </i18n-t>
