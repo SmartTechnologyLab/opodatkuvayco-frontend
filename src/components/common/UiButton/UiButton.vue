@@ -30,17 +30,13 @@ const component = computed(() => {
 </script>
 
 <template>
-  <template v-if="component">
-    <Component :is="component">
-      <Button v-bind="{ ...props, ...attrs }">
-        <slot />
-      </Button>
-    </Component>
-  </template>
-
-  <template v-else>
+  <Component :is="component" v-if="component">
     <Button v-bind="{ ...props, ...attrs }">
       <slot />
     </Button>
-  </template>
+  </Component>
+
+  <Button v-bind="{ ...props, ...attrs }" v-else>
+    <slot />
+  </Button>
 </template>
