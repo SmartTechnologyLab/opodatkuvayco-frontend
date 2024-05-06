@@ -19,6 +19,7 @@
   "registration": {
     "userName": "Імʼя користувача",
     "userPassword": "Пароль",
-    "submitBtn": "ПРОДОВЖИТИ"
+    "submitBtn": "Продовжити",
+    "googleIcon": "Авторизація з Google"
   }
 }

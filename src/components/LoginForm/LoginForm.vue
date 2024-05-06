@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import UiTextInput from '@/components/common/UiInput/UiInput.vue'
 import UiButton from '@/components/common/UiButton/UiButton.vue'
+import googleIcon from '@/assets/icons/google-icon.svg'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -14,6 +15,10 @@ const { t } = useI18n()
 
     <UiButton type="submit" class="login-form__btn">
       {{ t('registration.submitBtn') }}
+    </UiButton>
+
+    <UiButton class="login-form__icon">
+      <img :src="googleIcon" :alt="t('registration.googleIcon')" />
     </UiButton>
   </form>
 </template>
@@ -35,12 +40,16 @@ const { t } = useI18n()
 
   // ToDo: add scss variable and figure out with @use
   &__btn {
-    background: none;
+    background: $main-background-color;
     color: #fff;
-    border: 1px solid #fff;
     border-radius: 0.5rem;
     padding: 0.8rem;
     font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  &__icon {
+    background: none;
   }
 }
 </style>
