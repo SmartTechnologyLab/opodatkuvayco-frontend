@@ -2,11 +2,11 @@
 import { RouterView, useRoute } from 'vue-router'
 import NavBar from '@/components/NavBar/NavBar.vue'
 import { computed } from 'vue'
-import { Routes } from './router/common'
+import { routesWithoutNavBar } from './router/common/routesWithoutNavBar'
 
 const route = useRoute()
 
-const showNavBar = computed(() => (route.path === Routes.REGISTER_PAGE ? false : true))
+const showNavBar = computed(() => !routesWithoutNavBar.includes(route.path))
 </script>
 
 <template>
