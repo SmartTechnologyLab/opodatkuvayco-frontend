@@ -3,7 +3,7 @@ import UiTextInput from '@/components/common/UiInput/UiInput.vue'
 import UiButton from '@/components/common/UiButton/UiButton.vue'
 import googleIcon from '@/assets/icons/google-icon.svg'
 import { useI18n } from 'vue-i18n'
-import UiImage from '../common/UiImage/UiImage.vue'
+import UiImage from '@/components/common/UiImage/UiImage.vue'
 
 const { t } = useI18n()
 </script>
