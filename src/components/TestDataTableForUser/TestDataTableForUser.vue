@@ -4,8 +4,12 @@ import { resultHeaders } from '@/components/common/DataTable/constants'
 import { getDeal, type Deal } from '@/components/common/DataTable/mocks'
 import type { DataTableCellEditCompleteEvent } from 'primevue/datatable'
 import { assocPath } from 'ramda'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { notEditableColumns } from './common/notEditableColumns'
+import UiButton from '../common/UiButton/UiButton.vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const rowData = ref({
   ticker: 'DAL',
@@ -23,21 +27,25 @@ const table = ref({
   data: [getDeal(rowData.value), getDeal(), getDeal(), getDeal(), getDeal()]
 })
 
+const btnContent = ref(t('table.btnAddRow'))
+
 const onCellEditComplete = (event: DataTableCellEditCompleteEvent) => {
   let { data, newValue, field } = event
 
-  const rowIndex = table.value.data.findIndex((row) => row === data)
+  if (newValue !== undefined && newValue !== null && newValue !== '') {
+    const rowIndex = table.value.data.findIndex((row) => row === data)
 
-  if (rowIndex !== -1) {
-    const editedRow = table.value.data[rowIndex]
+    if (rowIndex !== -1) {
+      const editedRow = table.value.data[rowIndex]
 
-    const fieldPath = field.split('.')
+      const fieldPath = field.split('.')
 
-    const updatedRow = assocPath(fieldPath, newValue, editedRow)
+      const updatedRow = assocPath(fieldPath, newValue, editedRow)
 
-    table.value.data[rowIndex] = updatedRow
+      table.value.data[rowIndex] = updatedRow
 
-    recalculateVariables(updatedRow)
+      recalculateVariables(updatedRow)
+    }
   }
 }
 
@@ -50,6 +58,15 @@ const recalculateVariables = (deal: Deal) => {
   deal.total = deal.sale.uah - deal.purchase.uah
   deal.percent = deal.sale.uah / deal.purchase.uah - 1
 }
+
+const handleAddRow = () => {
+  table.value.data.length < 8 ? table.value.data.push(getDeal()) : null
+}
+
+watch(
+  () => table.value.data.length < 8,
+  () => (btnContent.value = t('table.btnYourLimitLeft'))
+)
 </script>
 
 <template>
@@ -58,8 +75,33 @@ const recalculateVariables = (deal: Deal) => {
     sortableColumn
     :table="table"
     title="Example table"
-    @onCellEditComplete="onCellEditComplete($event)"
+    @onCellEdit="onCellEditComplete($event)"
     :notEditableColumns="notEditableColumns"
+    edit-mode="cell"
+    class="data-table"
   >
+    <template #add-row>
+      <UiButton @click-btn="handleAddRow" class="data-table__add-btn">
+        <i class="pi pi-plus" style="color: black" v-if="table.data.length < 8" />
+        {{ btnContent }}
+      </UiButton>
+    </template>
   </DataTable>
 </template>
+
+<style scoped lang="scss">
+.data-table {
+  &__add-btn {
+    margin-left: auto;
+    margin-top: 1rem;
+
+    min-width: 180px;
+    max-width: 200px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+}
+</style>

@@ -19,10 +19,11 @@ defineProps<{
   sortableColumn?: boolean
   removeSortable?: boolean
   notEditableColumns?: string[]
+  editMode: 'cell' | 'row' | undefined
 }>()
 
 defineEmits<{
-  (e: 'onCellEditComplete', event: DataTableCellEditCompleteEvent): void
+  (e: 'onCellEdit', event: DataTableCellEditCompleteEvent): void
 }>()
 
 const { d, n } = useI18n()
@@ -42,7 +43,7 @@ const getFormattedData = (data: Ref<Deal[]>, field: string, type?: FormatType) =
   return formatted
 }
 
-const isFieldEditable = (notEditableColumns: string[] | undefined, field: string) => {
+const isColumnsEditable = (notEditableColumns: string[] | undefined, field: string) => {
   return !notEditableColumns?.includes(field)
 }
 </script>
@@ -58,8 +59,9 @@ const isFieldEditable = (notEditableColumns: string[] | undefined, field: string
         :value="table.data"
         size="small"
         :removableSort="removeSortable"
-        @cell-edit-complete="$emit('onCellEditComplete', $event)"
-        editMode="cell"
+        @cell-edit-complete="$emit('onCellEdit', $event)"
+        :editMode="editMode"
+        scrollable
       >
         <Column
           v-for="{ field, header, type } in table.headers"
@@ -67,6 +69,7 @@ const isFieldEditable = (notEditableColumns: string[] | undefined, field: string
           :key="field"
           :field
           :header="$t(header)"
+          style="min-width: 120px"
         >
           <template #body="{ data, field }">
             <slot :name="field" :value="path(field.split('.'), data)" :type="type">
@@ -74,7 +77,7 @@ const isFieldEditable = (notEditableColumns: string[] | undefined, field: string
             </slot>
           </template>
 
-          <template #editor="{ data, field }" v-if="isFieldEditable(notEditableColumns, field)">
+          <template #editor="{ data, field }" v-if="isColumnsEditable(notEditableColumns, field)">
             <template v-if="calendarFields.includes(field)">
               <Calendar v-model="data[field]" dateFormat="dd.mm.yy" />
             </template>
@@ -82,7 +85,7 @@ const isFieldEditable = (notEditableColumns: string[] | undefined, field: string
               <UiNumberInput v-model="data[field]" mode="currency" currency="USD" />
             </template>
             <template v-else-if="numberFields.includes(field)">
-              <UiNumberInput v-model="data[field]" autofocus />
+              <UiNumberInput v-model="data[field]" />
             </template>
 
             <template v-else>
@@ -93,6 +96,7 @@ const isFieldEditable = (notEditableColumns: string[] | undefined, field: string
 
         <template #empty>{{ $t('table.empty') }}</template>
       </DataTable>
+      <slot name="add-row" />
     </template>
   </Card>
 </template>
