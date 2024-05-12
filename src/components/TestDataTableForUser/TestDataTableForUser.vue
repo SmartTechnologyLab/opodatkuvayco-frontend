@@ -30,22 +30,18 @@ const table = ref({
 const btnContent = ref(t('table.btnAddRow'))
 
 const onCellEditComplete = (event: DataTableCellEditCompleteEvent) => {
-  let { data, newValue, field } = event
+  let { newValue, field, index } = event
 
   if (newValue !== undefined && newValue !== null && newValue !== '') {
-    const rowIndex = table.value.data.findIndex((row) => row === data)
+    const editedRow = table.value.data[index]
 
-    if (rowIndex !== -1) {
-      const editedRow = table.value.data[rowIndex]
+    const fieldPath = field.split('.')
 
-      const fieldPath = field.split('.')
+    const updatedRow = assocPath(fieldPath, newValue, editedRow)
 
-      const updatedRow = assocPath(fieldPath, newValue, editedRow)
+    table.value.data[index] = updatedRow
 
-      table.value.data[rowIndex] = updatedRow
-
-      recalculateVariables(updatedRow)
-    }
+    recalculateVariables(updatedRow)
   }
 }
 
