@@ -4,7 +4,8 @@ export const currencyFields: string[] = [
   'purchase.rate',
   'sale.price',
   'sale.rate',
-  'sale.uah'
+  'sale.uah',
+  'sale.commission'
 ]
 
 export const calendarFields: string[] = ['purchase.date', 'sale.date']

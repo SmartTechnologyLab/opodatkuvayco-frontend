@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import DataTable from 'primevue/datatable'
+import DataTable, { type DataTableCellEditCompleteEvent } from 'primevue/datatable'
 import Column from 'primevue/column'
 import Card from 'primevue/card'
 import { path } from 'ramda'
@@ -21,7 +21,9 @@ defineProps<{
   notEditableColumns?: string[]
 }>()
 
-defineEmits(['onCellEditComplete'])
+defineEmits<{
+  (e: 'onCellEditComplete', event: DataTableCellEditCompleteEvent): void
+}>()
 
 const { d, n } = useI18n()
 

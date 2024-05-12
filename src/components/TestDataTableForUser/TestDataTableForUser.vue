@@ -59,7 +59,7 @@ const recalculateVariables = (deal: Deal) => {
     :table="table"
     title="Example table"
     @onCellEditComplete="onCellEditComplete($event)"
-    :notEditableColumns
+    :notEditableColumns="notEditableColumns"
   >
   </DataTable>
 </template>
