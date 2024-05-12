@@ -91,6 +91,8 @@ watch(
 
 <style scoped lang="scss">
 .data-table {
+  width: 90vw;
+
   &__add-btn {
     margin-left: auto;
     margin-top: 1rem;
