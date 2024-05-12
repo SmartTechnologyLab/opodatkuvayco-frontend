@@ -19,7 +19,8 @@ defineProps<{
   sortableColumn?: boolean
   removeSortable?: boolean
   notEditableColumns?: string[]
-  editMode: 'cell' | 'row' | undefined
+  editMode?: 'cell' | 'row' | undefined
+  resizableColumns?: boolean
 }>()
 
 defineEmits<{
@@ -62,6 +63,7 @@ const isColumnsEditable = (notEditableColumns: string[] | undefined, field: stri
         @cell-edit-complete="$emit('onCellEdit', $event)"
         :editMode="editMode"
         scrollable
+        :resizable-columns="resizableColumns"
       >
         <Column
           v-for="{ field, header, type } in table.headers"
@@ -69,7 +71,7 @@ const isColumnsEditable = (notEditableColumns: string[] | undefined, field: stri
           :key="field"
           :field
           :header="$t(header)"
-          style="min-width: 120px"
+          style="min-width: 100px"
         >
           <template #body="{ data, field }">
             <slot :name="field" :value="path(field.split('.'), data)" :type="type">

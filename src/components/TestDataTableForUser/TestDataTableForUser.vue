@@ -79,6 +79,7 @@ watch(
     :notEditableColumns="notEditableColumns"
     edit-mode="cell"
     class="data-table"
+    resizableColumns
   >
     <template #add-row>
       <UiButton @click-btn="handleAddRow" class="data-table__add-btn">
