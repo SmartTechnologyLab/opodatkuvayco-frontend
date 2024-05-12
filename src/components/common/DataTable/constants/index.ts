@@ -30,7 +30,7 @@ export const resultHeaders: TableHeaders[] = [
     type: FormatType.CurrencyUSD
   },
   {
-    header: '$',
+    header: 'Курс$',
     field: 'purchase.rate',
     type: FormatType.CurrencyUAH
   },
