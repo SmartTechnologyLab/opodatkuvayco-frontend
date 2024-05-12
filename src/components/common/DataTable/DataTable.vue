@@ -47,6 +47,10 @@ const getFormattedData = (data: Ref<Deal[]>, field: string, type?: FormatType) =
 const isColumnsEditable = (notEditableColumns: string[] | undefined, field: string) => {
   return !notEditableColumns?.includes(field)
 }
+
+const currencyType = (currency?: FormatType) => {
+  return currency === FormatType.CurrencyUSD ? 'USD' : 'UAH'
+}
 </script>
 
 <template>
@@ -84,7 +88,7 @@ const isColumnsEditable = (notEditableColumns: string[] | undefined, field: stri
               <Calendar v-model="data[field]" dateFormat="dd.mm.yy" />
             </template>
             <template v-else-if="currencyFields.includes(field)">
-              <UiNumberInput v-model="data[field]" mode="currency" currency="USD" />
+              <UiNumberInput v-model="data[field]" mode="currency" :currency="currencyType(type)" />
             </template>
             <template v-else-if="numberFields.includes(field)">
               <UiNumberInput v-model="data[field]" />
