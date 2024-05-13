@@ -12,6 +12,7 @@ import UiInput from '@/components/common/UiInput/UiInput.vue'
 import Calendar from 'primevue/calendar'
 import { calendarFields, currencyFields, numberFields } from '@/components/common/DataTable/constants/fieldsList'
 import UiNumberInput from '../UiNumberInput/UiNumberInput.vue'
+import { Currency } from '../UiNumberInput/common/currency'
 
 defineProps<{
   table: Table
@@ -49,7 +50,7 @@ const isColumnsEditable = (notEditableColumns: string[] | undefined, field: stri
 }
 
 const currencyType = (currency?: FormatType) => {
-  return currency === FormatType.CurrencyUSD ? 'USD' : 'UAH'
+  return currency === FormatType.CurrencyUSD ? Currency.USD : Currency.UAH
 }
 </script>
 
