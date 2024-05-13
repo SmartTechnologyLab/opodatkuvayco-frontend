@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import InputNumber from 'primevue/inputnumber'
 import { useAttrs } from 'vue'
-import type { Currency } from './common/currency'
+import type { Currency } from './types'
 
 const attrs = useAttrs()
 

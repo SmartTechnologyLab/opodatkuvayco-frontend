@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 import UiNumberInput from './UiNumberInput.vue'
-import { Currency } from './common/currency'
+import { Currency } from './types'
 
 export default {
   component: UiNumberInput,

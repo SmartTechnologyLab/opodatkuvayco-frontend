@@ -9,10 +9,11 @@ import { type Deal } from '@/components/common/DataTable/mocks'
 import { FormatType, type Table } from '@/components/common/DataTable/types'
 import { isNil } from 'ramda'
 import UiInput from '@/components/common/UiInput/UiInput.vue'
-import Calendar from 'primevue/calendar'
 import { calendarFields, currencyFields, numberFields } from '@/components/common/DataTable/constants/fieldsList'
 import UiNumberInput from '../UiNumberInput/UiNumberInput.vue'
-import { Currency } from '../UiNumberInput/common/currency'
+import { Currency } from '../UiNumberInput/types'
+import UiCalendar from '../UiCalendar/UiCalendar.vue'
+import { DateFormat } from '../UiCalendar/types'
 
 defineProps<{
   table: Table
@@ -86,7 +87,7 @@ const currencyType = (currency?: FormatType) => {
 
           <template #editor="{ data, field }" v-if="isColumnsEditable(notEditableColumns, field)">
             <template v-if="calendarFields.includes(field)">
-              <Calendar v-model="data[field]" dateFormat="dd.mm.yy" />
+              <UiCalendar v-model="data[field]" :dateFormat="DateFormat.DOTTED" />
             </template>
             <template v-else-if="currencyFields.includes(field)">
               <UiNumberInput v-model="data[field]" mode="currency" :currency="currencyType(type)" />
