@@ -1,25 +1,33 @@
 <script setup lang="ts">
-import DataTable from 'primevue/datatable'
+import DataTable, { type DataTableCellEditCompleteEvent } from 'primevue/datatable'
 import Column from 'primevue/column'
 import Card from 'primevue/card'
 import { path } from 'ramda'
 import { useI18n } from 'vue-i18n'
-
 import { type Ref } from 'vue'
 import { type Deal } from '@/components/common/DataTable/mocks'
 import { FormatType, type Table } from '@/components/common/DataTable/types'
 import { isNil } from 'ramda'
+import UiInput from '@/components/common/UiInput/UiInput.vue'
+import { calendarFields, currencyFields, numberFields } from '@/components/common/DataTable/constants/fieldsList'
+import UiNumberInput from '../UiNumberInput/UiNumberInput.vue'
+import { Currency } from '../UiNumberInput/types'
+import UiCalendar from '../UiCalendar/UiCalendar.vue'
+import { DateFormat } from '../UiCalendar/types'
 
-defineProps({
-  table: {
-    type: Object as () => Table,
-    required: true
-  },
-  title: {
-    type: String,
-    default: ''
-  }
-})
+defineProps<{
+  table: Table
+  title?: string
+  sortableColumn?: boolean
+  removeSortable?: boolean
+  notEditableColumns?: string[]
+  editMode?: 'cell' | 'row' | undefined
+  resizableColumns?: boolean
+}>()
+
+defineEmits<{
+  (e: 'onCellEdit', event: DataTableCellEditCompleteEvent): void
+}>()
 
 const { d, n } = useI18n()
 
@@ -37,6 +45,14 @@ const getFormattedData = (data: Ref<Deal[]>, field: string, type?: FormatType) =
 
   return formatted
 }
+
+const isColumnsEditable = (notEditableColumns: string[] | undefined, field: string) => {
+  return !notEditableColumns?.includes(field)
+}
+
+const currencyType = (currency?: FormatType) => {
+  return currency === FormatType.CurrencyUSD ? Currency.USD : Currency.UAH
+}
 </script>
 
 <template>
@@ -46,17 +62,49 @@ const getFormattedData = (data: Ref<Deal[]>, field: string, type?: FormatType) =
     </template>
 
     <template #content>
-      <DataTable :value="table.data" size="small" tableStyle="min-width: 50rem">
-        <Column v-for="{ field, header, type } in table.headers" :key="field" :field :header="$t(header)">
+      <DataTable
+        :value="table.data"
+        size="small"
+        :removableSort="removeSortable"
+        @cell-edit-complete="$emit('onCellEdit', $event)"
+        :editMode="editMode"
+        scrollable
+        :resizable-columns="resizableColumns"
+      >
+        <Column
+          v-for="{ field, header, type } in table.headers"
+          :sortable="sortableColumn"
+          :key="field"
+          :field
+          :header="$t(header)"
+          style="min-width: 100px"
+        >
           <template #body="{ data, field }">
             <slot :name="field" :value="path(field.split('.'), data)" :type="type">
               {{ isNil(type) ? path(field.split('.'), data) || '-' : getFormattedData(data, field, type) }}
             </slot>
           </template>
+
+          <template #editor="{ data, field }" v-if="isColumnsEditable(notEditableColumns, field)">
+            <template v-if="calendarFields.includes(field)">
+              <UiCalendar v-model="data[field]" :dateFormat="DateFormat.DOTTED" />
+            </template>
+            <template v-else-if="currencyFields.includes(field)">
+              <UiNumberInput v-model="data[field]" mode="currency" :currency="currencyType(type)" />
+            </template>
+            <template v-else-if="numberFields.includes(field)">
+              <UiNumberInput v-model="data[field]" />
+            </template>
+
+            <template v-else>
+              <UiInput v-model="data[field]" />
+            </template>
+          </template>
         </Column>
 
         <template #empty>{{ $t('table.empty') }}</template>
       </DataTable>
+      <slot name="add-row" />
     </template>
   </Card>
 </template>

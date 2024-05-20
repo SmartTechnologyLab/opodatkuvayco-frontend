@@ -1,15 +1,17 @@
 <script setup lang="ts">
+import { useAttrs } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
 defineEmits(['file-selected'])
+const attrs = useAttrs()
 </script>
 
 <template>
   <label class="file-input">
     <span class="file-input__download">{{ t('main.calc.file-download') }}</span>
-    <input @change="$emit('file-selected')" type="file" style="display: none" />
+    <input v-bind="{ ...attrs }" @change="$emit('file-selected')" type="file" style="display: none" />
   </label>
 </template>
 

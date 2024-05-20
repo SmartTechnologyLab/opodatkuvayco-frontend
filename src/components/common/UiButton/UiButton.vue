@@ -12,10 +12,14 @@ const props = defineProps<{
   outlined?: boolean
   raised?: boolean
 }>()
+
+defineEmits<{
+  (e: 'clickBtn'): void
+}>()
 </script>
 
 <template>
-  <Button v-bind="{ ...props, ...attrs }">
+  <Button v-bind="{ ...props, ...attrs }" @click="$emit('clickBtn')">
     <slot />
   </Button>
 </template>

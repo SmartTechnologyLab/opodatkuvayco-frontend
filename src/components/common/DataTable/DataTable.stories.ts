@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3'
 import DataTable from './DataTable.vue'
 import { resultHeaders } from '@/components/common/DataTable/constants'
 import { getDeal } from '@/components/common/DataTable/mocks'
+import { action } from '@storybook/addon-actions'
 
 const meta: Meta<typeof DataTable> = {
   component: DataTable,
@@ -166,5 +167,77 @@ export const HeaderType: Story = {
         getDeal()
       ]
     }
+  }
+}
+
+export const Sortable: Story = {
+  render: (args) => ({
+    components: { DataTable },
+    setup() {
+      return { args }
+    },
+    template: `
+      <DataTable v-bind="{...args}" />
+    `
+  }),
+  args: {
+    title: 'Мої угоди',
+    table: {
+      headers: resultHeaders,
+      data: [
+        getDeal({
+          ticker: 'DAL',
+          quantity: 2,
+          purchaseRate: 29.2549,
+          purchasePrice: 28.88,
+          purchaseCommission: 1.49,
+          saleRate: 36.5686,
+          salePrice: 42.42,
+          saleCommission: 1.62
+        }),
+        getDeal(),
+        getDeal(),
+        getDeal(),
+        getDeal()
+      ]
+    },
+    sortableColumn: true,
+    removeSortable: true
+  }
+}
+
+export const Editable: Story = {
+  render: (args) => ({
+    components: { DataTable },
+    setup() {
+      return { args }
+    },
+    template: `
+      <DataTable v-bind="{...args}" @onCellEdit="action" />
+    `,
+    methods: { action: action('changed') }
+  }),
+  args: {
+    title: 'Мої угоди',
+    table: {
+      headers: resultHeaders,
+      data: [
+        getDeal({
+          ticker: 'DAL',
+          quantity: 2,
+          purchaseRate: 29.2549,
+          purchasePrice: 28.88,
+          purchaseCommission: 1.49,
+          saleRate: 36.5686,
+          salePrice: 42.42,
+          saleCommission: 1.62
+        }),
+        getDeal(),
+        getDeal(),
+        getDeal(),
+        getDeal()
+      ]
+    },
+    editMode: 'cell'
   }
 }
