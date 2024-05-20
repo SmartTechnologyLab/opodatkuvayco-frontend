@@ -73,9 +73,7 @@ const handleCheckInput = (value: string) => {
       @input="handleCheckInput(result)"
     />
 
-    <template v-else>
-      <FileInput @change="handleFileChange" />
-    </template>
+    <FileInput @change="handleFileChange" accept=".json, .xml" v-else />
 
     <div class="calc__example">
       <span class="calc__example-title" v-if="!selectedFiles.length">
