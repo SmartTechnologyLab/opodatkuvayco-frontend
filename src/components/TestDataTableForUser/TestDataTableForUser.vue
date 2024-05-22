@@ -6,8 +6,9 @@ import type { DataTableCellEditCompleteEvent } from 'primevue/datatable'
 import { assocPath } from 'ramda'
 import { ref, watch } from 'vue'
 import { notEditableColumns } from './common/notEditableColumns'
-import UiButton from '../common/UiButton/UiButton.vue'
 import { useI18n } from 'vue-i18n'
+import { getCurrencyExchange } from '@/api/getCurrencyExchange'
+import UiButton from '@/components/common/UiButton/UiButton.vue'
 
 const { t } = useI18n()
 
@@ -29,10 +30,22 @@ const table = ref({
 
 const btnContent = ref(t('table.btnAddRow'))
 
-const onCellEditComplete = (event: DataTableCellEditCompleteEvent) => {
+const onCellEditComplete = async (event: DataTableCellEditCompleteEvent) => {
   let { newValue, field, index } = event
 
-  if (newValue !== undefined && newValue !== null && newValue !== '') {
+  if (newValue) {
+    if (field === 'purchase.date') {
+      const exchangeRate = await getCurrencyExchange('USD', newValue)
+      console.log(exchangeRate)
+      table.value.data[index].purchase.rate = exchangeRate.rate
+    }
+
+    if (field === 'sale.date') {
+      const exchangeRate = await getCurrencyExchange('USD', newValue)
+      console.log(exchangeRate)
+      table.value.data[index].sale.rate = exchangeRate.rate
+    }
+
     const editedRow = table.value.data[index]
 
     const fieldPath = field.split('.')
