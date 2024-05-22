@@ -36,13 +36,11 @@ const onCellEditComplete = async (event: DataTableCellEditCompleteEvent) => {
   if (newValue) {
     if (field === 'purchase.date') {
       const exchangeRate = await getCurrencyExchange('USD', newValue)
-      console.log(exchangeRate)
       table.value.data[index].purchase.rate = exchangeRate.rate
     }
 
     if (field === 'sale.date') {
       const exchangeRate = await getCurrencyExchange('USD', newValue)
-      console.log(exchangeRate)
       table.value.data[index].sale.rate = exchangeRate.rate
     }
 
