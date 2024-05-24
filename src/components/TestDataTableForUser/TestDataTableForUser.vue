@@ -91,7 +91,7 @@ watch(
     class="data-table"
     resizableColumns
   >
-    <template #currenctSelect>
+    <template #header>
       <div class="data-table__header">
         <h1 class="data-table__title">{{ t('table.title') }}</h1>
         <SelectButton v-model="selectedCurrency" :options="currencies" />

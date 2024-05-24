@@ -78,6 +78,7 @@ export const Slot: Story = {
     },
     template: `
     <DataTable v-bind="{...args}">
+      <template #header>Мої угоди</template>
       <template #ticker="{ value }">🎉 {{ value }} 🎉</template>
       <template #date="{ value }"> {{ $d(value) }}</template>
     </DataTable>
@@ -94,6 +95,7 @@ export const MockedSlot: Story = {
     },
     template: `
     <DataTable v-bind="{...args}">
+      <template #header>Мої угоди</template>
       <template #purchase.date="{ value }"> {{ $d(value) }}</template>
       <template #purchase.price="{ value }"> {{ $n(value, { style: 'currency', currency: 'USD' }) }}</template>
       <template #purchase.sum="{ value }"> {{ $n(value, { style: 'currency', currency: 'USD' }) }}</template>
@@ -142,7 +144,7 @@ export const HeaderType: Story = {
       return { args }
     },
     template: `
-    <DataTable v-bind="{...args}" />      
+    <DataTable v-bind="{...args}" />
   `
   }),
   args: {

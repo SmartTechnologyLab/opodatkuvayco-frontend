@@ -57,7 +57,7 @@ const currencyType = (currency?: FormatType) => {
 <template>
   <Card>
     <template #title>
-      <slot name="currenctSelect" />
+      <slot name="header" />
     </template>
 
     <template #content>
