@@ -9,6 +9,8 @@ import { notEditableColumns } from './common/notEditableColumns'
 import { useI18n } from 'vue-i18n'
 import { getCurrencyExchange } from '@/api/getCurrencyExchange'
 import UiButton from '@/components/common/UiButton/UiButton.vue'
+import SelectButton from 'primevue/selectbutton'
+import { Currency } from '../common/UiNumberInput/types'
 
 const { t } = useI18n()
 
@@ -28,6 +30,10 @@ const table = ref({
   data: [getDeal(rowData.value), getDeal(), getDeal(), getDeal(), getDeal()]
 })
 
+const currencies = ref<string[]>(Object.values(Currency).filter((currency) => currency !== Currency.UAH))
+
+const selectedCurrency = ref(Currency.USD)
+
 const btnContent = ref(t('table.btnAddRow'))
 
 const onCellEditComplete = async (event: DataTableCellEditCompleteEvent) => {
@@ -35,12 +41,12 @@ const onCellEditComplete = async (event: DataTableCellEditCompleteEvent) => {
 
   if (newValue) {
     if (field === 'purchase.date') {
-      const exchangeRate = await getCurrencyExchange('USD', newValue)
+      const exchangeRate = await getCurrencyExchange(selectedCurrency.value, newValue)
       table.value.data[index].purchase.rate = exchangeRate.rate
     }
 
     if (field === 'sale.date') {
-      const exchangeRate = await getCurrencyExchange('USD', newValue)
+      const exchangeRate = await getCurrencyExchange(selectedCurrency.value, newValue)
       table.value.data[index].sale.rate = exchangeRate.rate
     }
 
@@ -78,16 +84,20 @@ watch(
 
 <template>
   <DataTable
-    removeSortable
-    sortableColumn
     :table="table"
-    title="Example table"
     @onCellEdit="onCellEditComplete($event)"
     :notEditableColumns="notEditableColumns"
     edit-mode="cell"
     class="data-table"
     resizableColumns
   >
+    <template #currenctSelect>
+      <div class="data-table__header">
+        <h1 class="data-table__title">{{ t('table.title') }}</h1>
+        <SelectButton v-model="selectedCurrency" :options="currencies" />
+      </div>
+    </template>
+
     <template #add-row>
       <UiButton @click-btn="handleAddRow" class="data-table__add-btn">
         <i class="pi pi-plus" style="color: black" v-if="table.data.length < 8" />
@@ -100,6 +110,16 @@ watch(
 <style scoped lang="scss">
 .data-table {
   width: 90vw;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__title {
+    font-size: 2rem;
+  }
 
   &__add-btn {
     margin-left: auto;

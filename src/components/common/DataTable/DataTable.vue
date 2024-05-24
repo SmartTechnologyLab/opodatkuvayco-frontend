@@ -17,7 +17,6 @@ import { DateFormat } from '../UiCalendar/types'
 
 defineProps<{
   table: Table
-  title?: string
   sortableColumn?: boolean
   removeSortable?: boolean
   notEditableColumns?: string[]
@@ -57,8 +56,8 @@ const currencyType = (currency?: FormatType) => {
 
 <template>
   <Card>
-    <template #title v-if="title">
-      {{ $t(title) }}
+    <template #title>
+      <slot name="currenctSelect" />
     </template>
 
     <template #content>

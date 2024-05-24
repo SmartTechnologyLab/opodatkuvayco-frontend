@@ -113,7 +113,6 @@ export const MockedSlot: Story = {
   `
   }),
   args: {
-    title: 'Мої угоди',
     table: {
       headers: resultHeaders,
       data: [
@@ -147,7 +146,6 @@ export const HeaderType: Story = {
   `
   }),
   args: {
-    title: 'Мої угоди',
     table: {
       headers: resultHeaders,
       data: [
@@ -181,7 +179,6 @@ export const Sortable: Story = {
     `
   }),
   args: {
-    title: 'Мої угоди',
     table: {
       headers: resultHeaders,
       data: [
@@ -218,7 +215,6 @@ export const Editable: Story = {
     methods: { action: action('changed') }
   }),
   args: {
-    title: 'Мої угоди',
     table: {
       headers: resultHeaders,
       data: [
