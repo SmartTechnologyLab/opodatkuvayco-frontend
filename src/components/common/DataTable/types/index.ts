@@ -3,6 +3,8 @@ export enum FormatType {
   Number,
   CurrencyUAH,
   CurrencyUSD,
+  CurrencyEUR,
+  ExchangeUAH,
   Percent
 }
 

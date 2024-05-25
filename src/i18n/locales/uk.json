@@ -23,5 +23,9 @@
   "navBar": {
     "companyName": "Оподаткувайко",
     "logo-alt": "Логотип Оподаткувайко"
+  },
+  "currency": {
+    "euro": "€",
+    "dollar": "$"
   }
 }

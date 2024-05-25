@@ -15,20 +15,21 @@ import { Currency } from '../UiNumberInput/types'
 import UiCalendar from '../UiCalendar/UiCalendar.vue'
 import { DateFormat } from '../UiCalendar/types'
 
-defineProps<{
+const props = defineProps<{
   table: Table
   sortableColumn?: boolean
   removeSortable?: boolean
   notEditableColumns?: string[]
   editMode?: 'cell' | 'row' | undefined
   resizableColumns?: boolean
+  currency?: Currency
 }>()
 
 defineEmits<{
   (e: 'onCellEdit', event: DataTableCellEditCompleteEvent): void
 }>()
 
-const { d, n } = useI18n()
+const { d, n, t } = useI18n()
 
 const getFormattedData = (data: Ref<Deal[]>, field: string, type?: FormatType) => {
   const value = path(field.split('.'), data)
@@ -36,8 +37,9 @@ const getFormattedData = (data: Ref<Deal[]>, field: string, type?: FormatType) =
   const [formatted] = [
     type === FormatType.Date && d(value),
     type === FormatType.Number && n(value),
-    type === FormatType.CurrencyUSD && n(value, { style: 'currency', currency: 'USD' }),
-    type === FormatType.CurrencyUAH && n(value, 'currency'),
+    type === FormatType.CurrencyUSD && n(value, { style: 'currency', currency: props.currency }),
+    type === FormatType.ExchangeUAH && n(value, { style: 'currency', currency: 'UAH' }),
+    type === FormatType.CurrencyUAH && n(value, { style: 'currency', currency: 'UAH' }),
     type === FormatType.Percent && n(value, 'percent'),
     value
   ].filter(Boolean)
@@ -51,6 +53,16 @@ const isColumnsEditable = (notEditableColumns: string[] | undefined, field: stri
 
 const currencyType = (currency?: FormatType) => {
   return currency === FormatType.CurrencyUSD ? Currency.USD : Currency.UAH
+}
+
+const tableCurrency = (currency: FormatType) => {
+  return currency === FormatType.CurrencyUSD ||
+    currency === FormatType.CurrencyEUR ||
+    currency === FormatType.ExchangeUAH
+    ? props.currency === Currency.EUR
+      ? t('currency.euro')
+      : t('currency.dollar')
+    : ''
 }
 </script>
 
@@ -75,7 +87,7 @@ const currencyType = (currency?: FormatType) => {
           :sortable="sortableColumn"
           :key="field"
           :field
-          :header="$t(header)"
+          :header="`${$t(header)} ${tableCurrency(type as FormatType)}`"
           style="min-width: 100px"
         >
           <template #body="{ data, field }">

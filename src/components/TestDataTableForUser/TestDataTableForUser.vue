@@ -107,6 +107,7 @@ table.value.data.forEach((deal) => {
     edit-mode="cell"
     class="data-table"
     resizableColumns
+    :currency="selectedCurrency"
   >
     <template #header>
       <div class="data-table__header">

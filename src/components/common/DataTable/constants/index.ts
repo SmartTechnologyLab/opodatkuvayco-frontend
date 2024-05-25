@@ -1,4 +1,5 @@
 import { FormatType, type TableHeaders } from '../types'
+
 export const resultHeaders: TableHeaders[] = [
   {
     header: 'Тікер',
@@ -15,24 +16,24 @@ export const resultHeaders: TableHeaders[] = [
     type: FormatType.Number
   },
   {
-    header: 'Ціна ($)',
+    header: 'Ціна',
     field: 'purchase.price',
     type: FormatType.CurrencyUSD
   },
   {
-    header: 'Сума ($)',
+    header: 'Сума',
     field: 'purchase.sum',
     type: FormatType.CurrencyUSD
   },
   {
-    header: 'Комісія ($)',
+    header: 'Комісія',
     field: 'purchase.commission',
     type: FormatType.CurrencyUSD
   },
   {
-    header: 'Курс$',
+    header: 'Курс',
     field: 'purchase.rate',
-    type: FormatType.CurrencyUAH
+    type: FormatType.ExchangeUAH
   },
   {
     header: 'Покупка (грн)',
@@ -45,24 +46,24 @@ export const resultHeaders: TableHeaders[] = [
     type: FormatType.Date
   },
   {
-    header: 'Ціна ($)',
+    header: 'Ціна',
     field: 'sale.price',
     type: FormatType.CurrencyUSD
   },
   {
-    header: 'Сума ($)',
+    header: 'Сума',
     field: 'sale.sum',
     type: FormatType.CurrencyUSD
   },
   {
-    header: 'Комісія ($)',
+    header: 'Комісія',
     field: 'sale.commission',
     type: FormatType.CurrencyUSD
   },
   {
-    header: 'Курс$',
+    header: 'Курс',
     field: 'sale.rate',
-    type: FormatType.CurrencyUAH
+    type: FormatType.ExchangeUAH
   },
   {
     header: 'Продаж (грн)',
