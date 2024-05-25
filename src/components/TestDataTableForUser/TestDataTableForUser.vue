@@ -9,8 +9,8 @@ import { notEditableColumns } from './common/notEditableColumns'
 import { useI18n } from 'vue-i18n'
 import { getCurrencyExchange } from '@/api/getCurrencyExchange'
 import UiButton from '@/components/common/UiButton/UiButton.vue'
-import SelectButton from 'primevue/selectbutton'
-import { Currency } from '../common/UiNumberInput/types'
+import { Currency } from '@/components/common/UiNumberInput/types'
+import UiSelectButton from '@/components/common/UiSelectButton/UiSelectButton.vue'
 
 const { t } = useI18n()
 
@@ -112,7 +112,7 @@ table.value.data.forEach((deal) => {
     <template #header>
       <div class="data-table__header">
         <h1 class="data-table__title">{{ t('table.title') }}</h1>
-        <SelectButton v-model="selectedCurrency" :options="currencies" :allow-empty="false" />
+        <UiSelectButton v-model="selectedCurrency" :options="currencies" :allow-empty="false" />
       </div>
     </template>
 
