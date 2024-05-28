@@ -4,21 +4,68 @@ import UiButton from '@/components/common/UiButton/UiButton.vue'
 import googleIcon from '@/assets/icons/google-icon.svg'
 import { useI18n } from 'vue-i18n'
 import UiImage from '@/components/common/UiImage/UiImage.vue'
+import { ref } from 'vue'
+import { useSupabaseAuth } from 'vue-supabase'
 
 const { t } = useI18n()
+
+const loading = ref(false)
+const email = ref('')
+const password = ref('')
+
+const auth = useSupabaseAuth()
+
+const handleLogin = async () => {
+  try {
+    loading.value = true
+
+    const { error } = await auth.signUp({
+      email: email.value,
+      password: password.value
+    })
+
+    if (error) throw error
+    alert('Registration successful! Please check your email to confirm your account.')
+  } catch (error) {
+    console.log(error)
+    throw error
+  } finally {
+    loading.value = false
+  }
+}
+
+const handleGoogleLogin = async () => {
+  const { error } = await auth.signIn({
+    provider: 'google'
+  })
+  if (error) console.error('Error during Google OAuth login:', error.message)
+}
+
+const handleSignOut = async () => {
+  const { error } = await auth.signOut()
+
+  if (error) throw error
+}
 </script>
 
 <template>
-  <form @submit.prevent class="login-form">
-    <UiTextInput class="login-form__input" :placeholder="t('registration.userName')" />
+  <form @submit.prevent="handleLogin" class="login-form">
+    <UiTextInput v-model="email" class="login-form__input" :placeholder="t('registration.userName')" />
 
-    <UiTextInput type="password" class="login-form__input" :placeholder="t('registration.userPassword')" />
+    <UiTextInput
+      v-model="password"
+      type="password"
+      class="login-form__input"
+      :placeholder="t('registration.userPassword')"
+    />
 
     <UiButton type="submit" class="login-form__btn">
       {{ t('registration.submitBtn') }}
     </UiButton>
 
-    <UiButton class="login-form__icon">
+    <UiButton @click="handleSignOut">Signout</UiButton>
+
+    <UiButton class="login-form__icon" @click="handleGoogleLogin">
       <UiImage :src="googleIcon" :alt="t('registration.googleIcon')" />
     </UiButton>
   </form>
