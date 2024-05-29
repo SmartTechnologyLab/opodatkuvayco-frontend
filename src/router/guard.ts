@@ -1,12 +1,10 @@
-import { useUser } from '@/stores/user'
 import type { Router } from 'vue-router'
+import { useSupabase } from 'vue-supabase'
 
 export const guard = (router: Router) => {
   router.beforeEach(async (to) => {
-    const userStore = useUser()
+    const { auth } = useSupabase()
 
-    await userStore.fetchUser()
-
-    if (to.meta.requiresAuth && !userStore.isAuth) return '/login'
+    if (to.meta.requiresAuth && !auth.user()) return '/login'
   })
 }
