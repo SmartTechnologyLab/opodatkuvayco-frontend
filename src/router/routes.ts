@@ -9,5 +9,5 @@ const AsyncHomePage = defineAsyncComponent(() => import('@/pages/HomePage.vue'))
 export const routes: readonly RouteRecordRaw[] = [
   { path: Routes.HOME_PAGE, component: AsyncHomePage },
   { path: Routes.REGISTER_PAGE, component: AsyncAuthPage },
-  { path: Routes.POLICY_PAGE, component: AsyncPolicyPage }
+  { path: Routes.POLICY_PAGE, component: AsyncPolicyPage, meta: { requiresAuth: true } }
 ]
