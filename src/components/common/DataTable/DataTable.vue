@@ -56,13 +56,15 @@ const currencyType = (currency?: FormatType) => {
 }
 
 const tableCurrency = (currency: FormatType) => {
-  return currency === FormatType.CurrencyUSD ||
+  if (
+    currency === FormatType.CurrencyUSD ||
     currency === FormatType.CurrencyEUR ||
     currency === FormatType.ExchangeUAH
-    ? props.currency === Currency.EUR
-      ? t('currency.euro')
-      : t('currency.dollar')
-    : ''
+  ) {
+    return props.currency === Currency.EUR ? t('currency.euro') : t('currency.dollar')
+  }
+
+  return ''
 }
 </script>
 
