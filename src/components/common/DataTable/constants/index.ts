@@ -1,4 +1,4 @@
-import type { TableHeaders, Currencies } from '../types'
+import type { TableHeaders } from '../types'
 import { Currency } from '@/constants/currencies'
 
 export enum FormatType {
@@ -12,10 +12,10 @@ export enum FormatType {
 
 export const dynamicCurrencies = [FormatType.CurrencyUSD, FormatType.CurrencyEUR]
 
-export const currenciesName: Record<Currencies, Currency> = {
-  [FormatType.CurrencyUAH]: Currency.UAH,
-  [FormatType.CurrencyUSD]: Currency.USD,
-  [FormatType.CurrencyEUR]: Currency.EUR
+export const currenciesName: Record<Currency, Currency> = {
+  [Currency.UAH]: Currency.UAH,
+  [Currency.USD]: Currency.USD,
+  [Currency.EUR]: Currency.EUR
 }
 
 export const resultHeaders: TableHeaders[] = [

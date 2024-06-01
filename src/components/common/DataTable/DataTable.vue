@@ -4,7 +4,7 @@ import Column from 'primevue/column'
 import Card from 'primevue/card'
 import { isNil, path } from 'ramda'
 import { useI18n } from 'vue-i18n'
-import { type Ref } from 'vue'
+import { computed, type Ref } from 'vue'
 import { type Deal } from '@/components/common/DataTable/mocks'
 import type { Currencies, Table } from '@/components/common/DataTable/types'
 import UiInput from '@/components/common/UiInput/UiInput.vue'
@@ -39,7 +39,6 @@ const getFormattedData = (data: Ref<Deal[]>, field: string, type?: FormatType) =
     type === FormatType.Number && n(value),
     type === FormatType.CurrencyUSD && n(value, { style: 'currency', currency: props.currency || Currency.EUR }),
     type === FormatType.CurrencyUAH && n(value, { style: 'currency', currency: Currency.UAH }),
-    type === FormatType.CurrencyUAH && n(value, { style: 'currency', currency: Currency.UAH }),
     type === FormatType.Percent && n(value, 'percent'),
     value
   ].filter(Boolean)
@@ -51,9 +50,7 @@ const isColumnsEditable = (notEditableColumns: string[] | undefined, field: stri
   return !notEditableColumns?.includes(field)
 }
 
-const currencyType = (currency?: FormatType): Currency => {
-  return currenciesName[currency as Currencies] || Currency.UAH
-}
+const currencyType = computed(() => currenciesName[props.currency as Currencies])
 
 const tableCurrency = (currency: FormatType) => {
   if (currency === FormatType.CurrencyUAH) {
@@ -99,7 +96,7 @@ const tableCurrency = (currency: FormatType) => {
               <UiCalendar v-model="data[field]" :dateFormat="DateFormat.DOTTED" />
             </template>
             <template v-else-if="currencyFields.includes(field)">
-              <UiNumberInput v-model="data[field]" mode="currency" :currency="currencyType(type)" />
+              <UiNumberInput v-model="data[field]" mode="currency" :currency="currencyType" />
             </template>
             <template v-else-if="numberFields.includes(field)">
               <UiNumberInput v-model="data[field]" />
