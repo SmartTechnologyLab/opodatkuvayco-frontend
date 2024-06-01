@@ -3,6 +3,10 @@ import Button from 'primevue/button'
 import { computed, useAttrs } from 'vue'
 import { Icons, Severities } from './constants'
 
+defineOptions({
+  inheritAttrs: false
+})
+
 const attrs = useAttrs()
 
 const props = defineProps<{
@@ -11,12 +15,16 @@ const props = defineProps<{
   rounded?: boolean
   outlined?: boolean
   raised?: boolean
-  class?: string
 }>()
 
 defineEmits<{
   (e: 'clickBtn'): void
 }>()
+
+const componentAttrs = computed(() => {
+  const { href, to } = attrs
+  return { href, to }
+})
 
 const routerLinkTag = 'router-link'
 const linkTag = 'a'
@@ -34,7 +42,7 @@ const component = computed(() => {
 </script>
 
 <template>
-  <Component :is="component" v-if="component">
+  <Component :is="component" v-if="component" v-bind="{ ...componentAttrs }">
     <Button v-bind="{ ...props, ...attrs }" @click="$emit('clickBtn')">
       <slot />
     </Button>
