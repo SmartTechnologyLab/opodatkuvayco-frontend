@@ -8,10 +8,10 @@ import { validChars } from './constants'
 
 const selectedFiles = ref<File[]>([])
 const numbers = ref<Array<number | string>>([1, 2, 3, 4, 5, 6, 7, 8, 9, '+/-', 0, '.'])
-const result = ref<string>('')
+const result = ref('')
 const operations = ref<string[]>(['*', '/', '+', '-'])
-const isNegative = ref<boolean>(false)
-const isCalculating = ref<boolean>(false)
+const isNegative = ref(false)
+const isCalculating = ref(false)
 
 const { t } = useI18n()
 
@@ -148,7 +148,7 @@ $equal-background: #8cd0d0;
   flex-direction: column;
   gap: 1rem;
   width: 100%;
-  max-width: 720px;
+  max-width: 460px;
 
   &__container {
     display: flex;
@@ -223,14 +223,16 @@ $equal-background: #8cd0d0;
     font-size: 18px;
     border: none;
     cursor: pointer;
-    width: 100%;
-    height: 2.7rem;
+    min-width: 2rem;
+    max-width: 4rem;
+    height: 2.8rem;
     display: flex;
     align-items: center;
     justify-content: center;
 
     &--equal {
-      width: 43%;
+      min-width: 2rem;
+      max-width: 4rem;
       height: 100%;
 
       &:nth-child(2) {
@@ -243,7 +245,7 @@ $equal-background: #8cd0d0;
   &__wrapper {
     display: flex;
     flex-direction: column;
-    gap: 10%;
+    gap: 1.5rem;
     width: 63%;
   }
 
