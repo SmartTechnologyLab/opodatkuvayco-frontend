@@ -14,6 +14,10 @@ const props = defineProps<{
   class?: string
 }>()
 
+defineEmits<{
+  (e: 'clickBtn'): void
+}>()
+
 const routerLinkTag = 'router-link'
 const linkTag = 'a'
 
@@ -31,12 +35,12 @@ const component = computed(() => {
 
 <template>
   <Component :is="component" v-if="component">
-    <Button v-bind="{ ...props, ...attrs }">
+    <Button v-bind="{ ...props, ...attrs }" @click="$emit('clickBtn')">
       <slot />
     </Button>
   </Component>
 
-  <Button v-bind="{ ...props, ...attrs }" v-else>
+  <Button v-bind="{ ...props, ...attrs }" @click="$emit('clickBtn')" v-else>
     <slot />
   </Button>
 </template>
