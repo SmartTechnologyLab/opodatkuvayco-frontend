@@ -1,4 +1,22 @@
-import { FormatType, type TableHeaders } from '../types'
+import type { TableHeaders, Currencies } from '../types'
+import { Currency } from '@/constants/currencies'
+
+export enum FormatType {
+  Date,
+  Number,
+  CurrencyUAH,
+  CurrencyUSD,
+  CurrencyEUR,
+  Percent
+}
+
+export const dynamicCurrencies = [FormatType.CurrencyUSD, FormatType.CurrencyEUR]
+
+export const currenciesName: Record<Currencies, Currency> = {
+  [FormatType.CurrencyUAH]: Currency.UAH,
+  [FormatType.CurrencyUSD]: Currency.USD,
+  [FormatType.CurrencyEUR]: Currency.EUR
+}
 
 export const resultHeaders: TableHeaders[] = [
   {
@@ -33,10 +51,10 @@ export const resultHeaders: TableHeaders[] = [
   {
     header: 'Курс',
     field: 'purchase.rate',
-    type: FormatType.ExchangeUAH
+    type: FormatType.CurrencyUAH
   },
   {
-    header: 'Покупка (грн)',
+    header: 'Покупка',
     field: 'purchase.uah',
     type: FormatType.CurrencyUAH
   },
@@ -63,10 +81,10 @@ export const resultHeaders: TableHeaders[] = [
   {
     header: 'Курс',
     field: 'sale.rate',
-    type: FormatType.ExchangeUAH
+    type: FormatType.CurrencyUAH
   },
   {
-    header: 'Продаж (грн)',
+    header: 'Продаж',
     field: 'sale.uah',
     type: FormatType.CurrencyUAH
   },

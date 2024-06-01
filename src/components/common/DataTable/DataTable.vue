@@ -2,18 +2,18 @@
 import DataTable, { type DataTableCellEditCompleteEvent } from 'primevue/datatable'
 import Column from 'primevue/column'
 import Card from 'primevue/card'
-import { path } from 'ramda'
+import { isNil, path } from 'ramda'
 import { useI18n } from 'vue-i18n'
 import { type Ref } from 'vue'
 import { type Deal } from '@/components/common/DataTable/mocks'
-import { FormatType, type Table } from '@/components/common/DataTable/types'
-import { isNil } from 'ramda'
+import type { Currencies, Table } from '@/components/common/DataTable/types'
 import UiInput from '@/components/common/UiInput/UiInput.vue'
 import { calendarFields, currencyFields, numberFields } from '@/components/common/DataTable/constants/fieldsList'
 import UiNumberInput from '../UiNumberInput/UiNumberInput.vue'
-import { Currency } from '../UiNumberInput/types'
 import UiCalendar from '../UiCalendar/UiCalendar.vue'
 import { DateFormat } from '../UiCalendar/types'
+import { Currency, currenciesSymbols } from '@/constants/currencies'
+import { currenciesName, FormatType, dynamicCurrencies } from '@/components/common/DataTable/constants'
 
 const props = defineProps<{
   table: Table
@@ -29,7 +29,7 @@ defineEmits<{
   (e: 'onCellEdit', event: DataTableCellEditCompleteEvent): void
 }>()
 
-const { d, n, t } = useI18n()
+const { d, n } = useI18n()
 
 const getFormattedData = (data: Ref<Deal[]>, field: string, type?: FormatType) => {
   const value = path(field.split('.'), data)
@@ -37,9 +37,9 @@ const getFormattedData = (data: Ref<Deal[]>, field: string, type?: FormatType) =
   const [formatted] = [
     type === FormatType.Date && d(value),
     type === FormatType.Number && n(value),
-    type === FormatType.CurrencyUSD && n(value, { style: 'currency', currency: props.currency }),
-    type === FormatType.ExchangeUAH && n(value, { style: 'currency', currency: 'UAH' }),
-    type === FormatType.CurrencyUAH && n(value, { style: 'currency', currency: 'UAH' }),
+    type === FormatType.CurrencyUSD && n(value, { style: 'currency', currency: props.currency || Currency.EUR }),
+    type === FormatType.CurrencyUAH && n(value, { style: 'currency', currency: Currency.UAH }),
+    type === FormatType.CurrencyUAH && n(value, { style: 'currency', currency: Currency.UAH }),
     type === FormatType.Percent && n(value, 'percent'),
     value
   ].filter(Boolean)
@@ -51,20 +51,16 @@ const isColumnsEditable = (notEditableColumns: string[] | undefined, field: stri
   return !notEditableColumns?.includes(field)
 }
 
-const currencyType = (currency?: FormatType) => {
-  return currency === FormatType.CurrencyUSD ? Currency.USD : Currency.UAH
+const currencyType = (currency?: FormatType): Currency => {
+  return currenciesName[currency as Currencies] || Currency.UAH
 }
 
 const tableCurrency = (currency: FormatType) => {
-  if (
-    currency === FormatType.CurrencyUSD ||
-    currency === FormatType.CurrencyEUR ||
-    currency === FormatType.ExchangeUAH
-  ) {
-    return props.currency === Currency.EUR ? t('currency.euro') : t('currency.dollar')
+  if (currency === FormatType.CurrencyUAH) {
+    return currenciesSymbols[Currency.UAH]
   }
 
-  return ''
+  return dynamicCurrencies.includes(currency) ? currenciesSymbols[props.currency as Currency] : ''
 }
 </script>
 

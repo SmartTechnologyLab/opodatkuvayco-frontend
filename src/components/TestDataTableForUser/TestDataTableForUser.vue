@@ -9,7 +9,7 @@ import { notEditableColumns } from './common/notEditableColumns'
 import { useI18n } from 'vue-i18n'
 import { getCurrencyExchange } from '@/api/getCurrencyExchange'
 import UiButton from '@/components/common/UiButton/UiButton.vue'
-import { Currency } from '@/components/common/UiNumberInput/types'
+import { Currency } from '@/constants/currencies'
 import UiSelectButton from '@/components/common/UiSelectButton/UiSelectButton.vue'
 
 const { t } = useI18n()

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 import UiSelectButton from '@/components/common/UiSelectButton/UiSelectButton.vue'
-import { Currency } from '../UiNumberInput/types'
+import { Currency } from '@/constants/currencies'
 
 export default {
   component: UiSelectButton,
