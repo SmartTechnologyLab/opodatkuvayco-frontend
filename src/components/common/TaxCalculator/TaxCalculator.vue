@@ -1,15 +1,13 @@
 <script setup lang="ts">
 import FileInput from '@/components/common/FileInput/FileInput.vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import UIButton from '@/components/common/UiButton/UiButton.vue'
 import { Icons } from '@/components/common/UiButton/constants'
-import { validChars } from './constants'
+import { operations, validChars, values } from '@/components/common/TaxCalculator/constants/index'
 
 const selectedFiles = ref<File[]>([])
-const numbers = ref<Array<number | string>>([1, 2, 3, 4, 5, 6, 7, 8, 9, '+/-', 0, '.'])
 const result = ref('')
-const operations = ref<string[]>(['*', '/', '+', '-'])
 const isNegative = ref(false)
 const isCalculating = ref(false)
 
@@ -61,6 +59,8 @@ const handleCheckInput = (value: string) => {
 
   result.value = arrayChars
 }
+
+const equalBtnType = computed(() => (selectedFiles.value.length && !result.value.length ? 'submit' : 'button'))
 </script>
 
 <template>
@@ -69,24 +69,25 @@ const handleCheckInput = (value: string) => {
       v-if="result.length || isCalculating"
       type="text"
       class="calc__result"
+      data-testid="result"
       v-model="result"
       @input="handleCheckInput(result)"
     />
 
-    <FileInput @onFileSelect="handleFileChange" accept=".json, .xml" v-else />
+    <FileInput @onFileSelect="handleFileChange" accept=".json, .xml" data-testid="file-input" v-else />
 
     <div class="calc__example">
       <span class="calc__example-title" v-if="!selectedFiles.length">
         {{ t('main.calc.file-example') }}
       </span>
 
-      <ul v-else class="calc__files-list">
+      <ul class="calc__files-list" v-else>
         <li class="calc__file" v-for="file in selectedFiles" :key="file.lastModified">
-          <span class="calc__file-name">
+          <span class="calc__file-name" data-testid="file-name">
             {{ file.name?.slice(0, 12) + '...' }}
           </span>
 
-          <UIButton :icon="Icons.CROSS" @click="handleDeleteFile(file)" />
+          <UIButton :icon="Icons.CROSS" @click="handleDeleteFile(file)" data-testid="btn-deleteFile" />
         </li>
       </ul>
       <div class="calc__toggle" />
@@ -94,8 +95,14 @@ const handleCheckInput = (value: string) => {
 
     <div class="calc__container">
       <div class="calc__numbers-grid">
-        <UIButton v-for="num in numbers" :key="num" class="calc__numbers" @click="addToResult(num)">
-          {{ num }}
+        <UIButton
+          v-for="value in values"
+          :key="value"
+          class="calc__numbers"
+          data-testid="btn-number"
+          @click="addToResult(value)"
+        >
+          {{ value }}
         </UIButton>
       </div>
 
@@ -106,18 +113,20 @@ const handleCheckInput = (value: string) => {
             @click="addToResult(operation)"
             :key="operation"
             class="calc__numbers"
+            data-testid="btn-operation"
           >
             {{ operation }}
           </UIButton>
         </div>
 
         <div class="calc__submit-grid">
-          <UIButton class="calc__numbers calc__numbers--equal" @click="reset">C</UIButton>
+          <UIButton class="calc__numbers calc__numbers--equal" data-testid="reset-btn" @click="reset">C</UIButton>
 
           <UIButton
             class="calc__numbers calc__numbers--equal"
+            data-testid="btn-equal"
             @click="calculate"
-            :type="selectedFiles.length && !result.length ? 'submit' : 'button'"
+            :type="equalBtnType"
           >
             =
           </UIButton>
