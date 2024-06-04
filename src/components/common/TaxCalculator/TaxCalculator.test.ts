@@ -151,7 +151,7 @@ describe('TaxCalculator tests', () => {
     const file = new File(['file'], 'example.json', { type: 'application/json' })
     const files = [file]
 
-    fileInput.vm.$emit('onFileSelect', { target: { files } })
+    fileInput.vm.$emit('change', { target: { files } })
 
     await wrapper.vm.$nextTick()
 
@@ -166,7 +166,7 @@ describe('TaxCalculator tests', () => {
     const file = new File(['file'], 'example.json', { type: 'application/json' })
     const files = [file]
 
-    fileInput.vm.$emit('onFileSelect', { target: { files } })
+    fileInput.vm.$emit('change', { target: { files } })
 
     await wrapper.vm.$nextTick()
 

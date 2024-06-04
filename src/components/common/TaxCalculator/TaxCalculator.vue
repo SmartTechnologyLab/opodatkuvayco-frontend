@@ -40,6 +40,7 @@ const calculate = () => {
 const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement
   const files = target?.files
+  console.log(files)
   if (files) {
     selectedFiles.value.push(...files)
   }
@@ -74,7 +75,7 @@ const equalBtnType = computed(() => (selectedFiles.value.length && !result.value
       @input="handleCheckInput(result)"
     />
 
-    <FileInput @onFileSelect="handleFileChange" accept=".json, .xml" data-testid="file-input" v-else />
+    <FileInput @change="handleFileChange" accept=".json, .xml" data-testid="file-input" v-else />
 
     <div class="calc__example">
       <span class="calc__example-title" v-if="!selectedFiles.length">
@@ -84,10 +85,15 @@ const equalBtnType = computed(() => (selectedFiles.value.length && !result.value
       <ul class="calc__files-list" v-else>
         <li class="calc__file" v-for="file in selectedFiles" :key="file.lastModified">
           <span class="calc__file-name" data-testid="file-name">
-            {{ file.name?.slice(0, 12) + '...' }}
+            {{ file.name }}
           </span>
 
-          <UIButton :icon="Icons.CROSS" @click="handleDeleteFile(file)" data-testid="btn-deleteFile" />
+          <UIButton
+            :icon="Icons.CROSS"
+            @click="handleDeleteFile(file)"
+            class="calc__delete-btn"
+            data-testid="btn-deleteFile"
+          />
         </li>
       </ul>
       <div class="calc__toggle" />
@@ -147,7 +153,9 @@ $toggle-background-main: #1c2022;
 
 $toggle-background-secondary: #6691a1;
 
-$equal-background: #8cd0d0;
+$special-btn-background: #8cd0d0;
+
+$special-btn-background: #8cd0d0;
 
 .calc {
   padding: 1rem;
@@ -161,7 +169,7 @@ $equal-background: #8cd0d0;
 
   &__container {
     display: flex;
-    gap: 6%;
+    gap: 1rem;
     width: 100%;
   }
 
@@ -175,7 +183,7 @@ $equal-background: #8cd0d0;
     height: 18px;
     border: 1px solid #628c9c;
     border-radius: 18px;
-    width: 20%;
+    width: 4rem;
     background: linear-gradient(to right, $toggle-background-main 70%, $toggle-background-secondary 70%);
   }
 
@@ -187,6 +195,8 @@ $equal-background: #8cd0d0;
     display: flex;
     align-items: center;
     gap: 0.3rem;
+    max-width: 235px;
+    overflow: hidden;
   }
 
   &__files-list {
@@ -194,16 +204,12 @@ $equal-background: #8cd0d0;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 1rem;
-  }
-
-  &__file-delete {
-    background: $equal-background;
-    height: 14px;
-    width: 14px;
+    padding: 0;
   }
 
   &__file-name {
     text-decoration: underline;
+    overflow: hidden;
   }
 
   &__result {
@@ -220,7 +226,7 @@ $equal-background: #8cd0d0;
   &__numbers-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-gap: 8% 10%;
+    grid-gap: 1rem 1rem;
     width: 100%;
     height: 15rem;
   }
@@ -242,10 +248,10 @@ $equal-background: #8cd0d0;
     &--equal {
       min-width: 2rem;
       max-width: 4rem;
-      height: 100%;
+      height: 6.9rem;
 
       &:nth-child(2) {
-        background: $equal-background;
+        background: $special-btn-background;
         color: $main-text-color;
       }
     }
@@ -254,27 +260,32 @@ $equal-background: #8cd0d0;
   &__wrapper {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
     width: 63%;
   }
 
   &__operations-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: 19% 13%;
+    grid-gap: 1rem;
     height: 100%;
   }
 
   &__submit-grid {
-    height: 100%;
-    display: flex;
-    gap: 13%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 1rem;
   }
 
   &__result {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  &__delete-btn {
+    background: none;
+    width: 1.5rem;
   }
 }
 </style>
