@@ -1,16 +1,11 @@
 <script setup lang="ts">
 import InputText from 'primevue/inputtext'
 import { useAttrs } from 'vue'
-
 const attrs = useAttrs()
-
-const props = defineProps<{
-  placeholder: string
-}>()
 </script>
 
 <template>
-  <InputText type="text" v-bind="{ ...attrs, ...props }" />
+  <InputText type="text" v-bind="{ ...attrs }" />
 </template>
 
-<style lang="scss"></style>
+<style lang="scss" scopped></style>
