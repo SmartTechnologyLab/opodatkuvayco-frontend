@@ -19,13 +19,10 @@ const handleLogin = async () => {
   try {
     loading.value = true
 
-    const { error } = await auth.signUp({
+    await auth.signUp({
       email: email.value,
       password: password.value
     })
-
-    if (error) throw error
-    alert('Registration successful! Please check your email to confirm your account.')
   } catch (error) {
     console.log(error)
     throw error
@@ -35,16 +32,24 @@ const handleLogin = async () => {
 }
 
 const handleGoogleLogin = async () => {
-  const { error } = await auth.signIn({
-    provider: 'google'
-  })
-  if (error) console.error('Error during Google OAuth login:', error.message)
+  loading.value = true
+  try {
+    await auth.signIn({
+      provider: 'google'
+    })
+  } catch (error) {
+    console.error(error)
+  } finally {
+    loading.value = false
+  }
 }
 
 const handleSignOut = async () => {
-  const { error } = await auth.signOut()
-
-  if (error) throw error
+  try {
+    await auth.signOut()
+  } catch (error) {
+    console.log(error)
+  }
 }
 </script>
 
