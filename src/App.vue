@@ -1,10 +1,16 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
+import { RouterView, useRoute } from 'vue-router'
 import NavBar from '@/components/NavBar/NavBar.vue'
+import { computed } from 'vue'
+import { routesWithoutNavBar } from '@/router/common/routesWithoutNavBar.ts'
+
+const route = useRoute()
+
+const showNavBar = computed(() => !routesWithoutNavBar.includes(route.path))
 </script>
 
 <template>
-  <NavBar />
+  <NavBar v-if="showNavBar" />
   <RouterView />
 </template>
 
