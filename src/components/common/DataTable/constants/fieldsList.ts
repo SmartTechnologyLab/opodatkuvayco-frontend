@@ -1,9 +1,7 @@
 export const currencyFields: string[] = [
   'purchase.price',
   'purchase.commission',
-  'purchase.rate',
   'sale.price',
-  'sale.rate',
   'sale.uah',
   'sale.commission'
 ]
