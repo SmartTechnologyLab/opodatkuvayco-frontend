@@ -1,4 +1,23 @@
-import { FormatType, type TableHeaders } from '../types'
+import type { TableHeaders } from '../types'
+import { Currency } from '@/constants/currencies'
+
+export enum FormatType {
+  Date,
+  Number,
+  CurrencyUAH,
+  CurrencyUSD,
+  CurrencyEUR,
+  Percent
+}
+
+export const dynamicCurrencies = [FormatType.CurrencyUSD, FormatType.CurrencyEUR]
+
+export const currenciesName: Record<Currency, Currency> = {
+  [Currency.UAH]: Currency.UAH,
+  [Currency.USD]: Currency.USD,
+  [Currency.EUR]: Currency.EUR
+}
+
 export const resultHeaders: TableHeaders[] = [
   {
     header: 'Тікер',
@@ -15,27 +34,27 @@ export const resultHeaders: TableHeaders[] = [
     type: FormatType.Number
   },
   {
-    header: 'Ціна ($)',
+    header: 'Ціна',
     field: 'purchase.price',
     type: FormatType.CurrencyUSD
   },
   {
-    header: 'Сума ($)',
+    header: 'Сума',
     field: 'purchase.sum',
     type: FormatType.CurrencyUSD
   },
   {
-    header: 'Комісія ($)',
+    header: 'Комісія',
     field: 'purchase.commission',
     type: FormatType.CurrencyUSD
   },
   {
-    header: 'Курс$',
+    header: 'Курс',
     field: 'purchase.rate',
     type: FormatType.CurrencyUAH
   },
   {
-    header: 'Покупка (грн)',
+    header: 'Покупка',
     field: 'purchase.uah',
     type: FormatType.CurrencyUAH
   },
@@ -45,27 +64,27 @@ export const resultHeaders: TableHeaders[] = [
     type: FormatType.Date
   },
   {
-    header: 'Ціна ($)',
+    header: 'Ціна',
     field: 'sale.price',
     type: FormatType.CurrencyUSD
   },
   {
-    header: 'Сума ($)',
+    header: 'Сума',
     field: 'sale.sum',
     type: FormatType.CurrencyUSD
   },
   {
-    header: 'Комісія ($)',
+    header: 'Комісія',
     field: 'sale.commission',
     type: FormatType.CurrencyUSD
   },
   {
-    header: 'Курс$',
+    header: 'Курс',
     field: 'sale.rate',
     type: FormatType.CurrencyUAH
   },
   {
-    header: 'Продаж (грн)',
+    header: 'Продаж',
     field: 'sale.uah',
     type: FormatType.CurrencyUAH
   },

@@ -78,6 +78,7 @@ export const Slot: Story = {
     },
     template: `
     <DataTable v-bind="{...args}">
+      <template #header>Мої угоди</template>
       <template #ticker="{ value }">🎉 {{ value }} 🎉</template>
       <template #date="{ value }"> {{ $d(value) }}</template>
     </DataTable>
@@ -94,6 +95,7 @@ export const MockedSlot: Story = {
     },
     template: `
     <DataTable v-bind="{...args}">
+      <template #header>Мої угоди</template>
       <template #purchase.date="{ value }"> {{ $d(value) }}</template>
       <template #purchase.price="{ value }"> {{ $n(value, { style: 'currency', currency: 'USD' }) }}</template>
       <template #purchase.sum="{ value }"> {{ $n(value, { style: 'currency', currency: 'USD' }) }}</template>
@@ -113,7 +115,6 @@ export const MockedSlot: Story = {
   `
   }),
   args: {
-    title: 'Мої угоди',
     table: {
       headers: resultHeaders,
       data: [
@@ -143,11 +144,10 @@ export const HeaderType: Story = {
       return { args }
     },
     template: `
-    <DataTable v-bind="{...args}" />      
+    <DataTable v-bind="{...args}" />
   `
   }),
   args: {
-    title: 'Мої угоди',
     table: {
       headers: resultHeaders,
       data: [
@@ -181,7 +181,6 @@ export const Sortable: Story = {
     `
   }),
   args: {
-    title: 'Мої угоди',
     table: {
       headers: resultHeaders,
       data: [
@@ -218,7 +217,6 @@ export const Editable: Story = {
     methods: { action: action('changed') }
   }),
   args: {
-    title: 'Мої угоди',
     table: {
       headers: resultHeaders,
       data: [

@@ -5,5 +5,7 @@ export const notEditableColumns: string[] = [
   'sale.sum',
   'purchase.uah',
   'sale.uah',
-  'purchase.sum'
+  'purchase.sum',
+  'sale.rate',
+  'purchase.rate'
 ]

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 import UiNumberInput from './UiNumberInput.vue'
-import { Currency } from './types'
+import { Currency } from '@/constants/currencies'
 
 export default {
   component: UiNumberInput,
@@ -8,7 +8,7 @@ export default {
     mode: undefined,
     minFractionDigits: 0,
     maxFractionDigits: 0,
-    preffix: '',
+    prefix: '',
     suffix: ''
   },
   argTypes: {
@@ -21,7 +21,7 @@ export default {
       control: 'radio',
       options: [undefined, ...Object.values(Currency)]
     },
-    preffix: {
+    prefix: {
       control: 'text'
     },
     suffix: {
