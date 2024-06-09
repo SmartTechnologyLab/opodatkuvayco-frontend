@@ -70,12 +70,11 @@ const equalBtnType = computed(() => (selectedFiles.value.length && !result.value
       v-if="result.length || isCalculating"
       type="text"
       class="calc__result"
-      data-testid="result"
       v-model="result"
       @input="handleCheckInput(result)"
     />
 
-    <FileInput @change="handleFileChange" accept=".json, .xml" data-testid="file-input" v-else />
+    <FileInput @change="handleFileChange" accept=".json, .xml" v-else />
 
     <div class="calc__example">
       <span class="calc__example-title" v-if="!selectedFiles.length">
@@ -84,16 +83,11 @@ const equalBtnType = computed(() => (selectedFiles.value.length && !result.value
 
       <ul class="calc__files-list" v-else>
         <li class="calc__file" v-for="file in selectedFiles" :key="file.lastModified">
-          <span class="calc__file-name" data-testid="file-name">
+          <span class="calc__file-name">
             {{ file.name }}
           </span>
 
-          <UIButton
-            :icon="Icons.CROSS"
-            @click="handleDeleteFile(file)"
-            class="calc__delete-btn"
-            data-testid="btn-deleteFile"
-          />
+          <UIButton :icon="Icons.CROSS" @click="handleDeleteFile(file)" class="calc__delete-btn" />
         </li>
       </ul>
       <div class="calc__toggle" />
@@ -101,13 +95,7 @@ const equalBtnType = computed(() => (selectedFiles.value.length && !result.value
 
     <div class="calc__container">
       <div class="calc__numbers-grid">
-        <UIButton
-          v-for="value in values"
-          :key="value"
-          class="calc__numbers"
-          data-testid="btn-number"
-          @click="addToResult(value)"
-        >
+        <UIButton v-for="value in values" :key="value" class="calc__numbers" @click="addToResult(value)">
           {{ value }}
         </UIButton>
       </div>
@@ -119,23 +107,15 @@ const equalBtnType = computed(() => (selectedFiles.value.length && !result.value
             @click="addToResult(operation)"
             :key="operation"
             class="calc__numbers"
-            data-testid="btn-operation"
           >
             {{ operation }}
           </UIButton>
         </div>
 
         <div class="calc__submit-grid">
-          <UIButton class="calc__numbers calc__numbers--equal" data-testid="reset-btn" @click="reset">C</UIButton>
+          <UIButton class="calc__numbers calc__numbers--equal" @click="reset">C</UIButton>
 
-          <UIButton
-            class="calc__numbers calc__numbers--equal"
-            data-testid="btn-equal"
-            @click="calculate"
-            :type="equalBtnType"
-          >
-            =
-          </UIButton>
+          <UIButton class="calc__numbers calc__numbers--equal" @click="calculate" :type="equalBtnType"> = </UIButton>
         </div>
       </div>
     </div>
