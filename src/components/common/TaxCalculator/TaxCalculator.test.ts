@@ -39,14 +39,23 @@ describe('TaxCalculator component', () => {
 
   it('When result is null or isCalculating is false - FileInput renders', () => {
     const fileInput = wrapper.findComponent(FileInput)
-    const resultInput = wrapper.find('[data-testid="result"]')
+    const resultInput = wrapper.find('input[type="text"]')
 
     expect(fileInput.exists()).toBe(true)
     expect(resultInput.exists()).toBe(false)
   })
 
+  const ONE = '1'
+  const TWO = '2'
+  const THREE = '3'
+  const PLUS = '+'
+  const MINUS = '-'
+  const MULTIPLY = '*'
+  const DIVIDE = '/'
+  const EQUAL = '='
+  const CLEAR = 'C'
   it('When the button with number is clicked, the result input is mounted into DOM', async () => {
-    const numberBtn = findButtonByText('1')
+    const numberBtn = findButtonByText(ONE)
 
     await numberBtn.trigger('click')
 
@@ -55,8 +64,8 @@ describe('TaxCalculator component', () => {
   })
 
   it('When the reset button clicked, the result input is unmounted from DOM and the FileInput renders', async () => {
-    const numberBtn = findButtonByText('1')
-    const resetBtn = findButtonByText('C')
+    const numberBtn = findButtonByText(ONE)
+    const resetBtn = findButtonByText(CLEAR)
 
     await numberBtn?.trigger('click')
 
@@ -65,17 +74,18 @@ describe('TaxCalculator component', () => {
 
     await resetBtn.trigger('click')
 
-    const resultInput = wrapper.find('input').attributes().type === 'text'
+    const resultInput = wrapper.find('input[type="text"]')
 
     expect(wrapper.findComponent(FileInput).exists()).toBe(true)
-    expect(resultInput).toBe(false)
+    expect(resultInput.exists()).toBe(false)
   })
 
   it('Calctulating the sum correctly', async () => {
-    const equalBtn = findButtonByText('=')
-    const plusBtn = findButtonByText('+')
-    const oneBtn = findButtonByText('1')
-    const twoBtn = findButtonByText('2')
+    const RESULT = '3'
+    const equalBtn = findButtonByText(EQUAL)
+    const plusBtn = findButtonByText(PLUS)
+    const oneBtn = findButtonByText(ONE)
+    const twoBtn = findButtonByText(TWO)
 
     await oneBtn.trigger('click')
 
@@ -86,14 +96,15 @@ describe('TaxCalculator component', () => {
     await equalBtn.trigger('click')
 
     const resultInput = wrapper.find('input[type="text"]')
-    expect((resultInput.element as HTMLInputElement).value).toStrictEqual('3')
+    expect((resultInput.element as HTMLInputElement).value).toStrictEqual(RESULT)
   })
 
   it('Calctulating the difference correctly', async () => {
-    const equalBtn = findButtonByText('=')
-    const minusBtn = findButtonByText('-')
-    const oneBtn = findButtonByText('1')
-    const twoBtn = findButtonByText('2')
+    const RESULT = '-1'
+    const equalBtn = findButtonByText(EQUAL)
+    const minusBtn = findButtonByText(MINUS)
+    const oneBtn = findButtonByText(ONE)
+    const twoBtn = findButtonByText(TWO)
 
     await oneBtn.trigger('click')
 
@@ -104,14 +115,15 @@ describe('TaxCalculator component', () => {
     await equalBtn.trigger('click')
 
     const resultInput = wrapper.find('input[type="text"]')
-    expect((resultInput.element as HTMLInputElement).value).toStrictEqual('-1')
+    expect((resultInput.element as HTMLInputElement).value).toStrictEqual(RESULT)
   })
 
   it('Calctulating the multiplication correctly', async () => {
-    const equalBtn = findButtonByText('=')
-    const multiplyBtn = findButtonByText('*')
-    const twoBtn = findButtonByText('2')
-    const threeBtn = findButtonByText('3')
+    const RESULT = '6'
+    const equalBtn = findButtonByText(EQUAL)
+    const multiplyBtn = findButtonByText(MULTIPLY)
+    const twoBtn = findButtonByText(TWO)
+    const threeBtn = findButtonByText(THREE)
 
     await threeBtn.trigger('click')
 
@@ -122,13 +134,14 @@ describe('TaxCalculator component', () => {
     await equalBtn.trigger('click')
 
     const resultInput = wrapper.find('input[type="text"]')
-    expect((resultInput.element as HTMLInputElement).value).toStrictEqual('6')
+    expect((resultInput.element as HTMLInputElement).value).toStrictEqual(RESULT)
   })
 
   it('Calctulating the division correctly', async () => {
-    const equalBtn = findButtonByText('=')
-    const divisionBtn = findButtonByText('/')
-    const threeBtn = findButtonByText('3')
+    const RESULT = '1'
+    const equalBtn = findButtonByText(EQUAL)
+    const divisionBtn = findButtonByText(DIVIDE)
+    const threeBtn = findButtonByText(THREE)
 
     await threeBtn.trigger('click')
 
@@ -139,14 +152,15 @@ describe('TaxCalculator component', () => {
     await equalBtn.trigger('click')
 
     const resultInput = wrapper.find('input[type="text"]')
-    expect((resultInput.element as HTMLInputElement).value).toEqual('1')
+    expect((resultInput.element as HTMLInputElement).value).toEqual(RESULT)
   })
 
   it('Set the number to negative correctly', async () => {
-    const equalBtn = findButtonByText('=')
-    const plusBtn = findButtonByText('+')
+    const RESULT = '0'
+    const equalBtn = findButtonByText(EQUAL)
+    const plusBtn = findButtonByText(PLUS)
     const negativeBtn = findButtonByText('+/-')
-    const threeBtn = findButtonByText('3')
+    const threeBtn = findButtonByText(THREE)
 
     await threeBtn?.trigger('click')
 
@@ -159,7 +173,7 @@ describe('TaxCalculator component', () => {
     await equalBtn.trigger('click')
 
     const resultInput = wrapper.find('input')
-    expect((resultInput.element as HTMLInputElement).value).toEqual('0')
+    expect((resultInput.element as HTMLInputElement).value).toEqual(RESULT)
   })
 
   it('Handles file input change', async () => {
@@ -210,7 +224,7 @@ describe('TaxCalculator component', () => {
 
     await fileInput.trigger('change')
 
-    expect(findButtonByText('=').attributes().type).toEqual('submit')
+    expect(findButtonByText(EQUAL).attributes().type).toEqual('submit')
   })
 
   it('Equal button reset type to button when ', async () => {
@@ -222,7 +236,7 @@ describe('TaxCalculator component', () => {
 
     await fileInput.trigger('change')
 
-    expect(findButtonByText('=').attributes().type).toEqual('submit')
+    expect(findButtonByText(EQUAL).attributes().type).toEqual('submit')
 
     const deleteButton = wrapper
       .findAll('button')
@@ -230,6 +244,6 @@ describe('TaxCalculator component', () => {
 
     await deleteButton.trigger('click')
 
-    expect(findButtonByText('=').attributes().type).toEqual('button')
+    expect(findButtonByText(EQUAL).attributes().type).toEqual('button')
   })
 })
