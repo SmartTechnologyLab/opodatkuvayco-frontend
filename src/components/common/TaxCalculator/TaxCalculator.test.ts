@@ -1,10 +1,19 @@
 import { DOMWrapper, shallowMount, type VueWrapper } from '@vue/test-utils'
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import TaxCalculator from '@/components/common/TaxCalculator/TaxCalculator.vue'
 import FileInput from '@/components/common/FileInput/FileInput.vue'
 import { nextTick } from 'vue'
 
-describe('TaxCalculator tests', () => {
+const file = new File(['file'], 'example.json', { type: 'application/json' })
+
+const mockDataTransfer = {
+  files: [file],
+  items: {
+    add: vi.fn()
+  }
+}
+
+describe('TaxCalculator component', () => {
   let wrapper: VueWrapper
 
   const findButtonByText = (text: string): DOMWrapper<HTMLElement> => {
@@ -28,7 +37,7 @@ describe('TaxCalculator tests', () => {
     wrapper.unmount()
   })
 
-  it('When result is null or isCalculating is false - render FileInput', () => {
+  it('When result is null or isCalculating is false - FileInput renders', () => {
     const fileInput = wrapper.findComponent(FileInput)
     const resultInput = wrapper.find('[data-testid="result"]')
 
@@ -76,7 +85,7 @@ describe('TaxCalculator tests', () => {
 
     await equalBtn.trigger('click')
 
-    const resultInput = wrapper.find('input')
+    const resultInput = wrapper.find('input[type="text"]')
     expect((resultInput.element as HTMLInputElement).value).toStrictEqual('3')
   })
 
@@ -94,7 +103,7 @@ describe('TaxCalculator tests', () => {
 
     await equalBtn.trigger('click')
 
-    const resultInput = wrapper.find('input')
+    const resultInput = wrapper.find('input[type="text"]')
     expect((resultInput.element as HTMLInputElement).value).toStrictEqual('-1')
   })
 
@@ -112,7 +121,7 @@ describe('TaxCalculator tests', () => {
 
     await equalBtn.trigger('click')
 
-    const resultInput = wrapper.find('input')
+    const resultInput = wrapper.find('input[type="text"]')
     expect((resultInput.element as HTMLInputElement).value).toStrictEqual('6')
   })
 
@@ -129,7 +138,7 @@ describe('TaxCalculator tests', () => {
 
     await equalBtn.trigger('click')
 
-    const resultInput = wrapper.find('input')
+    const resultInput = wrapper.find('input[type="text"]')
     expect((resultInput.element as HTMLInputElement).value).toEqual('1')
   })
 
@@ -154,12 +163,13 @@ describe('TaxCalculator tests', () => {
   })
 
   it('Handles file input change', async () => {
-    const fileInput = wrapper.findComponent(FileInput)
+    const fileInput = wrapper.findComponent(FileInput).find('input[type="file"]')
 
-    const file = new File(['file'], 'example.json', { type: 'application/json' })
-    const files = [file]
+    Object.defineProperty(fileInput.element, 'files', {
+      value: mockDataTransfer.files
+    })
 
-    fileInput.vm.$emit('change', { target: { files } })
+    await fileInput.trigger('change')
 
     await nextTick()
 
@@ -169,20 +179,57 @@ describe('TaxCalculator tests', () => {
   })
 
   it('Deletes file correctly', async () => {
-    const fileInput = wrapper.findComponent(FileInput)
-    const file = new File(['file'], 'example.json', { type: 'application/json' })
-    const files = [file]
+    const fileInput = wrapper.findComponent(FileInput).find('input[type="file"]')
 
-    fileInput.vm.$emit('change', { target: { files } })
+    Object.defineProperty(fileInput.element, 'files', {
+      value: mockDataTransfer.files
+    })
+
+    await fileInput.trigger('change')
 
     await nextTick()
 
-    const deleteFile = wrapper
+    const deleteButton = wrapper
       .findAll('button')
       .find((button) => button.attributes().icon === 'pi pi-times') as DOMWrapper<HTMLButtonElement>
-    await deleteFile.trigger('click')
+
+    await deleteButton.trigger('click')
+
+    await nextTick()
 
     const fileList = wrapper.find('ul')
     expect(fileList.exists()).toBe(false)
+  })
+
+  it('Equal button has type of submit when files is defined', async () => {
+    const fileInput = wrapper.findComponent(FileInput).find('input[type="file"]')
+
+    Object.defineProperty(fileInput.element, 'files', {
+      value: mockDataTransfer.files
+    })
+
+    await fileInput.trigger('change')
+
+    expect(findButtonByText('=').attributes().type).toEqual('submit')
+  })
+
+  it('Equal button reset type to button when ', async () => {
+    const fileInput = wrapper.findComponent(FileInput).find('input[type="file"]')
+
+    Object.defineProperty(fileInput.element, 'files', {
+      value: mockDataTransfer.files
+    })
+
+    await fileInput.trigger('change')
+
+    expect(findButtonByText('=').attributes().type).toEqual('submit')
+
+    const deleteButton = wrapper
+      .findAll('button')
+      .find((button) => button.attributes().icon === 'pi pi-times') as DOMWrapper<HTMLButtonElement>
+
+    await deleteButton.trigger('click')
+
+    expect(findButtonByText('=').attributes().type).toEqual('button')
   })
 })
