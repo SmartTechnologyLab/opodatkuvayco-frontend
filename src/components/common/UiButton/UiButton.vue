@@ -21,11 +21,6 @@ defineEmits<{
   (e: 'click'): void
 }>()
 
-const componentAttrs = computed(() => {
-  const { href, to } = attrs
-  return { href, to }
-})
-
 const routerLinkTag = 'router-link'
 const linkTag = 'a'
 
@@ -38,6 +33,16 @@ const component = computed(() => {
   }
 
   return null
+})
+
+const componentAttrs = computed(() => {
+  const { href, to } = attrs
+
+  if (component.value === 'router-link') {
+    return { to }
+  }
+
+  return { href }
 })
 </script>
 
