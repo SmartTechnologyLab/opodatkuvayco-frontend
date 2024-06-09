@@ -53,12 +53,10 @@ const handleDeleteFile = (file: File) => {
 const checkIsValid = (value: string) => validChars.includes(value)
 
 const handleCheckInput = (value: string) => {
-  const arrayChars = value
+  result.value = value
     .split('')
     .filter((char) => checkIsValid(char))
     .join('')
-
-  result.value = arrayChars
 }
 
 const equalBtnType = computed(() => (selectedFiles.value.length && !result.value.length ? 'submit' : 'button'))

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import InputNumber from 'primevue/inputnumber'
 import { useAttrs } from 'vue'
-import type { Currency } from './types'
+import { Currency } from '@/constants/currencies'
 
 const attrs = useAttrs()
 
@@ -10,7 +10,7 @@ const props = defineProps<{
   currency?: Currency
   minFractionDigits?: number
   maxFractionDigits?: number
-  preffix?: string
+  prefix?: string
   suffix?: string
 }>()
 </script>
