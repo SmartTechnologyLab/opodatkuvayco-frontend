@@ -18,7 +18,7 @@ const props = defineProps<{
 }>()
 
 defineEmits<{
-  (e: 'clickBtn'): void
+  (e: 'click'): void
 }>()
 
 const componentAttrs = computed(() => {
@@ -43,12 +43,12 @@ const component = computed(() => {
 
 <template>
   <Component :is="component" v-if="component" v-bind="{ ...componentAttrs }">
-    <Button v-bind="{ ...props, ...attrs }" @click="$emit('clickBtn')">
+    <Button v-bind="{ ...props, ...attrs }" @click="$emit('click')">
       <slot />
     </Button>
   </Component>
 
-  <Button v-bind="{ ...props, ...attrs }" @click="$emit('clickBtn')" v-else>
+  <Button v-bind="{ ...props, ...attrs }" @click="$emit('click')" v-else>
     <slot />
   </Button>
 </template>
