@@ -2,27 +2,27 @@
 import DataTable, { type DataTableCellEditCompleteEvent } from 'primevue/datatable'
 import Column from 'primevue/column'
 import Card from 'primevue/card'
-import { path } from 'ramda'
+import { isNil, path } from 'ramda'
 import { useI18n } from 'vue-i18n'
-import { type Ref } from 'vue'
+import { computed, type Ref } from 'vue'
 import { type Deal } from '@/components/common/DataTable/mocks'
-import { FormatType, type Table } from '@/components/common/DataTable/types'
-import { isNil } from 'ramda'
+import type { Currencies, Table } from '@/components/common/DataTable/types'
 import UiInput from '@/components/common/UiInput/UiInput.vue'
 import { calendarFields, currencyFields, numberFields } from '@/components/common/DataTable/constants/fieldsList'
 import UiNumberInput from '../UiNumberInput/UiNumberInput.vue'
-import { Currency } from '../UiNumberInput/types'
 import UiCalendar from '../UiCalendar/UiCalendar.vue'
 import { DateFormat } from '../UiCalendar/types'
+import { Currency, currenciesSymbols } from '@/constants/currencies'
+import { currenciesName, FormatType, dynamicCurrencies } from '@/components/common/DataTable/constants'
 
-defineProps<{
+const props = defineProps<{
   table: Table
-  title?: string
   sortableColumn?: boolean
   removeSortable?: boolean
   notEditableColumns?: string[]
   editMode?: 'cell' | 'row' | undefined
   resizableColumns?: boolean
+  currency?: Currency
 }>()
 
 defineEmits<{
@@ -37,8 +37,8 @@ const getFormattedData = (data: Ref<Deal[]>, field: string, type?: FormatType) =
   const [formatted] = [
     type === FormatType.Date && d(value),
     type === FormatType.Number && n(value),
-    type === FormatType.CurrencyUSD && n(value, { style: 'currency', currency: 'USD' }),
-    type === FormatType.CurrencyUAH && n(value, 'currency'),
+    type === FormatType.CurrencyUSD && n(value, { style: 'currency', currency: props.currency || Currency.EUR }),
+    type === FormatType.CurrencyUAH && n(value, { style: 'currency', currency: Currency.UAH }),
     type === FormatType.Percent && n(value, 'percent'),
     value
   ].filter(Boolean)
@@ -50,15 +50,21 @@ const isColumnsEditable = (notEditableColumns: string[] | undefined, field: stri
   return !notEditableColumns?.includes(field)
 }
 
-const currencyType = (currency?: FormatType) => {
-  return currency === FormatType.CurrencyUSD ? Currency.USD : Currency.UAH
+const currencyType = computed(() => currenciesName[props.currency as Currencies])
+
+const tableCurrency = (currency: FormatType) => {
+  if (currency === FormatType.CurrencyUAH) {
+    return currenciesSymbols[Currency.UAH]
+  }
+
+  return dynamicCurrencies.includes(currency) ? currenciesSymbols[props.currency as Currency] : ''
 }
 </script>
 
 <template>
   <Card>
-    <template #title v-if="title">
-      {{ $t(title) }}
+    <template #title>
+      <slot name="header" />
     </template>
 
     <template #content>
@@ -76,7 +82,7 @@ const currencyType = (currency?: FormatType) => {
           :sortable="sortableColumn"
           :key="field"
           :field
-          :header="$t(header)"
+          :header="`${$t(header)} ${tableCurrency(type as FormatType)}`"
           style="min-width: 100px"
         >
           <template #body="{ data, field }">
@@ -90,7 +96,7 @@ const currencyType = (currency?: FormatType) => {
               <UiCalendar v-model="data[field]" :dateFormat="DateFormat.DOTTED" />
             </template>
             <template v-else-if="currencyFields.includes(field)">
-              <UiNumberInput v-model="data[field]" mode="currency" :currency="currencyType(type)" />
+              <UiNumberInput v-model="data[field]" mode="currency" :currency="currencyType" />
             </template>
             <template v-else-if="numberFields.includes(field)">
               <UiNumberInput v-model="data[field]" />

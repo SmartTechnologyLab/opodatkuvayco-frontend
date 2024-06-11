@@ -14,9 +14,11 @@
     "register-btn": "Зареєструватись"
   },
   "table": {
+    "title": "Заголовок",
     "empty": "Не має жодних данних",
     "btnAddRow": "Добавити рядок",
-    "btnYourLimitLeft": "Ліміт вичерпан"
+    "btnYourLimitLeft": "Ліміт вичерпан",
+    "chooseCurrency": "Виберіть валюту"
   },
   "navBar": {
     "companyName": "Оподаткувайко",
