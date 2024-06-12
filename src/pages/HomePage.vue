@@ -19,11 +19,9 @@ const { t } = useI18n()
         </template>
       </i18n-t>
 
-      <RouterLink to="/register">
-        <UiButton class="main-page__btn">
-          {{ t('main.register-btn') }}
-        </UiButton>
-      </RouterLink>
+      <UiButton class="main-page__btn" to="/register">
+        {{ t('main.register-btn') }}
+      </UiButton>
 
       <TaxCalculator />
     </main>
@@ -34,7 +32,7 @@ const { t } = useI18n()
   </Suspense>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 $h2-marked-color: #6af6ff;
 $register-btn-color: #8cd0d0;
 

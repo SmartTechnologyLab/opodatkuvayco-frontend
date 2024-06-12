@@ -6,8 +6,11 @@ import type { DataTableCellEditCompleteEvent } from 'primevue/datatable'
 import { assocPath } from 'ramda'
 import { ref, watch } from 'vue'
 import { notEditableColumns } from './common/notEditableColumns'
-import UiButton from '../common/UiButton/UiButton.vue'
 import { useI18n } from 'vue-i18n'
+import { getCurrencyExchange } from '@/api/getCurrencyExchange'
+import UiButton from '@/components/common/UiButton/UiButton.vue'
+import { Currency } from '@/constants/currencies'
+import UiSelectButton from '@/components/common/UiSelectButton/UiSelectButton.vue'
 
 const { t } = useI18n()
 
@@ -27,12 +30,26 @@ const table = ref({
   data: [getDeal(rowData.value), getDeal(), getDeal(), getDeal(), getDeal()]
 })
 
+const currencies = ref<string[]>(Object.values(Currency).filter((currency) => currency !== Currency.UAH))
+
+const selectedCurrency = ref(Currency.USD)
+
 const btnContent = ref(t('table.btnAddRow'))
 
-const onCellEditComplete = (event: DataTableCellEditCompleteEvent) => {
+const onCellEditComplete = async (event: DataTableCellEditCompleteEvent) => {
   let { newValue, field, index } = event
 
-  if (newValue !== undefined && newValue !== null && newValue !== '') {
+  if (newValue) {
+    if (field === 'purchase.date') {
+      const exchangeRate = await getCurrencyExchange(selectedCurrency.value, newValue)
+      table.value.data[index].purchase.rate = exchangeRate.rate
+    }
+
+    if (field === 'sale.date') {
+      const exchangeRate = await getCurrencyExchange(selectedCurrency.value, newValue)
+      table.value.data[index].sale.rate = exchangeRate.rate
+    }
+
     const editedRow = table.value.data[index]
 
     const fieldPath = field.split('.')
@@ -63,22 +80,44 @@ watch(
   () => table.value.data.length < 8,
   () => (btnContent.value = t('table.btnYourLimitLeft'))
 )
+
+table.value.data.forEach((deal) => {
+  watch(
+    () => selectedCurrency.value,
+    async () => {
+      const [purchase, sale] = await Promise.all([
+        getCurrencyExchange(selectedCurrency.value, String(deal.purchase.date)),
+        getCurrencyExchange(selectedCurrency.value, String(deal.sale.date))
+      ])
+
+      deal.purchase.rate = purchase.rate
+      deal.sale.rate = sale.rate
+
+      recalculateVariables(deal)
+    }
+  )
+})
 </script>
 
 <template>
   <DataTable
-    removeSortable
-    sortableColumn
     :table="table"
-    title="Example table"
     @onCellEdit="onCellEditComplete($event)"
     :notEditableColumns="notEditableColumns"
     edit-mode="cell"
     class="data-table"
     resizableColumns
+    :currency="selectedCurrency"
   >
+    <template #header>
+      <div class="data-table__header">
+        <h1 class="data-table__title">{{ t('table.title') }}</h1>
+        <UiSelectButton v-model="selectedCurrency" :options="currencies" :allow-empty="false" />
+      </div>
+    </template>
+
     <template #add-row>
-      <UiButton @click-btn="handleAddRow" class="data-table__add-btn">
+      <UiButton @click="handleAddRow" class="data-table__add-btn">
         <i class="pi pi-plus" style="color: black" v-if="table.data.length < 8" />
         {{ btnContent }}
       </UiButton>
@@ -89,6 +128,16 @@ watch(
 <style scoped lang="scss">
 .data-table {
   width: 90vw;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__title {
+    font-size: 2rem;
+  }
 
   &__add-btn {
     margin-left: auto;

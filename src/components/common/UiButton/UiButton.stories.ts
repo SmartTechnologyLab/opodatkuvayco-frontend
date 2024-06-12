@@ -57,6 +57,19 @@ export const Colors: StoryFn<typeof UiButton> = (args) => ({
   </div>`
 })
 
+export const ButtonType: StoryFn<typeof UiButton> = (args) => ({
+  components: { UiButton },
+  setup() {
+    return { args }
+  },
+  template: `
+  <div style="display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+    <UiButton :key="severity" v-bind="{ ...args }" to='/google' />
+    <UiButton :key="severity" v-bind="{ ...args }" href='#id' />
+    <UiButton :key="severity" v-bind="{ ...args }" />
+  </div>`
+})
+
 export const Ico: StoryFn<typeof UiButton> = (args) => ({
   components: { UiButton },
   setup() {
