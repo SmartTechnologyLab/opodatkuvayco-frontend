@@ -1,17 +1,15 @@
 <script setup lang="ts">
 import FileInput from '@/components/common/FileInput/FileInput.vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import UIButton from '@/components/common/UiButton/UiButton.vue'
 import { Icons } from '@/components/common/UiButton/constants'
-import { validChars } from './constants'
+import { operations, validChars, values } from '@/components/common/TaxCalculator/constants/index'
 
 const selectedFiles = ref<File[]>([])
-const numbers = ref<Array<number | string>>([1, 2, 3, 4, 5, 6, 7, 8, 9, '+/-', 0, '.'])
-const result = ref<string>('')
-const operations = ref<string[]>(['*', '/', '+', '-'])
-const isNegative = ref<boolean>(false)
-const isCalculating = ref<boolean>(false)
+const result = ref('')
+const isNegative = ref(false)
+const isCalculating = ref(false)
 
 const { t } = useI18n()
 
@@ -42,6 +40,7 @@ const calculate = () => {
 const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement
   const files = target?.files
+  console.log(files)
   if (files) {
     selectedFiles.value.push(...files)
   }
@@ -59,6 +58,8 @@ const handleCheckInput = (value: string) => {
     .filter((char) => checkIsValid(char))
     .join('')
 }
+
+const equalBtnType = computed(() => (selectedFiles.value.length && !result.value.length ? 'submit' : 'button'))
 </script>
 
 <template>
@@ -78,13 +79,13 @@ const handleCheckInput = (value: string) => {
         {{ t('main.calc.file-example') }}
       </span>
 
-      <ul v-else class="calc__files-list">
+      <ul class="calc__files-list" v-else>
         <li class="calc__file" v-for="file in selectedFiles" :key="file.lastModified">
           <span class="calc__file-name">
-            {{ file.name?.slice(0, 12) + '...' }}
+            {{ file.name }}
           </span>
 
-          <UIButton :icon="Icons.CROSS" @click="handleDeleteFile(file)" />
+          <UIButton :icon="Icons.CROSS" @click="handleDeleteFile(file)" class="calc__delete-btn" />
         </li>
       </ul>
       <div class="calc__toggle" />
@@ -92,8 +93,8 @@ const handleCheckInput = (value: string) => {
 
     <div class="calc__container">
       <div class="calc__numbers-grid">
-        <UIButton v-for="num in numbers" :key="num" class="calc__numbers" @click="addToResult(num)">
-          {{ num }}
+        <UIButton v-for="value in values" :key="value" class="calc__numbers" @click="addToResult(value)">
+          {{ value }}
         </UIButton>
       </div>
 
@@ -112,13 +113,7 @@ const handleCheckInput = (value: string) => {
         <div class="calc__submit-grid">
           <UIButton class="calc__numbers calc__numbers--equal" @click="reset">C</UIButton>
 
-          <UIButton
-            class="calc__numbers calc__numbers--equal"
-            @click="calculate"
-            :type="selectedFiles.length && !result.length ? 'submit' : 'button'"
-          >
-            =
-          </UIButton>
+          <UIButton class="calc__numbers calc__numbers--equal" @click="calculate" :type="equalBtnType"> = </UIButton>
         </div>
       </div>
     </div>
@@ -136,7 +131,9 @@ $toggle-background-main: #1c2022;
 
 $toggle-background-secondary: #6691a1;
 
-$equal-background: #8cd0d0;
+$special-btn-background: #8cd0d0;
+
+$special-btn-background: #8cd0d0;
 
 .calc {
   padding: 1rem;
@@ -146,11 +143,11 @@ $equal-background: #8cd0d0;
   flex-direction: column;
   gap: 1rem;
   width: 100%;
-  max-width: 720px;
+  max-width: 460px;
 
   &__container {
     display: flex;
-    gap: 6%;
+    gap: 1rem;
     width: 100%;
   }
 
@@ -164,7 +161,7 @@ $equal-background: #8cd0d0;
     height: 18px;
     border: 1px solid #628c9c;
     border-radius: 18px;
-    width: 20%;
+    width: 4rem;
     background: linear-gradient(to right, $toggle-background-main 70%, $toggle-background-secondary 70%);
   }
 
@@ -176,6 +173,8 @@ $equal-background: #8cd0d0;
     display: flex;
     align-items: center;
     gap: 0.3rem;
+    max-width: 235px;
+    overflow: hidden;
   }
 
   &__files-list {
@@ -183,16 +182,12 @@ $equal-background: #8cd0d0;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 1rem;
-  }
-
-  &__file-delete {
-    background: $equal-background;
-    height: 14px;
-    width: 14px;
+    padding: 0;
   }
 
   &__file-name {
     text-decoration: underline;
+    overflow: hidden;
   }
 
   &__result {
@@ -209,7 +204,7 @@ $equal-background: #8cd0d0;
   &__numbers-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-gap: 8% 10%;
+    grid-gap: 1rem 1rem;
     width: 100%;
     height: 15rem;
   }
@@ -221,18 +216,20 @@ $equal-background: #8cd0d0;
     font-size: 18px;
     border: none;
     cursor: pointer;
-    width: 100%;
-    height: 2.7rem;
+    min-width: 2rem;
+    max-width: 4rem;
+    height: 2.8rem;
     display: flex;
     align-items: center;
     justify-content: center;
 
     &--equal {
-      width: 43%;
-      height: 100%;
+      min-width: 2rem;
+      max-width: 4rem;
+      height: 6.9rem;
 
       &:nth-child(2) {
-        background: $equal-background;
+        background: $special-btn-background;
         color: $main-text-color;
       }
     }
@@ -241,27 +238,32 @@ $equal-background: #8cd0d0;
   &__wrapper {
     display: flex;
     flex-direction: column;
-    gap: 10%;
+    gap: 1rem;
     width: 63%;
   }
 
   &__operations-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: 19% 13%;
+    grid-gap: 1rem;
     height: 100%;
   }
 
   &__submit-grid {
-    height: 100%;
-    display: flex;
-    gap: 13%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 1rem;
   }
 
   &__result {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  &__delete-btn {
+    background: none;
+    width: 1.5rem;
   }
 }
 </style>
