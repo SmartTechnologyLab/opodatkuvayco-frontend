@@ -117,7 +117,7 @@ table.value.data.forEach((deal) => {
     </template>
 
     <template #add-row>
-      <UiButton @click-btn="handleAddRow" class="data-table__add-btn">
+      <UiButton @click="handleAddRow" class="data-table__add-btn">
         <i class="pi pi-plus" style="color: black" v-if="table.data.length < 8" />
         {{ btnContent }}
       </UiButton>
