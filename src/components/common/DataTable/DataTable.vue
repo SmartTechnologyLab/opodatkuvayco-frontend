@@ -92,19 +92,16 @@ const tableCurrency = (currency: FormatType) => {
           </template>
 
           <template #editor="{ data, field }" v-if="isColumnsEditable(notEditableColumns, field)">
-            <template v-if="calendarFields.includes(field)">
-              <UiCalendar v-model="data[field]" :dateFormat="DateFormat.DOTTED" />
-            </template>
-            <template v-else-if="currencyFields.includes(field)">
-              <UiNumberInput v-model="data[field]" mode="currency" :currency="currencyType" />
-            </template>
-            <template v-else-if="numberFields.includes(field)">
-              <UiNumberInput v-model="data[field]" />
-            </template>
+            <UiCalendar v-if="calendarFields.includes(field)" v-model="data[field]" :dateFormat="DateFormat.DOTTED" />
+            <UiNumberInput
+              v-else-if="currencyFields.includes(field)"
+              v-model="data[field]"
+              mode="currency"
+              :currency="currencyType"
+            />
+            <UiNumberInput v-else-if="numberFields.includes(field)" v-model="data[field]" />
 
-            <template v-else>
-              <UiInput v-model="data[field]" />
-            </template>
+            <UiInput v-else v-model="data[field]" />
           </template>
         </Column>
 
