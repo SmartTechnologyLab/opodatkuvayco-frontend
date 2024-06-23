@@ -7,9 +7,7 @@ export default {
   args: {
     mode: undefined,
     minFractionDigits: 0,
-    maxFractionDigits: 0,
-    prefix: '',
-    suffix: ''
+    maxFractionDigits: 0
   },
   argTypes: {
     mode: {
@@ -75,8 +73,5 @@ export const InputWithSuffix: Story = {
     template: `
       <UiNumberInput v-bind="{...args}" />
     `
-  }),
-  args: {
-    suffix: '%'
-  }
+  })
 }
