@@ -4,7 +4,7 @@ import _DataTable from 'primevue/datatable'
 import { VueWrapper, config, shallowMount } from '@vue/test-utils'
 import Card from 'primevue/card'
 import Column from 'primevue/column'
-import { stubComponent } from '@/helpers/testsHelpers/createComponent'
+import { stubComponent } from '@/helpers/testHelpers/createComponent'
 
 const table = {
   headers: [
@@ -144,8 +144,6 @@ describe('DataTable', () => {
     const HEADER = 'Дата покупки '
     const ColumnStub = findColumnByHeader(HEADER)
     const UiCalendar = ColumnStub?.findComponent({ name: 'UiCalendar' })
-
-    console.log(wrapper.html())
 
     expect(ColumnStub?.exists()).toBeTruthy()
     expect(UiCalendar?.exists()).toBe(true)
