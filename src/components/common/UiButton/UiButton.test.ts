@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import UiButton from '@/components/common/UiButton/UiButton.vue'
 import { createRouterMock, injectRouterMock } from 'vue-router-mock'
 import { Icons, Severities } from './constants'
-import { stubComponent } from '@/helpers/testsHelpers/createComponent'
+import { stubComponent } from '@/helpers/testHelpers/createComponent'
 
 const router = createRouterMock({
   spy: {
