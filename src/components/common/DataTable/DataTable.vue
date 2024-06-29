@@ -82,7 +82,7 @@ const tableCurrency = (currency: FormatType) => {
           :sortable="sortableColumn"
           :key="field"
           :field
-          :header="`${$t(header)} ${tableCurrency(type as FormatType)}`"
+          :header="`${header} ${tableCurrency(type as FormatType)}`"
           style="min-width: 100px"
         >
           <template #body="{ data, field }">

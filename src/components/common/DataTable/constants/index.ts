@@ -1,3 +1,4 @@
+import { _t } from '@/i18n'
 import type { TableHeaders } from '../types'
 import { Currency } from '@/constants/currencies'
 
@@ -20,81 +21,81 @@ export const currenciesName: Record<Currency, Currency> = {
 
 export const resultHeaders: TableHeaders[] = [
   {
-    header: 'Тікер',
+    header: _t('table.headers.ticker'),
     field: 'ticker'
   },
   {
-    header: 'Дата покупки',
+    header: _t('table.headers.purchase-date'),
     field: 'purchase.date',
     type: FormatType.Date
   },
   {
-    header: 'Кількість',
+    header: _t('table.headers.quantity'),
     field: 'quantity',
     type: FormatType.Number
   },
   {
-    header: 'Ціна',
+    header: _t('table.headers.purchase'),
     field: 'purchase.price',
     type: FormatType.CurrencyUSD
   },
   {
-    header: 'Сума',
+    header: _t('table.headers.sum'),
     field: 'purchase.sum',
     type: FormatType.CurrencyUSD
   },
   {
-    header: 'Комісія',
+    header: _t('table.headers.comission'),
     field: 'purchase.commission',
     type: FormatType.CurrencyUSD
   },
   {
-    header: 'Курс',
+    header: _t('table.headers.rate'),
     field: 'purchase.rate',
     type: FormatType.CurrencyUAH
   },
   {
-    header: 'Покупка',
+    header: _t('table.headers.purchase'),
     field: 'purchase.uah',
     type: FormatType.CurrencyUAH
   },
   {
-    header: 'Дата продажу',
+    header: _t('table.headers.sale-date'),
     field: 'sale.date',
     type: FormatType.Date
   },
   {
-    header: 'Ціна',
+    header: _t('table.headers.price'),
     field: 'sale.price',
     type: FormatType.CurrencyUSD
   },
   {
-    header: 'Сума',
+    header: _t('table.headers.sum'),
     field: 'sale.sum',
     type: FormatType.CurrencyUSD
   },
   {
-    header: 'Комісія',
+    header: _t('table.headers.comission'),
     field: 'sale.commission',
     type: FormatType.CurrencyUSD
   },
   {
-    header: 'Курс',
+    header: _t('table.headers.rate'),
     field: 'sale.rate',
     type: FormatType.CurrencyUAH
   },
   {
-    header: 'Продаж',
+    header: _t('table.headers.sale'),
     field: 'sale.uah',
     type: FormatType.CurrencyUAH
   },
   {
-    header: 'Всього',
+    header: _t('table.headers.total'),
     field: 'total',
     type: FormatType.CurrencyUAH
   },
   {
-    header: '%',
+    header: _t('table.headers.percent'),
     field: 'percent',
     type: FormatType.Percent
   }

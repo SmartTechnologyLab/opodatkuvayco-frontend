@@ -19,3 +19,5 @@ export const i18n = createI18n({
   pluralRules,
   datetimeFormats
 })
+
+export const _t = i18n.global.t

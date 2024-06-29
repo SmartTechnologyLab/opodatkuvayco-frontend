@@ -18,7 +18,21 @@
     "empty": "Не має жодних данних",
     "btnAddRow": "Добавити рядок",
     "btnYourLimitLeft": "Ліміт вичерпан",
-    "chooseCurrency": "Виберіть валюту"
+    "chooseCurrency": "Виберіть валюту",
+    "headers": {
+      "ticker": "Тікер",
+      "purchase-date": "Дата покупки",
+      "quantity": "Кількість",
+      "price": "Ціна",
+      "sum": "Сума",
+      "comission": "Комісія",
+      "rate": "Курс",
+      "purchase": "Покупка",
+      "sale-date": "Дата продажу",
+      "sale": "Продаж",
+      "percent": "%",
+      "total": "Всього"
+    }
   },
   "navBar": {
     "companyName": "Оподаткувайко",
