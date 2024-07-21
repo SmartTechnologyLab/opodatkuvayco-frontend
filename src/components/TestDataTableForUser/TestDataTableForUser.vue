@@ -4,8 +4,13 @@ import { resultHeaders } from '@/components/common/DataTable/constants'
 import { getDeal, type Deal } from '@/components/common/DataTable/mocks'
 import type { DataTableCellEditCompleteEvent } from 'primevue/datatable'
 import { assocPath } from 'ramda'
-import { ref, watch } from 'vue'
-import { notEditableColumns } from './common/notEditableColumns'
+import { computed, ref, watch } from 'vue'
+import {
+  currencyOptions,
+  notEditableColumns,
+  TableSize,
+  tableSizeOptions
+} from '@/components/TestDataTableForUser/common/constants'
 import { useI18n } from 'vue-i18n'
 import { getCurrencyExchange } from '@/api/getCurrencyExchange'
 import UiButton from '@/components/common/UiButton/UiButton.vue'
@@ -26,16 +31,24 @@ const rowData = ref({
   saleCommission: 1.62
 })
 
-const table = ref({
-  headers: resultHeaders,
-  data: [getDeal(rowData.value), getDeal(), getDeal(), getDeal(), getDeal()]
+const selectedCurrency = ref<Currency>(Currency.USD)
+
+const selectedTableSize = ref<TableSize>(TableSize.LG)
+
+const addBtnText = ref(t('table.btnAddRow'))
+
+const headers = computed(() => {
+  if (selectedTableSize.value === TableSize.LG) {
+    return resultHeaders
+  }
+
+  return resultHeaders.filter((header) => header.size?.includes(TableSize.SM))
 })
 
-const currencies = ref<string[]>(Object.values(Currency).filter((currency) => currency !== Currency.UAH))
-
-const selectedCurrency = ref(Currency.USD)
-
-const btnContent = ref(t('table.btnAddRow'))
+const table = ref({
+  headers: headers.value,
+  data: [getDeal(rowData.value), getDeal(), getDeal(), getDeal(), getDeal()]
+})
 
 const onCellEditComplete = async (event: DataTableCellEditCompleteEvent) => {
   let { newValue, field, index } = event
@@ -95,7 +108,7 @@ const handleDeleteRow = (rowIndex: number) => {
 
 watch(
   () => table.value.data.length < 8,
-  () => (btnContent.value = t('table.btnYourLimitLeft'))
+  () => (addBtnText.value = t('table.btnYourLimitLeft'))
 )
 
 watch(
@@ -104,22 +117,55 @@ watch(
     await Promise.all(table.value.data.map((deal) => updateDealRates(deal)))
   }
 )
+
+const groupByTicker = (deals: Deal[]) => {
+  const grouped = deals.reduce(
+    (acc, deal) => {
+      if (!acc[deal.ticker]) {
+        acc[deal.ticker] = { ...deal }
+      } else {
+        acc[deal.ticker].sale.uah += deal.sale.uah
+        acc[deal.ticker].purchase.uah += deal.purchase.uah
+        acc[deal.ticker].total += deal.total
+      }
+
+      return acc
+    },
+    {} as Record<string, Deal>
+  )
+
+  return Object.values(grouped)
+}
+
+watch(
+  () => selectedTableSize.value,
+  (newValue) => {
+    table.value.headers = headers.value
+
+    if (newValue === TableSize.SM) {
+      const groupedTableData = groupByTicker(table.value.data)
+
+      table.value.data = groupedTableData
+    }
+  }
+)
 </script>
 
 <template>
   <DataTable
+    v-if="selectedTableSize === TableSize.LG"
     :table="table"
     @onCellEdit="onCellEditComplete($event)"
     :notEditableColumns="notEditableColumns"
     edit-mode="cell"
     class="data-table"
-    resizableColumns
     :currency="selectedCurrency"
   >
     <template #header>
       <div class="data-table__header">
         <h1 class="data-table__title">{{ t('table.title') }}</h1>
-        <UiSelectButton v-model="selectedCurrency" :options="currencies" :allow-empty="false" />
+        <UiSelectButton v-model="selectedTableSize" :options="tableSizeOptions" :allow-empty="false" />
+        <UiSelectButton v-model="selectedCurrency" :options="currencyOptions" :allow-empty="false" />
       </div>
     </template>
 
@@ -130,8 +176,29 @@ watch(
     <template #addRow>
       <UiButton @click="handleAddRow" class="data-table__add-btn">
         <i class="pi pi-plus" style="color: black" v-if="table.data.length < 8" />
-        {{ btnContent }}
+        {{ addBtnText }}
       </UiButton>
+    </template>
+  </DataTable>
+
+  <DataTable
+    v-else
+    :table="table"
+    :notEditableColumns="notEditableColumns"
+    edit-mode="cell"
+    class="data-table"
+    :currency="selectedCurrency"
+  >
+    <template #header>
+      <div class="data-table__header">
+        <h1 class="data-table__title">{{ t('table.title') }}</h1>
+        <UiSelectButton v-model="selectedTableSize" :options="tableSizeOptions" :allow-empty="false" />
+        <UiSelectButton v-model="selectedCurrency" :options="currencyOptions" :allow-empty="false" />
+      </div>
+    </template>
+
+    <template #deleteRow="{ index }">
+      <UiButton @click="handleDeleteRow(index)" :outlined="true" :icon="Icons.DELETE"> </UiButton>
     </template>
   </DataTable>
 </template>
