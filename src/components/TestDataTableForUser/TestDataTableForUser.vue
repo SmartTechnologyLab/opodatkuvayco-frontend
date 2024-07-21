@@ -76,27 +76,29 @@ const handleAddRow = () => {
   table.value.data.length < 8 ? table.value.data.push(getDeal()) : null
 }
 
+const updateDealRates = async (deal: Deal) => {
+  const [purchase, sale] = await Promise.all([
+    getCurrencyExchange(selectedCurrency.value, String(deal.purchase.date)),
+    getCurrencyExchange(selectedCurrency.value, String(deal.sale.date))
+  ])
+
+  deal.purchase.rate = purchase.rate
+  deal.sale.rate = sale.rate
+
+  recalculateVariables(deal)
+}
+
 watch(
   () => table.value.data.length < 8,
   () => (btnContent.value = t('table.btnYourLimitLeft'))
 )
 
-table.value.data.forEach((deal) => {
-  watch(
-    () => selectedCurrency.value,
-    async () => {
-      const [purchase, sale] = await Promise.all([
-        getCurrencyExchange(selectedCurrency.value, String(deal.purchase.date)),
-        getCurrencyExchange(selectedCurrency.value, String(deal.sale.date))
-      ])
-
-      deal.purchase.rate = purchase.rate
-      deal.sale.rate = sale.rate
-
-      recalculateVariables(deal)
-    }
-  )
-})
+watch(
+  () => selectedCurrency.value,
+  async () => {
+    await Promise.all(table.value.data.map((deal) => updateDealRates(deal)))
+  }
+)
 </script>
 
 <template>
