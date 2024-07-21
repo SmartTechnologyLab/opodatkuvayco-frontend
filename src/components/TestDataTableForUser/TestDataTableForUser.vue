@@ -11,6 +11,7 @@ import { getCurrencyExchange } from '@/api/getCurrencyExchange'
 import UiButton from '@/components/common/UiButton/UiButton.vue'
 import { Currency } from '@/constants/currencies'
 import UiSelectButton from '@/components/common/UiSelectButton/UiSelectButton.vue'
+import { Icons } from '../common/UiButton/constants'
 
 const { t } = useI18n()
 
@@ -88,6 +89,10 @@ const updateDealRates = async (deal: Deal) => {
   recalculateVariables(deal)
 }
 
+const handleDeleteRow = (rowIndex: number) => {
+  table.value.data = table.value.data.filter((_, index) => index !== rowIndex)
+}
+
 watch(
   () => table.value.data.length < 8,
   () => (btnContent.value = t('table.btnYourLimitLeft'))
@@ -118,7 +123,11 @@ watch(
       </div>
     </template>
 
-    <template #add-row>
+    <template #deleteRow="{ index }">
+      <UiButton @click="handleDeleteRow(index)" :outlined="true" :icon="Icons.DELETE"> </UiButton>
+    </template>
+
+    <template #addRow>
       <UiButton @click="handleAddRow" class="data-table__add-btn">
         <i class="pi pi-plus" style="color: black" v-if="table.data.length < 8" />
         {{ btnContent }}

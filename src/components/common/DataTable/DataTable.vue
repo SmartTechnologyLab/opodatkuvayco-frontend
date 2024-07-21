@@ -31,6 +31,8 @@ defineEmits<{
 
 const { d, n } = useI18n()
 
+const currencyType = computed(() => currenciesName[props.currency as Currencies])
+
 const getFormattedData = (data: Ref<Deal[]>, field: string, type?: FormatType) => {
   const value = path(field.split('.'), data)
 
@@ -49,8 +51,6 @@ const getFormattedData = (data: Ref<Deal[]>, field: string, type?: FormatType) =
 const isColumnsEditable = (notEditableColumns: string[] | undefined, field: string) => {
   return !notEditableColumns?.includes(field)
 }
-
-const currencyType = computed(() => currenciesName[props.currency as Currencies])
 
 const tableCurrency = (currency: FormatType) => {
   if (currency === FormatType.CurrencyUAH) {
@@ -77,6 +77,12 @@ const tableCurrency = (currency: FormatType) => {
         scrollable
         :resizable-columns="resizableColumns"
       >
+        <Column>
+          <template #body="{ index }">
+            <slot name="deleteRow" :index="index" />
+          </template>
+        </Column>
+
         <Column
           v-for="{ field, header, type } in table.headers"
           :sortable="sortableColumn"
@@ -110,7 +116,7 @@ const tableCurrency = (currency: FormatType) => {
 
         <template #empty>{{ $t('table.empty') }}</template>
       </DataTable>
-      <slot name="add-row" />
+      <slot name="addRow" />
     </template>
   </Card>
 </template>
