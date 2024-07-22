@@ -35,9 +35,7 @@ const rowData = ref({
 })
 
 const selectedCurrency = ref<Currencies>(Currency.USD)
-
 const selectedTableSize = ref<TableSizes>(TableSize.LG)
-
 const addBtnText = ref(t('table.btnAddRow'))
 
 const originalData = ref([getDeal(rowData.value), getDeal(), getDeal(), getDeal(), getDeal()])
@@ -54,13 +52,22 @@ const table = ref({
   data: [...originalData.value]
 })
 
+const highlightedCells = ref(new Set<string>())
+
 const notEditableColumns = computed(() => {
   if (selectedTableSize.value === TableSize.LG) {
     return notEditableColumnsLargeTable
   }
-
   return headers.value.map((header) => header.field)
 })
+
+const highlightCell = (index: number, field: string) => {
+  const key = `${index}-${field}`
+  highlightedCells.value.add(key)
+  setTimeout(() => {
+    highlightedCells.value.delete(key)
+  }, 2000)
+}
 
 const onCellEditComplete = async (event: DataTableCellEditCompleteEvent) => {
   let { newValue, field, index } = event
@@ -81,6 +88,8 @@ const onCellEditComplete = async (event: DataTableCellEditCompleteEvent) => {
     const updatedRow = assocPath(fieldPath, newValue, editedRow)
     table.value.data[index] = updatedRow
     recalculateVariables(updatedRow)
+
+    highlightCell(index, field)
   }
 }
 
@@ -150,24 +159,22 @@ watch(
     removableSort
     rowHover
     scrollable
+    key="large-table"
   >
     <template #header>
       <div class="data-table__header">
         <h1 class="data-table__title">{{ t('table.title') }}</h1>
-        <UiSelectButton v-model="selectedTableSize" :options="tableSizeOptions" :allow-empty="false" />
         <UiSelectButton v-model="selectedCurrency" :options="currencyOptions" :allow-empty="false" />
+        <UiSelectButton v-model="selectedTableSize" :options="tableSizeOptions" :allow-empty="false" />
       </div>
     </template>
 
     <template #deleteRow="{ index }">
-      <UiButton @click="handleDeleteRow(index)" class="data-table__delete-btn" :outlined="true" :icon="Icons.DELETE" />
+      <UiButton @click="handleDeleteRow(index)" class="data-table__delete-btn" outlined :icon="Icons.DELETE" />
     </template>
 
     <template #addRow>
-      <UiButton @click="handleAddRow" class="data-table__add-btn">
-        <i class="pi pi-plus" style="color: black" v-if="table.data.length < 8" />
-        {{ addBtnText }}
-      </UiButton>
+      <UiButton @click="handleAddRow" class="data-table__add-btn" :label="addBtnText" :icon="Icons.PLUS" />
     </template>
   </DataTable>
 
@@ -181,12 +188,12 @@ watch(
     removableSort
     rowHover
     scrollable
+    key="small-table"
   >
     <template #header>
       <div class="data-table__header">
         <h1 class="data-table__title">{{ t('table.title') }}</h1>
         <UiSelectButton v-model="selectedTableSize" :options="tableSizeOptions" :allow-empty="false" />
-        <UiSelectButton v-model="selectedCurrency" :options="currencyOptions" :allow-empty="false" />
       </div>
     </template>
   </DataTable>
@@ -194,15 +201,8 @@ watch(
 
 <style scoped lang="scss">
 .data-table {
-  &--lg {
-    width: 90vw;
-  }
-
-  &--sm {
-    min-width: 40vw;
-
-    max-width: 90vw;
-  }
+  min-width: 40vw;
+  max-width: 90vw;
 
   &__header {
     display: flex;
@@ -217,10 +217,8 @@ watch(
   &__add-btn {
     margin-left: auto;
     margin-top: 1rem;
-
     min-width: 180px;
     max-width: 200px;
-
     display: flex;
     align-items: center;
     justify-content: center;
@@ -232,9 +230,5 @@ watch(
     justify-content: center;
     padding-inline: 10px;
   }
-}
-
-.table-class {
-  background: white;
 }
 </style>

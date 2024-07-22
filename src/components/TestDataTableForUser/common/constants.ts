@@ -13,8 +13,8 @@ export const notEditableColumns: string[] = [
 ]
 
 export enum TableSize {
-  LG = 'lg',
-  SM = 'sm'
+  LG = 'Full Statement',
+  SM = 'Short Statement'
 }
 
 export const currencyOptions = Object.values(Currency).filter((currency) => currency !== Currency.UAH)

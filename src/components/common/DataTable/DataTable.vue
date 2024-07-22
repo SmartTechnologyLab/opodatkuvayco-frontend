@@ -81,8 +81,8 @@ const tableCurrency = (currency: FormatType) => {
           :field
           :header="`${$t(header)} ${tableCurrency(type as FormatType)}`"
         >
-          <template #body="{ data, field }">
-            <slot :name="field" :value="path(field.split('.'), data)" :type="type">
+          <template #body="{ data, field, index }">
+            <slot :name="field" :value="path(field.split('.'), data)" :type="type" :field :index>
               {{ isNil(type) ? path(field.split('.'), data) || '-' : getFormattedData(data, field, type) }}
             </slot>
           </template>
