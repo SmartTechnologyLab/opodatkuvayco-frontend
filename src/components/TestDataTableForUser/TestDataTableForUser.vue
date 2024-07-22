@@ -35,7 +35,9 @@ const rowData = ref({
 })
 
 const selectedCurrency = ref<Currencies>(Currency.USD)
+
 const selectedTableSize = ref<TableSizes>(TableSize.LG)
+
 const addBtnText = ref(t('table.btnAddRow'))
 
 const originalData = ref([getDeal(rowData.value), getDeal(), getDeal(), getDeal(), getDeal()])
@@ -52,8 +54,6 @@ const table = ref({
   data: [...originalData.value]
 })
 
-const highlightedCells = ref(new Set<string>())
-
 const notEditableColumns = computed(() => {
   if (selectedTableSize.value === TableSize.LG) {
     return notEditableColumnsLargeTable
@@ -61,16 +61,8 @@ const notEditableColumns = computed(() => {
   return headers.value.map((header) => header.field)
 })
 
-const highlightCell = (index: number, field: string) => {
-  const key = `${index}-${field}`
-  highlightedCells.value.add(key)
-  setTimeout(() => {
-    highlightedCells.value.delete(key)
-  }, 2000)
-}
-
 const onCellEditComplete = async (event: DataTableCellEditCompleteEvent) => {
-  let { newValue, field, index } = event
+  const { newValue, field, index } = event
 
   if (newValue) {
     if (field === 'purchase.date') {
@@ -84,12 +76,14 @@ const onCellEditComplete = async (event: DataTableCellEditCompleteEvent) => {
     }
 
     const editedRow = table.value.data[index]
+
     const fieldPath = field.split('.')
     const updatedRow = assocPath(fieldPath, newValue, editedRow)
-    table.value.data[index] = updatedRow
-    recalculateVariables(updatedRow)
 
-    highlightCell(index, field)
+    table.value.data[index] = updatedRow
+    originalData.value[index] = updatedRow
+
+    recalculateVariables(updatedRow)
   }
 }
 
@@ -122,26 +116,14 @@ watch(
 
 watch(
   () => selectedTableSize.value,
-  (newValue) => {
+  () => {
     table.value.headers = headers.value
 
-    if (newValue === TableSize.SM) {
+    if (selectedTableSize.value === TableSize.SM) {
       table.value.data = groupAndSumByTicker(table.value.data)
     } else {
       table.value.data = [...originalData.value]
     }
-  }
-)
-
-watch(
-  () => table.value.data,
-  () => {
-    if (table.value.data.length && selectedTableSize.value === TableSize.LG) {
-      originalData.value = [...table.value.data]
-    }
-  },
-  {
-    deep: true
   }
 )
 </script>
@@ -149,8 +131,8 @@ watch(
 <template>
   <DataTable
     v-if="selectedTableSize === TableSize.LG"
-    class="data-table data-table--lg"
-    :table="table"
+    class="data-table"
+    :table
     @onCellEdit="onCellEditComplete($event)"
     :notEditableColumns="notEditableColumns"
     edit-mode="cell"
@@ -159,7 +141,6 @@ watch(
     removableSort
     rowHover
     scrollable
-    key="large-table"
   >
     <template #header>
       <div class="data-table__header">
@@ -180,15 +161,14 @@ watch(
 
   <DataTable
     v-else
-    :table="table"
+    :table
     :notEditableColumns="notEditableColumns"
-    class="data-table data-table--sm"
+    class="data-table"
     :currency="selectedCurrency"
     stripedRows
     removableSort
     rowHover
     scrollable
-    key="small-table"
   >
     <template #header>
       <div class="data-table__header">

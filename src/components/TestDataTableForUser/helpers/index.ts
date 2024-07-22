@@ -2,12 +2,15 @@ import { getCurrencyExchange } from '@/api/getCurrencyExchange'
 import type { Deal } from '@/components/common/DataTable/mocks'
 import type { Currency } from '@/constants/currencies'
 import type { RecalculateDeal } from '@/components/TestDataTableForUser/common/types'
+import { clone } from 'ramda'
 
 export const groupAndSumByTicker = (deals: Deal[]) => {
-  const grouped = deals.reduce(
+  const copyDeals = clone(deals) as Deal[]
+
+  const grouped = copyDeals.reduce(
     (acc, deal) => {
       if (!acc[deal.ticker]) {
-        acc[deal.ticker] = { ...deal }
+        acc[deal.ticker] = deal
       } else {
         acc[deal.ticker].sale.uah += deal.sale.uah
         acc[deal.ticker].purchase.uah += deal.purchase.uah

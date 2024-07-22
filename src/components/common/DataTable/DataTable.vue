@@ -4,7 +4,7 @@ import Column from 'primevue/column'
 import Card from 'primevue/card'
 import { isNil, path } from 'ramda'
 import { useI18n } from 'vue-i18n'
-import { computed, useAttrs, type Ref } from 'vue'
+import { computed, useAttrs, useSlots, type Ref } from 'vue'
 import { type Deal } from '@/components/common/DataTable/mocks'
 import type { Currencies, Table } from '@/components/common/DataTable/types'
 import UiInput from '@/components/common/UiInput/UiInput.vue'
@@ -29,6 +29,8 @@ defineEmits<{
 const { d, n } = useI18n()
 
 const attrs = useAttrs()
+
+const slots = useSlots()
 
 const currencyType = computed(() => currenciesName[props.currency as Currencies])
 
@@ -68,7 +70,7 @@ const tableCurrency = (currency: FormatType) => {
 
     <template #content>
       <DataTable v-bind="{ ...attrs }" :value="table.data" @cell-edit-complete="$emit('onCellEdit', $event)" :editMode>
-        <Column>
+        <Column v-if="slots.deleteRow">
           <template #body="{ index }">
             <slot name="deleteRow" :index="index" />
           </template>
