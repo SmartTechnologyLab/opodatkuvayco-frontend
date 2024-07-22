@@ -23,7 +23,8 @@ export const resultHeaders: TableHeaders[] = [
   {
     header: 'Тікер',
     field: 'ticker',
-    size: [TableSize.LG, TableSize.SM]
+    size: [TableSize.LG, TableSize.SM],
+    sortable: true
   },
   {
     header: 'Дата покупки',

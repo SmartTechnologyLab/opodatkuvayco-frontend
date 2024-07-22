@@ -200,7 +200,6 @@ export const Sortable: Story = {
         getDeal()
       ]
     },
-    sortableColumn: true,
     removeSortable: true
   }
 }

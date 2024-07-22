@@ -7,6 +7,7 @@ export interface TableHeaders {
   field: string
   type?: FormatType
   size?: TableSize[]
+  sortable?: boolean
 }
 
 export interface Table {

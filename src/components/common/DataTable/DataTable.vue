@@ -17,7 +17,6 @@ import { currenciesName, FormatType, dynamicCurrencies } from '@/components/comm
 
 const props = defineProps<{
   table: Table
-  sortableColumn?: boolean
   removeSortable?: boolean
   notEditableColumns?: string[]
   editMode?: 'cell' | 'row' | undefined
@@ -73,9 +72,9 @@ const tableCurrency = (currency: FormatType) => {
         size="small"
         :removableSort="removeSortable"
         @cell-edit-complete="$emit('onCellEdit', $event)"
-        :editMode="editMode"
+        :editMode
         scrollable
-        :resizable-columns="resizableColumns"
+        :resizableColumns
       >
         <Column>
           <template #body="{ index }">
@@ -84,8 +83,8 @@ const tableCurrency = (currency: FormatType) => {
         </Column>
 
         <Column
-          v-for="{ field, header, type } in table.headers"
-          :sortable="sortableColumn"
+          v-for="{ field, header, type, sortable } in table.headers"
+          :sortable
           :key="field"
           :field
           :header="`${$t(header)} ${tableCurrency(type as FormatType)}`"
