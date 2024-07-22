@@ -4,7 +4,7 @@ import Column from 'primevue/column'
 import Card from 'primevue/card'
 import { isNil, path } from 'ramda'
 import { useI18n } from 'vue-i18n'
-import { computed, type Ref } from 'vue'
+import { computed, useAttrs, type Ref } from 'vue'
 import { type Deal } from '@/components/common/DataTable/mocks'
 import type { Currencies, Table } from '@/components/common/DataTable/types'
 import UiInput from '@/components/common/UiInput/UiInput.vue'
@@ -17,10 +17,8 @@ import { currenciesName, FormatType, dynamicCurrencies } from '@/components/comm
 
 const props = defineProps<{
   table: Table
-  removeSortable?: boolean
   notEditableColumns?: string[]
   editMode?: 'cell' | 'row' | undefined
-  resizableColumns?: boolean
   currency?: Currency
 }>()
 
@@ -29,6 +27,8 @@ defineEmits<{
 }>()
 
 const { d, n } = useI18n()
+
+const attrs = useAttrs()
 
 const currencyType = computed(() => currenciesName[props.currency as Currencies])
 
@@ -67,15 +67,7 @@ const tableCurrency = (currency: FormatType) => {
     </template>
 
     <template #content>
-      <DataTable
-        :value="table.data"
-        size="small"
-        :removableSort="removeSortable"
-        @cell-edit-complete="$emit('onCellEdit', $event)"
-        :editMode
-        scrollable
-        :resizableColumns
-      >
+      <DataTable v-bind="{ ...attrs }" :value="table.data" @cell-edit-complete="$emit('onCellEdit', $event)" :editMode>
         <Column>
           <template #body="{ index }">
             <slot name="deleteRow" :index="index" />
@@ -88,7 +80,6 @@ const tableCurrency = (currency: FormatType) => {
           :key="field"
           :field
           :header="`${$t(header)} ${tableCurrency(type as FormatType)}`"
-          style="min-width: 100px"
         >
           <template #body="{ data, field }">
             <slot :name="field" :value="path(field.split('.'), data)" :type="type">

@@ -199,8 +199,7 @@ export const Sortable: Story = {
         getDeal(),
         getDeal()
       ]
-    },
-    removeSortable: true
+    }
   }
 }
 

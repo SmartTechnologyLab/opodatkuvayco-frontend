@@ -140,12 +140,16 @@ watch(
 <template>
   <DataTable
     v-if="selectedTableSize === TableSize.LG"
+    class="data-table data-table--lg"
     :table="table"
     @onCellEdit="onCellEditComplete($event)"
     :notEditableColumns="notEditableColumns"
     edit-mode="cell"
-    class="data-table"
     :currency="selectedCurrency"
+    stripedRows
+    removableSort
+    rowHover
+    scrollable
   >
     <template #header>
       <div class="data-table__header">
@@ -171,9 +175,12 @@ watch(
     v-else
     :table="table"
     :notEditableColumns="notEditableColumns"
-    edit-mode="cell"
-    class="data-table"
+    class="data-table data-table--sm"
     :currency="selectedCurrency"
+    stripedRows
+    removableSort
+    rowHover
+    scrollable
   >
     <template #header>
       <div class="data-table__header">
@@ -187,7 +194,15 @@ watch(
 
 <style scoped lang="scss">
 .data-table {
-  width: 90vw;
+  &--lg {
+    width: 90vw;
+  }
+
+  &--sm {
+    min-width: 40vw;
+
+    max-width: 90vw;
+  }
 
   &__header {
     display: flex;
@@ -217,5 +232,9 @@ watch(
     justify-content: center;
     padding-inline: 10px;
   }
+}
+
+.table-class {
+  background: white;
 }
 </style>
