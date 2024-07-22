@@ -37,17 +37,18 @@ const selectedTableSize = ref<TableSize>(TableSize.LG)
 
 const addBtnText = ref(t('table.btnAddRow'))
 
+const originalData = ref([getDeal(rowData.value), getDeal(), getDeal(), getDeal(), getDeal()])
+
 const headers = computed(() => {
   if (selectedTableSize.value === TableSize.LG) {
     return resultHeaders
   }
-
   return resultHeaders.filter((header) => header.size?.includes(TableSize.SM))
 })
 
 const table = ref({
   headers: headers.value,
-  data: [getDeal(rowData.value), getDeal(), getDeal(), getDeal(), getDeal()]
+  data: [...originalData.value]
 })
 
 const onCellEditComplete = async (event: DataTableCellEditCompleteEvent) => {
@@ -65,13 +66,9 @@ const onCellEditComplete = async (event: DataTableCellEditCompleteEvent) => {
     }
 
     const editedRow = table.value.data[index]
-
     const fieldPath = field.split('.')
-
     const updatedRow = assocPath(fieldPath, newValue, editedRow)
-
     table.value.data[index] = updatedRow
-
     recalculateVariables(updatedRow)
   }
 }
@@ -87,7 +84,16 @@ const recalculateVariables = (deal: Deal) => {
 }
 
 const handleAddRow = () => {
-  table.value.data.length < 8 ? table.value.data.push(getDeal()) : null
+  if (originalData.value.length < 8) {
+    const newDeal = getDeal()
+    originalData.value.push(newDeal)
+    table.value.data.push(newDeal)
+  }
+}
+
+const handleDeleteRow = (rowIndex: number) => {
+  originalData.value = originalData.value.filter((_, index) => index !== rowIndex)
+  table.value.data = table.value.data.filter((_, index) => index !== rowIndex)
 }
 
 const updateDealRates = async (deal: Deal) => {
@@ -98,27 +104,10 @@ const updateDealRates = async (deal: Deal) => {
 
   deal.purchase.rate = purchase.rate
   deal.sale.rate = sale.rate
-
   recalculateVariables(deal)
 }
 
-const handleDeleteRow = (rowIndex: number) => {
-  table.value.data = table.value.data.filter((_, index) => index !== rowIndex)
-}
-
-watch(
-  () => table.value.data.length < 8,
-  () => (addBtnText.value = t('table.btnYourLimitLeft'))
-)
-
-watch(
-  () => selectedCurrency.value,
-  async () => {
-    await Promise.all(table.value.data.map((deal) => updateDealRates(deal)))
-  }
-)
-
-const groupByTicker = (deals: Deal[]) => {
+const groupAndSumByTicker = (deals: Deal[]) => {
   const grouped = deals.reduce(
     (acc, deal) => {
       if (!acc[deal.ticker]) {
@@ -138,17 +127,35 @@ const groupByTicker = (deals: Deal[]) => {
 }
 
 watch(
+  () => table.value.data.length < 8,
+  () => (addBtnText.value = t('table.btnYourLimitLeft'))
+)
+
+watch(
+  () => selectedCurrency.value,
+  async () => {
+    await Promise.all(table.value.data.map((deal) => updateDealRates(deal)))
+  }
+)
+
+watch(
   () => selectedTableSize.value,
   (newValue) => {
     table.value.headers = headers.value
 
     if (newValue === TableSize.SM) {
-      const groupedTableData = groupByTicker(table.value.data)
-
-      table.value.data = groupedTableData
+      table.value.data = groupAndSumByTicker(table.value.data)
+    } else {
+      table.value.data = [...originalData.value]
     }
   }
 )
+
+watch(table.value.data, () => {
+  if (table.value.data.length && selectedTableSize.value === TableSize.LG) {
+    originalData.value = [...table.value.data]
+  }
+})
 </script>
 
 <template>
