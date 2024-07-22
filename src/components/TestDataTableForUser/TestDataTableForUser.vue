@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import DataTable from '@/components/common/DataTable/DataTable.vue'
 import { resultHeaders } from '@/components/common/DataTable/constants'
-import { getDeal, type Deal } from '@/components/common/DataTable/mocks'
+import { getDeal } from '@/components/common/DataTable/mocks'
 import type { DataTableCellEditCompleteEvent } from 'primevue/datatable'
 import { assocPath } from 'ramda'
 import { computed, ref, watch } from 'vue'
 import {
   currencyOptions,
-  notEditableColumns,
+  notEditableColumns as notEditableColumnsLargeTable,
   TableSize,
   tableSizeOptions
 } from '@/components/TestDataTableForUser/common/constants'
@@ -16,7 +16,10 @@ import { getCurrencyExchange } from '@/api/getCurrencyExchange'
 import UiButton from '@/components/common/UiButton/UiButton.vue'
 import { Currency } from '@/constants/currencies'
 import UiSelectButton from '@/components/common/UiSelectButton/UiSelectButton.vue'
-import { Icons } from '../common/UiButton/constants'
+import { Icons } from '@/components/common/UiButton/constants'
+import type { Currencies } from '@/components/common/DataTable/types'
+import type { TableSizes } from '@/components/TestDataTableForUser/common/types'
+import { groupAndSumByTicker, recalculateVariables, updateDealRates } from '@/components/TestDataTableForUser/helpers'
 
 const { t } = useI18n()
 
@@ -31,9 +34,9 @@ const rowData = ref({
   saleCommission: 1.62
 })
 
-const selectedCurrency = ref<Currency>(Currency.USD)
+const selectedCurrency = ref<Currencies>(Currency.USD)
 
-const selectedTableSize = ref<TableSize>(TableSize.LG)
+const selectedTableSize = ref<TableSizes>(TableSize.LG)
 
 const addBtnText = ref(t('table.btnAddRow'))
 
@@ -49,6 +52,14 @@ const headers = computed(() => {
 const table = ref({
   headers: headers.value,
   data: [...originalData.value]
+})
+
+const notEditableColumns = computed(() => {
+  if (selectedTableSize.value === TableSize.LG) {
+    return notEditableColumnsLargeTable
+  }
+
+  return headers.value.map((header) => header.field)
 })
 
 const onCellEditComplete = async (event: DataTableCellEditCompleteEvent) => {
@@ -73,57 +84,17 @@ const onCellEditComplete = async (event: DataTableCellEditCompleteEvent) => {
   }
 }
 
-const recalculateVariables = (deal: Deal) => {
-  deal.purchase.sum = deal.purchase.price * deal.quantity
-  deal.sale.sum = deal.sale.price * deal.quantity
-  deal.purchase.uah =
-    (deal.purchase.sum + deal.purchase.commission) * deal.purchase.rate + deal.sale.commission * deal.sale.rate
-  deal.sale.uah = deal.sale.sum * deal.sale.rate
-  deal.total = deal.sale.uah - deal.purchase.uah
-  deal.percent = deal.sale.uah / deal.purchase.uah - 1
-}
-
 const handleAddRow = () => {
   if (originalData.value.length < 8) {
     const newDeal = getDeal()
-    originalData.value.push(newDeal)
-    table.value.data.push(newDeal)
+    originalData.value = [...originalData.value, newDeal]
+    table.value.data = [...table.value.data, newDeal]
   }
 }
 
 const handleDeleteRow = (rowIndex: number) => {
   originalData.value = originalData.value.filter((_, index) => index !== rowIndex)
   table.value.data = table.value.data.filter((_, index) => index !== rowIndex)
-}
-
-const updateDealRates = async (deal: Deal) => {
-  const [purchase, sale] = await Promise.all([
-    getCurrencyExchange(selectedCurrency.value, String(deal.purchase.date)),
-    getCurrencyExchange(selectedCurrency.value, String(deal.sale.date))
-  ])
-
-  deal.purchase.rate = purchase.rate
-  deal.sale.rate = sale.rate
-  recalculateVariables(deal)
-}
-
-const groupAndSumByTicker = (deals: Deal[]) => {
-  const grouped = deals.reduce(
-    (acc, deal) => {
-      if (!acc[deal.ticker]) {
-        acc[deal.ticker] = { ...deal }
-      } else {
-        acc[deal.ticker].sale.uah += deal.sale.uah
-        acc[deal.ticker].purchase.uah += deal.purchase.uah
-        acc[deal.ticker].total += deal.total
-      }
-
-      return acc
-    },
-    {} as Record<string, Deal>
-  )
-
-  return Object.values(grouped)
 }
 
 watch(
@@ -134,7 +105,9 @@ watch(
 watch(
   () => selectedCurrency.value,
   async () => {
-    await Promise.all(table.value.data.map((deal) => updateDealRates(deal)))
+    await Promise.all(
+      table.value.data.map((deal) => updateDealRates(deal, selectedCurrency.value, () => recalculateVariables(deal)))
+    )
   }
 )
 
@@ -151,11 +124,17 @@ watch(
   }
 )
 
-watch(table.value.data, () => {
-  if (table.value.data.length && selectedTableSize.value === TableSize.LG) {
-    originalData.value = [...table.value.data]
+watch(
+  () => table.value.data,
+  () => {
+    if (table.value.data.length && selectedTableSize.value === TableSize.LG) {
+      originalData.value = [...table.value.data]
+    }
+  },
+  {
+    deep: true
   }
-})
+)
 </script>
 
 <template>
@@ -177,7 +156,7 @@ watch(table.value.data, () => {
     </template>
 
     <template #deleteRow="{ index }">
-      <UiButton @click="handleDeleteRow(index)" :outlined="true" :icon="Icons.DELETE"> </UiButton>
+      <UiButton @click="handleDeleteRow(index)" class="data-table__delete-btn" :outlined="true" :icon="Icons.DELETE" />
     </template>
 
     <template #addRow>
@@ -202,10 +181,6 @@ watch(table.value.data, () => {
         <UiSelectButton v-model="selectedTableSize" :options="tableSizeOptions" :allow-empty="false" />
         <UiSelectButton v-model="selectedCurrency" :options="currencyOptions" :allow-empty="false" />
       </div>
-    </template>
-
-    <template #deleteRow="{ index }">
-      <UiButton @click="handleDeleteRow(index)" :outlined="true" :icon="Icons.DELETE"> </UiButton>
     </template>
   </DataTable>
 </template>
@@ -235,6 +210,12 @@ watch(table.value.data, () => {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+  }
+
+  &__delete-btn {
+    display: flex;
+    justify-content: center;
+    padding-inline: 10px;
   }
 }
 </style>
