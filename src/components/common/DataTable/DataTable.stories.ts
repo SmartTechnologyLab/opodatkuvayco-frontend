@@ -2,7 +2,9 @@ import type { Meta, StoryObj } from '@storybook/vue3'
 import DataTable from './DataTable.vue'
 import { resultHeaders } from '@/components/common/DataTable/constants'
 import { getDeal } from '@/components/common/DataTable/mocks'
-import { action } from '@storybook/addon-actions'
+import { Currency } from '@/constants/currencies'
+import type { DataTableCellEditCompleteEvent } from 'primevue/datatable'
+import { assocPath } from 'ramda'
 
 const meta: Meta<typeof DataTable> = {
   component: DataTable,
@@ -48,7 +50,31 @@ export const Default: Story = {
           date: '2021-01-01'
         }
       ]
-    }
+    },
+    currency: Currency.USD
+  }
+}
+
+const FullTableData: Story = {
+  args: {
+    table: {
+      headers: resultHeaders,
+      data: [
+        getDeal({
+          ticker: 'DAL',
+          quantity: 2,
+          purchaseRate: 29.2549,
+          purchasePrice: 28.88,
+          purchaseCommission: 1.49,
+          saleRate: 36.5686,
+          salePrice: 42.42,
+          saleCommission: 1.62
+        }),
+        getDeal(),
+        getDeal()
+      ]
+    },
+    currency: Currency.USD
   }
 }
 
@@ -93,8 +119,11 @@ export const MockedSlot: Story = {
     setup() {
       return { args }
     },
+    slots: {
+      header: 'dodqdq'
+    },
     template: `
-    <DataTable v-bind="{...args}">
+    <DataTable v-bind="{ ...args }">
       <template #header>Мої угоди</template>
       <template #purchase.date="{ value }"> {{ $d(value) }}</template>
       <template #purchase.price="{ value }"> {{ $n(value, { style: 'currency', currency: 'USD' }) }}</template>
@@ -114,27 +143,7 @@ export const MockedSlot: Story = {
     </DataTable>
   `
   }),
-  args: {
-    table: {
-      headers: resultHeaders,
-      data: [
-        getDeal({
-          ticker: 'DAL',
-          quantity: 2,
-          purchaseRate: 29.2549,
-          purchasePrice: 28.88,
-          purchaseCommission: 1.49,
-          saleRate: 36.5686,
-          salePrice: 42.42,
-          saleCommission: 1.62
-        }),
-        getDeal(),
-        getDeal(),
-        getDeal(),
-        getDeal()
-      ]
-    }
-  }
+  args: FullTableData.args
 }
 
 export const HeaderType: Story = {
@@ -147,27 +156,7 @@ export const HeaderType: Story = {
     <DataTable v-bind="{...args}" />
   `
   }),
-  args: {
-    table: {
-      headers: resultHeaders,
-      data: [
-        getDeal({
-          ticker: 'DAL',
-          quantity: 2,
-          purchaseRate: 29.2549,
-          purchasePrice: 28.88,
-          purchaseCommission: 1.49,
-          saleRate: 36.5686,
-          salePrice: 42.42,
-          saleCommission: 1.62
-        }),
-        getDeal(),
-        getDeal(),
-        getDeal(),
-        getDeal()
-      ]
-    }
-  }
+  args: Default.args
 }
 
 export const Sortable: Story = {
@@ -180,27 +169,7 @@ export const Sortable: Story = {
       <DataTable v-bind="{...args}" />
     `
   }),
-  args: {
-    table: {
-      headers: resultHeaders,
-      data: [
-        getDeal({
-          ticker: 'DAL',
-          quantity: 2,
-          purchaseRate: 29.2549,
-          purchasePrice: 28.88,
-          purchaseCommission: 1.49,
-          saleRate: 36.5686,
-          salePrice: 42.42,
-          saleCommission: 1.62
-        }),
-        getDeal(),
-        getDeal(),
-        getDeal(),
-        getDeal()
-      ]
-    }
-  }
+  args: FullTableData.args
 }
 
 export const Editable: Story = {
@@ -210,30 +179,30 @@ export const Editable: Story = {
       return { args }
     },
     template: `
-      <DataTable v-bind="{...args}" @onCellEdit="action" />
+      <DataTable v-bind="{...args}" @onCellEdit="onCellEdit($event)">
+        <template #header>Мої угоди</template>
+        <template #ticker="{ value }">🎉 {{ value }} 🎉</template>
+        <template #date="{ value }">{{ $d(value) }}</template>
+      </DataTable>
     `,
-    methods: { action: action('changed') }
+    methods: {
+      onCellEdit(event: DataTableCellEditCompleteEvent) {
+        const { newValue, index, field } = event
+
+        if (newValue) {
+          const editedRow = args.table.data[index]
+
+          const fieldPath = field.split('.')
+
+          const updatedRow = assocPath(fieldPath, newValue, editedRow)
+
+          args.table.data[index] = updatedRow
+        }
+      }
+    }
   }),
   args: {
-    table: {
-      headers: resultHeaders,
-      data: [
-        getDeal({
-          ticker: 'DAL',
-          quantity: 2,
-          purchaseRate: 29.2549,
-          purchasePrice: 28.88,
-          purchaseCommission: 1.49,
-          saleRate: 36.5686,
-          salePrice: 42.42,
-          saleCommission: 1.62
-        }),
-        getDeal(),
-        getDeal(),
-        getDeal(),
-        getDeal()
-      ]
-    },
+    ...Default.args,
     editMode: 'cell'
   }
 }
