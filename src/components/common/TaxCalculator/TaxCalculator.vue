@@ -40,7 +40,7 @@ const calculate = () => {
 const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement
   const files = target?.files
-  console.log(files)
+
   if (files) {
     selectedFiles.value.push(...files)
   }

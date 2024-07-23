@@ -1,11 +1,13 @@
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import DataTable from './DataTable.vue'
 import _DataTable from 'primevue/datatable'
-import { VueWrapper, config, shallowMount } from '@vue/test-utils'
+import { VueWrapper, shallowMount } from '@vue/test-utils'
 import Card from 'primevue/card'
 import Column from 'primevue/column'
 import UiInput from '../UiInput/UiInput.vue'
 import { stubComponent } from '@/helpers/testHelpers/createComponent'
+import UiNumberInput from '../UiNumberInput/UiNumberInput.vue'
+import UiCalendar from '../UiCalendar/UiCalendar.vue'
 
 const table = {
   headers: [
@@ -74,14 +76,6 @@ describe('DataTable', () => {
   const findColumnByHeader = (header: string) =>
     wrapper.findAllComponents(Column).find((col) => col.attributes().header === header)
 
-  beforeAll(() => {
-    config.global.renderStubDefaultSlot = true
-  })
-
-  afterAll(() => {
-    config.global.renderStubDefaultSlot = false
-  })
-
   beforeEach(() => {
     wrapper = shallowMount(DataTable, {
       global: {
@@ -89,7 +83,9 @@ describe('DataTable', () => {
           Card: CardStub,
           Column: ColumnStub,
           DataTable: DataTableStub,
-          UiInput
+          UiInput,
+          UiNumberInput,
+          UiCalendar
         }
       },
       props: {

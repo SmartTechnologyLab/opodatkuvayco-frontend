@@ -40,7 +40,7 @@ const selectedTableSize = ref<TableSizes>(TableSize.LG)
 
 const addBtnText = ref(t('table.btnAddRow'))
 
-const originalData = ref([getDeal(rowData.value), getDeal(), getDeal(), getDeal(), getDeal()])
+const originalData = ref([getDeal(rowData.value)])
 
 const headers = computed(() => {
   if (selectedTableSize.value === TableSize.LG) {
@@ -145,8 +145,8 @@ watch(
     <template #header>
       <div class="data-table__header">
         <h1 class="data-table__title">{{ t('table.title') }}</h1>
-        <UiSelectButton v-model="selectedCurrency" :options="currencyOptions" :allow-empty="false" />
-        <UiSelectButton v-model="selectedTableSize" :options="tableSizeOptions" :allow-empty="false" />
+        <UiSelectButton v-model="selectedCurrency" :options="currencyOptions" :allowEmpty="false" />
+        <UiSelectButton v-model="selectedTableSize" :options="tableSizeOptions" :allowEmpty="false" />
       </div>
     </template>
 
@@ -173,7 +173,7 @@ watch(
     <template #header>
       <div class="data-table__header">
         <h1 class="data-table__title">{{ t('table.title') }}</h1>
-        <UiSelectButton v-model="selectedTableSize" :options="tableSizeOptions" :allow-empty="false" />
+        <UiSelectButton v-model="selectedTableSize" :options="tableSizeOptions" :allowEmpty="false" />
       </div>
     </template>
   </DataTable>
