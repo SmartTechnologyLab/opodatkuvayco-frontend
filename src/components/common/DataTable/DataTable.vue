@@ -65,6 +65,8 @@ const tableCurrency = (currency: FormatType) => {
 const isCellShouldBeMarked = (field: string, index: number) => {
   return props?.highLightedCells && props?.highLightedCells[index] && props.highLightedCells[index].includes(field)
 }
+
+const maxDate = new Date()
 </script>
 
 <template>
@@ -104,7 +106,7 @@ const isCellShouldBeMarked = (field: string, index: number) => {
 
           <template #editor="{ data, field }" v-if="isColumnsEditable(notEditableColumns, field)">
             <template v-if="calendarFields.includes(field)">
-              <UiCalendar v-model="data[field]" :dateFormat="DateFormat.DOTTED" />
+              <UiCalendar v-model="data[field]" :dateFormat="DateFormat.DOTTED" :maxDate />
             </template>
             <template v-else-if="currencyFields.includes(field)">
               <UiNumberInput v-model="data[field]" mode="currency" :currency="currencyType" />
