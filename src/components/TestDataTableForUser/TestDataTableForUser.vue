@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import DataTable from '@/components/common/DataTable/DataTable.vue'
 import { resultHeaders } from '@/components/common/DataTable/constants'
-import { getDeal } from '@/components/common/DataTable/mocks'
+import { getDeal, type Deal } from '@/components/common/DataTable/mocks'
 import type { DataTableCellEditCompleteEvent } from 'primevue/datatable'
-import { assocPath } from 'ramda'
-import { computed, ref, watch } from 'vue'
+import { assocPath, difference, isEmpty } from 'ramda'
+import { computed, onUnmounted, ref, watch } from 'vue'
 import {
   currencyOptions,
   notEditableColumns as notEditableColumnsLargeTable,
@@ -19,7 +19,8 @@ import UiSelectButton from '@/components/common/UiSelectButton/UiSelectButton.vu
 import { Icons } from '@/components/common/UiButton/constants'
 import type { Currencies } from '@/components/common/DataTable/types'
 import type { TableSizes } from '@/components/TestDataTableForUser/common/types'
-import { groupAndSumByTicker, recalculateVariables, updateDealRates } from '@/components/TestDataTableForUser/helpers'
+import { groupAndSumByTicker, recalculateDeal, updateDealRates } from '@/components/TestDataTableForUser/helpers'
+import { flattenedEntries } from '@/helpers/flattenedEntries'
 
 const { t } = useI18n()
 
@@ -42,6 +43,10 @@ const addBtnText = ref(t('table.btnAddRow'))
 
 const originalData = ref([getDeal(rowData.value)])
 
+const highlightedCells = ref<Record<number, unknown[]>>({})
+
+const timeoutHighliting = ref<NodeJS.Timeout | null>(null)
+
 const headers = computed(() => {
   if (selectedTableSize.value === TableSize.LG) {
     return resultHeaders
@@ -61,29 +66,44 @@ const notEditableColumns = computed(() => {
   return headers.value.map((header) => header.field)
 })
 
+const checkDifference = (newRow: Deal, index: number) => {
+  clearTimeout(timeoutHighliting.value as NodeJS.Timeout)
+  timeoutHighliting.value = null
+
+  const arr: Array<[number, unknown]> = difference(flattenedEntries(table.value.data[index]), flattenedEntries(newRow))
+
+  if (!highlightedCells.value[index]) {
+    highlightedCells.value[index] = []
+  }
+
+  arr.forEach(([field]) => {
+    highlightedCells.value[index].push(field)
+  })
+}
+
 const onCellEditComplete = async (event: DataTableCellEditCompleteEvent) => {
-  const { newValue, field, index } = event
+  const { newValue, field, index, newData } = event
 
   if (newValue) {
     if (field === 'purchase.date') {
-      const exchangeRate = await getCurrencyExchange(selectedCurrency.value, newValue)
-      table.value.data[index].purchase.rate = exchangeRate.rate
+      const { rate } = await getCurrencyExchange(selectedCurrency.value, newValue)
+      table.value.data[index].purchase.rate = rate
     }
 
     if (field === 'sale.date') {
-      const exchangeRate = await getCurrencyExchange(selectedCurrency.value, newValue)
-      table.value.data[index].sale.rate = exchangeRate.rate
+      const { rate } = await getCurrencyExchange(selectedCurrency.value, newValue)
+      table.value.data[index].sale.rate = rate
     }
 
-    const editedRow = table.value.data[index]
-
     const fieldPath = field.split('.')
-    const updatedRow = assocPath(fieldPath, newValue, editedRow)
+    const updatedRow = assocPath(fieldPath, newValue, newData)
 
-    table.value.data[index] = updatedRow
-    originalData.value[index] = updatedRow
+    const recalculatedDeal = recalculateDeal(updatedRow)
 
-    recalculateVariables(updatedRow)
+    checkDifference(recalculatedDeal, index)
+
+    table.value.data[index] = recalculatedDeal
+    originalData.value[index] = recalculatedDeal
   }
 }
 
@@ -107,10 +127,8 @@ watch(
 
 watch(
   () => selectedCurrency.value,
-  async () => {
-    await Promise.all(
-      table.value.data.map((deal) => updateDealRates(deal, selectedCurrency.value, () => recalculateVariables(deal)))
-    )
+  () => {
+    updateDealRates(table.value.data, originalData.value, selectedCurrency.value)
   }
 )
 
@@ -126,15 +144,34 @@ watch(
     }
   }
 )
+
+watch(
+  () => highlightedCells.value,
+  () => {
+    if (!isEmpty(highlightedCells.value)) {
+      timeoutHighliting.value = setTimeout(() => {
+        highlightedCells.value = {}
+      }, 3000)
+    }
+  },
+  {
+    deep: true
+  }
+)
+
+onUnmounted(() => {
+  clearTimeout(timeoutHighliting.value as NodeJS.Timeout)
+})
 </script>
 
 <template>
   <DataTable
     v-if="selectedTableSize === TableSize.LG"
+    :high-lighted-cells="highlightedCells"
     class="data-table"
     :table
     @onCellEdit="onCellEditComplete($event)"
-    :notEditableColumns="notEditableColumns"
+    :notEditableColumns
     edit-mode="cell"
     :currency="selectedCurrency"
     stripedRows
@@ -162,7 +199,7 @@ watch(
   <DataTable
     v-else
     :table
-    :notEditableColumns="notEditableColumns"
+    :notEditableColumns
     class="data-table"
     :currency="selectedCurrency"
     stripedRows

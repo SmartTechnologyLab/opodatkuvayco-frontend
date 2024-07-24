@@ -20,6 +20,7 @@ const props = defineProps<{
   notEditableColumns?: string[]
   editMode?: 'cell' | 'row' | undefined
   currency?: Currency
+  highLightedCells?: Record<number, unknown[]>
 }>()
 
 defineEmits<{
@@ -60,10 +61,14 @@ const tableCurrency = (currency: FormatType) => {
 
   return dynamicCurrencies.includes(currency) ? currenciesSymbols[props.currency as Currency] : ''
 }
+
+const isCellShouldBeMarked = (field: string, index: number) => {
+  return props?.highLightedCells && props?.highLightedCells[index] && props.highLightedCells[index].includes(field)
+}
 </script>
 
 <template>
-  <Card>
+  <Card class="data-table">
     <template #title>
       <slot name="header" />
     </template>
@@ -84,9 +89,17 @@ const tableCurrency = (currency: FormatType) => {
           :header="`${$t(header)} ${tableCurrency(type as FormatType)}`"
         >
           <template #body="{ data, field, index }">
-            <slot :name="field" :value="path(field.split('.'), data)" :type="type" :field :index>
-              {{ isNil(type) ? path(field.split('.'), data) || '-' : getFormattedData(data, field, type) }}
-            </slot>
+            <div
+              :key="index"
+              :class="{
+                'data-table__marked-cell': isCellShouldBeMarked(field, index),
+                'data-table__unmarked-cell': !isCellShouldBeMarked(field, index)
+              }"
+            >
+              <slot :name="field" :value="path(field.split('.'), data)" :type="type" :field :index>
+                {{ isNil(type) ? path(field.split('.'), data) || '-' : getFormattedData(data, field, type) }}
+              </slot>
+            </div>
           </template>
 
           <template #editor="{ data, field }" v-if="isColumnsEditable(notEditableColumns, field)">
@@ -113,4 +126,18 @@ const tableCurrency = (currency: FormatType) => {
   </Card>
 </template>
 
-<style scoped></style>
+<style scoped lang="scss">
+$highlighted-cell-color: #34d399;
+
+.data-table {
+  &__marked-cell {
+    transition: color 1.2s ease-in;
+    color: $highlighted-cell-color;
+  }
+
+  &__unmarked-cell {
+    transition: color 0.9s ease-in-out;
+    color: white;
+  }
+}
+</style>
