@@ -19,7 +19,7 @@ import UiSelectButton from '@/components/common/UiSelectButton/UiSelectButton.vu
 import { Icons } from '@/components/common/UiButton/constants'
 import type { Currencies } from '@/components/common/DataTable/types'
 import type { TableSizes } from '@/components/TestDataTableForUser/common/types'
-import { groupAndSumByTicker, recalculateDeal, updateDealRates } from '@/components/TestDataTableForUser/helpers'
+import { groupAndSumByTicker, recalculateDeal, updatedDealRates } from '@/components/TestDataTableForUser/helpers'
 import { flattenedEntries } from '@/helpers/flattenedEntries'
 
 const { t } = useI18n()
@@ -127,8 +127,13 @@ watch(
 
 watch(
   () => selectedCurrency.value,
-  () => {
-    updateDealRates(table.value.data, originalData.value, selectedCurrency.value)
+  async () => {
+    const updatedDeals = await updatedDealRates(table.value.data, originalData.value, selectedCurrency.value)
+
+    table.value.data.forEach((_, index) => {
+      table.value.data[index] = updatedDeals[index]
+      originalData.value[index] = updatedDeals[index]
+    })
   }
 )
 
