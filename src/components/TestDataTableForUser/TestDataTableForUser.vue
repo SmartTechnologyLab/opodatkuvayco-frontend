@@ -22,6 +22,8 @@ import type { TableSizes } from '@/components/TestDataTableForUser/common/types'
 import { groupAndSumByTicker, recalculateDeal, updatedDealRates } from '@/components/TestDataTableForUser/helpers'
 import { flattenedEntries } from '@/helpers/flattenedEntries'
 
+const TIMEOUT_MS = 3000
+
 const { t } = useI18n()
 
 const rowData = ref({
@@ -156,7 +158,7 @@ watch(
     if (!isEmpty(highlightedCells.value)) {
       timeoutHighliting.value = setTimeout(() => {
         highlightedCells.value = {}
-      }, 3000)
+      }, TIMEOUT_MS)
     }
   },
   {
