@@ -70,6 +70,8 @@ const notEditableColumns = computed(() => {
 
 const checkDifference = (newRow: Deal, index: number) => {
   clearTimeout(timeoutHighliting.value as NodeJS.Timeout)
+
+  highlightedCells.value = {}
   timeoutHighliting.value = null
 
   const arr: Array<[number, unknown]> = difference(flattenedEntries(table.value.data[index]), flattenedEntries(newRow))
