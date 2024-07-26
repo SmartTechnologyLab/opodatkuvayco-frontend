@@ -226,6 +226,8 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
+$highlighted-cell-color: #34d399;
+
 .data-table {
   min-width: 40vw;
   max-width: 90vw;
@@ -255,6 +257,16 @@ onUnmounted(() => {
     display: flex;
     justify-content: center;
     padding-inline: 10px;
+  }
+
+  :deep &__marked-cell {
+    transition: color 1.2s ease-in;
+    color: $highlighted-cell-color;
+  }
+
+  :deep &__unmarked-cell {
+    transition: color 0.9s ease-in-out;
+    color: $main-text-color;
   }
 }
 </style>

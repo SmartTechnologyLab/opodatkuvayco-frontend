@@ -128,18 +128,4 @@ const maxDate = new Date()
   </Card>
 </template>
 
-<style scoped lang="scss">
-$highlighted-cell-color: #34d399;
-
-.data-table {
-  &__marked-cell {
-    transition: color 1.2s ease-in;
-    color: $highlighted-cell-color;
-  }
-
-  &__unmarked-cell {
-    transition: color 0.9s ease-in-out;
-    color: white;
-  }
-}
-</style>
+<style scoped lang="scss"></style>
