@@ -38,7 +38,7 @@ export const recalculateDeal = (dealParam: Deal) => {
   return deal
 }
 
-export const updatedDealRates = async (deals: Deal[], originalDeals: Deal[], currency: Currency) => {
+export const updatedDealRates = async (deals: Deal[], currency: Currency) => {
   const dealsWithNewRate = await Promise.all(
     deals.map(async (deal) => {
       const [purchase, sale] = await Promise.all([

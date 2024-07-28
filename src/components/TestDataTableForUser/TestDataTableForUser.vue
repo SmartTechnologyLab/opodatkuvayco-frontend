@@ -56,9 +56,17 @@ const headers = computed(() => {
   return resultHeaders.filter((header) => header.size?.includes(TableSize.SM))
 })
 
+const tableData = computed(() => {
+  if (selectedTableSize.value === TableSize.SM) {
+    return groupAndSumByTicker(originalData.value)
+  }
+
+  return originalData.value
+})
+
 const table = ref({
   headers: headers.value,
-  data: [...originalData.value]
+  data: tableData.value
 })
 
 const notEditableColumns = computed(() => {
@@ -107,20 +115,17 @@ const onCellEditComplete = async (event: DataTableCellEditCompleteEvent) => {
     checkDifference(recalculatedDeal, index)
 
     table.value.data[index] = recalculatedDeal
-    originalData.value[index] = recalculatedDeal
   }
 }
 
 const handleAddRow = () => {
-  if (originalData.value.length < 8) {
+  if (table.value.data.length < 8) {
     const newDeal = getDeal()
-    originalData.value = [...originalData.value, newDeal]
-    table.value.data = [...table.value.data, newDeal]
+    table.value.data.push(newDeal)
   }
 }
 
 const handleDeleteRow = (rowIndex: number) => {
-  originalData.value = originalData.value.filter((_, index) => index !== rowIndex)
   table.value.data = table.value.data.filter((_, index) => index !== rowIndex)
 }
 
@@ -132,11 +137,10 @@ watch(
 watch(
   () => selectedCurrency.value,
   async () => {
-    const updatedDeals = await updatedDealRates(table.value.data, originalData.value, selectedCurrency.value)
+    const updatedDeals = await updatedDealRates(table.value.data, selectedCurrency.value)
 
     table.value.data.forEach((_, index) => {
       table.value.data[index] = updatedDeals[index]
-      originalData.value[index] = updatedDeals[index]
     })
   }
 )
@@ -145,12 +149,7 @@ watch(
   () => selectedTableSize.value,
   () => {
     table.value.headers = headers.value
-
-    if (selectedTableSize.value === TableSize.SM) {
-      table.value.data = groupAndSumByTicker(table.value.data)
-    } else {
-      table.value.data = [...originalData.value]
-    }
+    table.value.data = tableData.value
   }
 )
 
@@ -258,13 +257,15 @@ $highlighted-cell-color: #34d399;
     justify-content: center;
     padding-inline: 10px;
   }
+}
 
-  :deep &__marked-cell {
+:deep() {
+  .data-table__marked-cell {
     transition: color 1.2s ease-in;
     color: $highlighted-cell-color;
   }
 
-  :deep &__unmarked-cell {
+  .data-table__unmarked-cell {
     transition: color 0.9s ease-in-out;
     color: $main-text-color;
   }
