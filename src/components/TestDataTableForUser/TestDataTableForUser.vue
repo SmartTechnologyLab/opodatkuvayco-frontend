@@ -134,27 +134,21 @@ watch(
   () => (addBtnText.value = t('table.btnYourLimitLeft'))
 )
 
-watch(
-  () => selectedCurrency.value,
-  async () => {
-    const updatedDeals = await updatedDealRates(table.value.data, selectedCurrency.value)
+watch(selectedCurrency, async () => {
+  const updatedDeals = await updatedDealRates(table.value.data, selectedCurrency.value)
 
-    table.value.data.forEach((_, index) => {
-      table.value.data[index] = updatedDeals[index]
-    })
-  }
-)
+  table.value.data.forEach((_, index) => {
+    table.value.data[index] = updatedDeals[index]
+  })
+})
 
-watch(
-  () => selectedTableSize.value,
-  () => {
-    table.value.headers = headers.value
-    table.value.data = tableData.value
-  }
-)
+watch(selectedTableSize, () => {
+  table.value.headers = headers.value
+  table.value.data = tableData.value
+})
 
 watch(
-  () => highlightedCells.value,
+  highlightedCells,
   () => {
     if (!isEmpty(highlightedCells.value)) {
       timeoutHighliting.value = setTimeout(() => {
