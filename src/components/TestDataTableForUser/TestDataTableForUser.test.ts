@@ -82,10 +82,11 @@ describe('Test DataTable for user', () => {
     wrapper.findAllComponents(UiSelectButton).find((btn) => btn.attributes().modelvalue === modelValue)
 
   it('Select currency button has certain params', () => {
+    const BUTTON_OPTIONS = `${Currency.USD},${Currency.EUR}`
     const CurrencyButton = findSelectButton<Currencies>(Currency.USD)
 
-    expect(CurrencyButton?.attributes().modelvalue).toMatchSnapshot()
-    expect(CurrencyButton?.attributes().options).toMatchSnapshot()
+    expect(CurrencyButton?.attributes().modelvalue).toEqual(Currency.USD)
+    expect(CurrencyButton?.attributes().options).toStrictEqual(BUTTON_OPTIONS)
   })
 
   it('Changes table size to small with select button', async () => {
@@ -96,8 +97,8 @@ describe('Test DataTable for user', () => {
 
     SelectSizeButton = findSelectButton(TableSize.SM)
 
-    expect(SelectSizeButton?.exists()).toMatchSnapshot()
-    expect(SelectSizeButton?.attributes().modelvalue).toMatchSnapshot()
+    expect(SelectSizeButton?.exists()).toBeTruthy()
+    expect(SelectSizeButton?.attributes().modelvalue).toStrictEqual(TableSize.SM)
   })
 
   it('Small table contains particular columns', async () => {
@@ -113,8 +114,8 @@ describe('Test DataTable for user', () => {
 
     const CURRENT_HEADERS = (SmallDataTable.props().table.headers as TableHeaders[]).map((header) => header.field)
 
-    expect(SelectSizeButton?.attributes().modelvalue).toMatchSnapshot()
-    expect(isArraysEqual(CURRENT_HEADERS, SMALL_TABLE_HEADERS)).toMatchSnapshot()
+    expect(SelectSizeButton?.attributes().modelvalue).toStrictEqual(TableSize.SM)
+    expect(isArraysEqual(CURRENT_HEADERS, SMALL_TABLE_HEADERS)).toBeTruthy()
   })
 
   it('Changes currency with select button', async () => {
@@ -123,23 +124,25 @@ describe('Test DataTable for user', () => {
     await SelectCurrencyButton?.setValue(Currency.EUR)
     await SelectCurrencyButton?.trigger('click')
 
-    expect(SelectCurrencyButton?.attributes().modelvalue).toMatchSnapshot()
+    expect(SelectCurrencyButton?.attributes().modelvalue).toStrictEqual(Currency.EUR)
   })
 
   it('Select Buttons must have attribute of allowEmpty to false', () => {
     const SelectCurrencyButton = findSelectButton<Currencies>(Currency.USD)
     const SelectSizeButton = findSelectButton<TableSizes>(TableSize.LG)
 
-    expect(SelectCurrencyButton?.attributes().allowempty).toMatchSnapshot()
-    expect(SelectSizeButton?.attributes().allowempty).toMatchSnapshot()
+    expect(SelectCurrencyButton?.attributes().allowempty).toEqual('false')
+    expect(SelectSizeButton?.attributes().allowempty).toEqual('false')
   })
 
   const ADD_BTN_TEXT = 'Добавити рядок'
   it('Add button attrs', () => {
+    const DELETE_ICON = 'pi pi-plus'
+    const LABEL = 'Добавити рядок'
     const addButton = wrapper.findAllComponents(UiButton).find((btn) => btn.attributes().label === ADD_BTN_TEXT)
 
-    expect(addButton?.attributes().icon).toMatchSnapshot()
-    expect(addButton?.attributes().label).toMatchSnapshot()
+    expect(addButton?.attributes().icon).toStrictEqual(DELETE_ICON)
+    expect(addButton?.attributes().label).toStrictEqual(LABEL)
   })
 
   it('Clicking add button adds new row', async () => {
@@ -180,7 +183,7 @@ describe('Test DataTable for user', () => {
 
     const dataTable = wrapper.findComponent(DataTable)
 
-    expect(isArraysEqual(dataTable.props().notEditableColumns, notEditableCols)).toMatchSnapshot()
+    expect(isArraysEqual(dataTable.props().notEditableColumns, notEditableCols)).toBeTruthy()
   })
 
   it('Small data table have all columns uneditable', async () => {
@@ -192,10 +195,11 @@ describe('Test DataTable for user', () => {
 
     const dataTable = wrapper.findComponent(DataTable)
 
-    expect(isArraysEqual(dataTable.props().notEditableColumns, SMALL_TABLE_HEADERS)).toMatchSnapshot()
+    expect(isArraysEqual(dataTable.props().notEditableColumns, SMALL_TABLE_HEADERS)).toBeTruthy()
   })
 
   it('Fetched and changed rates correctly', async () => {
+    const RATE = 44.84
     const dates: string[] = []
 
     const selectButton = findSelectButton<Currencies>(Currency.USD)
@@ -216,21 +220,23 @@ describe('Test DataTable for user', () => {
 
     expect(getCurrencyExchange).toHaveBeenCalledTimes(dates.length)
 
-    expect(selectButton?.attributes().modelvalue).toMatchSnapshot()
+    expect(selectButton?.attributes().modelvalue).toStrictEqual(Currency.EUR)
 
     deals.forEach((deal) => {
-      expect(deal.purchase.rate).toMatchSnapshot()
-      expect(deal.sale.rate).toMatchSnapshot()
+      expect(deal.purchase.rate).toStrictEqual(RATE)
+      expect(deal.sale.rate).toStrictEqual(RATE)
     })
   })
 
   it('Small data table group tickers by ticker name and sum it data', async () => {
     const TICKER_NAME = 'APPL'
+    const INITIAL_LENGTH = 1
+    const TOTAL_RESULT = 398
 
     let dataTable = wrapper.findComponent(DataTable)
     const addButton = wrapper.findAllComponents(UiButton).find((btn) => btn.attributes().label === ADD_BTN_TEXT)
 
-    expect(dataTable.props().table.data.length).toMatchSnapshot()
+    expect(dataTable.props().table.data.length).toStrictEqual(INITIAL_LENGTH)
 
     await addButton?.trigger('click')
 
@@ -244,7 +250,7 @@ describe('Test DataTable for user', () => {
     const [applDeal] = dataTable.props().table.data
     const filteredDealsByAppl = dataTable.props().table.data.filter((deal: Deal) => deal.ticker === TICKER_NAME)
 
-    expect(filteredDealsByAppl.length).toMatchSnapshot()
-    expect(applDeal.total).toMatchSnapshot()
+    expect(filteredDealsByAppl.length).toStrictEqual(INITIAL_LENGTH)
+    expect(applDeal.total).toStrictEqual(TOTAL_RESULT)
   })
 })
