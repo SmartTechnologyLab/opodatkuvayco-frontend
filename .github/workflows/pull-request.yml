@@ -1,5 +1,4 @@
 name: PullRequest
-
 on:
   pull_request:
     branches:
@@ -10,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  setup:
+  lint:
     runs-on: ubuntu-latest
     container:
       image: node:20.13.1-alpine
@@ -21,7 +20,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - name: Cache dependencies
         uses: actions/cache@v4
         with:
@@ -29,34 +27,50 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-
       - name: Install dependencies
         run: npm ci
-
-  lint:
-    needs: setup
-    runs-on: ubuntu-latest
-    container:
-      image: node:20.13.1-alpine
-    steps:
       - name: Linter
         run: npx lint-staged
 
   type_check:
-    needs: setup
     runs-on: ubuntu-latest
     container:
       image: node:20.13.1-alpine
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: npm ci
       - name: Type check
         run: npm run type-check
 
   unit_tests:
-    needs: setup
     runs-on: ubuntu-latest
     container:
       image: node:20.13.1-alpine
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: npm ci
       - name: Unit tests
         run: npm run test
 
@@ -66,6 +80,19 @@ jobs:
     container:
       image: node:20.13.1-alpine
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: npm ci
       - name: Build project
         run: npm run build
       - name: Build storybook
