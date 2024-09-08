@@ -6,20 +6,36 @@ on:
       - main
 
 permissions:
-  contents: read
+  contents: read # for checkout
 
 jobs:
-  lint:
+  setup:
     runs-on: ubuntu-latest
-    container:
-      image: node:20.13.1-alpine
     steps:
-      - name: Install Git
-        run: apk add --no-cache git
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.13.1"
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: npm ci
+
+  lint:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Cache dependencies
         uses: actions/cache@v4
         with:
@@ -33,14 +49,11 @@ jobs:
         run: npx lint-staged
 
   type_check:
+    needs: setup
     runs-on: ubuntu-latest
-    container:
-      image: node:20.13.1-alpine
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - name: Cache dependencies
         uses: actions/cache@v4
         with:
@@ -54,14 +67,11 @@ jobs:
         run: npm run type-check
 
   unit_tests:
+    needs: setup
     runs-on: ubuntu-latest
-    container:
-      image: node:20.13.1-alpine
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - name: Cache dependencies
         uses: actions/cache@v4
         with:
@@ -77,13 +87,9 @@ jobs:
   build:
     needs: [lint, type_check, unit_tests]
     runs-on: ubuntu-latest
-    container:
-      image: node:20.13.1-alpine
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - name: Cache dependencies
         uses: actions/cache@v4
         with:
