@@ -3,14 +3,26 @@ import DataTable from '@/components/common/DataTable/DataTable.vue'
 import { resultHeaders } from '@/components/common/DataTable/constants'
 import { getDeal, type Deal } from '@/components/common/DataTable/mocks'
 import type { DataTableCellEditCompleteEvent } from 'primevue/datatable'
-import { assocPath } from 'ramda'
-import { ref, watch } from 'vue'
-import { notEditableColumns } from './common/notEditableColumns'
+import { assocPath, difference, isEmpty } from 'ramda'
+import { computed, onUnmounted, ref, watch } from 'vue'
+import {
+  currencyOptions,
+  notEditableColumns as notEditableColumnsLargeTable,
+  TableSize,
+  tableSizeOptions
+} from '@/components/TestDataTableForUser/common/constants'
 import { useI18n } from 'vue-i18n'
 import { getCurrencyExchange } from '@/api/getCurrencyExchange'
 import UiButton from '@/components/common/UiButton/UiButton.vue'
 import { Currency } from '@/constants/currencies'
 import UiSelectButton from '@/components/common/UiSelectButton/UiSelectButton.vue'
+import { Icons } from '@/components/common/UiButton/constants'
+import type { Currencies } from '@/components/common/DataTable/types'
+import type { TableSizes } from '@/components/TestDataTableForUser/common/types'
+import { groupAndSumByTicker, recalculateDeal, updatedDealRates } from '@/components/TestDataTableForUser/helpers'
+import { flattenedEntries } from '@/helpers/flattenedEntries'
+
+const TIMEOUT_MS = 3000
 
 const { t } = useI18n()
 
@@ -25,109 +37,193 @@ const rowData = ref({
   saleCommission: 1.62
 })
 
-const table = ref({
-  headers: resultHeaders,
-  data: [getDeal(rowData.value), getDeal(), getDeal(), getDeal(), getDeal()]
+const selectedCurrency = ref<Currencies>(Currency.USD)
+
+const selectedTableSize = ref<TableSizes>(TableSize.LG)
+
+const addBtnText = ref(t('table.btnAddRow'))
+
+const originalData = ref([getDeal(rowData.value)])
+
+const highlightedCells = ref<Record<number, unknown[]>>({})
+
+const timeoutHighliting = ref<NodeJS.Timeout | null>(null)
+
+const headers = computed(() => {
+  if (selectedTableSize.value === TableSize.LG) {
+    return resultHeaders
+  }
+  return resultHeaders.filter((header) => header.size?.includes(TableSize.SM))
 })
 
-const currencies = ref<string[]>(Object.values(Currency).filter((currency) => currency !== Currency.UAH))
+const tableData = computed(() => {
+  if (selectedTableSize.value === TableSize.SM) {
+    return groupAndSumByTicker(originalData.value)
+  }
 
-const selectedCurrency = ref(Currency.USD)
+  return originalData.value
+})
 
-const btnContent = ref(t('table.btnAddRow'))
+const table = ref({
+  headers: headers.value,
+  data: tableData.value
+})
+
+const notEditableColumns = computed(() => {
+  if (selectedTableSize.value === TableSize.LG) {
+    return notEditableColumnsLargeTable
+  }
+  return headers.value.map((header) => header.field)
+})
+
+const checkDifference = (newRow: Deal, index: number) => {
+  clearTimeout(timeoutHighliting.value as NodeJS.Timeout)
+
+  highlightedCells.value = {}
+  timeoutHighliting.value = null
+
+  const arr: Array<[number, unknown]> = difference(flattenedEntries(table.value.data[index]), flattenedEntries(newRow))
+
+  if (!highlightedCells.value[index]) {
+    highlightedCells.value[index] = []
+  }
+
+  arr.forEach(([field]) => {
+    highlightedCells.value[index].push(field)
+  })
+}
 
 const onCellEditComplete = async (event: DataTableCellEditCompleteEvent) => {
-  let { newValue, field, index } = event
+  const { newValue, field, index, newData } = event
 
   if (newValue) {
     if (field === 'purchase.date') {
-      const exchangeRate = await getCurrencyExchange(selectedCurrency.value, newValue)
-      table.value.data[index].purchase.rate = exchangeRate.rate
+      const { rate } = await getCurrencyExchange(selectedCurrency.value, newValue)
+      table.value.data[index].purchase.rate = rate
     }
 
     if (field === 'sale.date') {
-      const exchangeRate = await getCurrencyExchange(selectedCurrency.value, newValue)
-      table.value.data[index].sale.rate = exchangeRate.rate
+      const { rate } = await getCurrencyExchange(selectedCurrency.value, newValue)
+      table.value.data[index].sale.rate = rate
     }
 
-    const editedRow = table.value.data[index]
-
     const fieldPath = field.split('.')
+    const updatedRow = assocPath(fieldPath, newValue, newData)
 
-    const updatedRow = assocPath(fieldPath, newValue, editedRow)
+    const recalculatedDeal = recalculateDeal(updatedRow)
 
-    table.value.data[index] = updatedRow
+    checkDifference(recalculatedDeal, index)
 
-    recalculateVariables(updatedRow)
+    table.value.data[index] = recalculatedDeal
   }
 }
 
-const recalculateVariables = (deal: Deal) => {
-  deal.purchase.sum = deal.purchase.price * deal.quantity
-  deal.sale.sum = deal.sale.price * deal.quantity
-  deal.purchase.uah =
-    (deal.purchase.sum + deal.purchase.commission) * deal.purchase.rate + deal.sale.commission * deal.sale.rate
-  deal.sale.uah = deal.sale.sum * deal.sale.rate
-  deal.total = deal.sale.uah - deal.purchase.uah
-  deal.percent = deal.sale.uah / deal.purchase.uah - 1
+const handleAddRow = () => {
+  if (table.value.data.length < 8) {
+    const newDeal = getDeal()
+    table.value.data.push(newDeal)
+  }
 }
 
-const handleAddRow = () => {
-  table.value.data.length < 8 ? table.value.data.push(getDeal()) : null
+const handleDeleteRow = (rowIndex: number) => {
+  table.value.data = table.value.data.filter((_, index) => index !== rowIndex)
 }
 
 watch(
   () => table.value.data.length < 8,
-  () => (btnContent.value = t('table.btnYourLimitLeft'))
+  () => (addBtnText.value = t('table.btnYourLimitLeft'))
 )
 
-table.value.data.forEach((deal) => {
-  watch(
-    () => selectedCurrency.value,
-    async () => {
-      const [purchase, sale] = await Promise.all([
-        getCurrencyExchange(selectedCurrency.value, String(deal.purchase.date)),
-        getCurrencyExchange(selectedCurrency.value, String(deal.sale.date))
-      ])
+watch(selectedCurrency, async () => {
+  const updatedDeals = await updatedDealRates(table.value.data, selectedCurrency.value)
 
-      deal.purchase.rate = purchase.rate
-      deal.sale.rate = sale.rate
+  table.value.data.forEach((_, index) => {
+    table.value.data[index] = updatedDeals[index]
+  })
+})
 
-      recalculateVariables(deal)
+watch(selectedTableSize, () => {
+  table.value.headers = headers.value
+  table.value.data = tableData.value
+})
+
+watch(
+  highlightedCells,
+  () => {
+    if (!isEmpty(highlightedCells.value)) {
+      timeoutHighliting.value = setTimeout(() => {
+        highlightedCells.value = {}
+      }, TIMEOUT_MS)
     }
-  )
+  },
+  {
+    deep: true
+  }
+)
+
+onUnmounted(() => {
+  clearTimeout(timeoutHighliting.value as NodeJS.Timeout)
 })
 </script>
 
 <template>
   <DataTable
-    :table="table"
-    @onCellEdit="onCellEditComplete($event)"
-    :notEditableColumns="notEditableColumns"
-    edit-mode="cell"
+    v-if="selectedTableSize === TableSize.LG"
+    :high-lighted-cells="highlightedCells"
     class="data-table"
-    resizableColumns
+    :table
+    @onCellEdit="onCellEditComplete($event)"
+    :notEditableColumns
+    edit-mode="cell"
     :currency="selectedCurrency"
+    stripedRows
+    removableSort
+    rowHover
+    scrollable
   >
     <template #header>
       <div class="data-table__header">
         <h1 class="data-table__title">{{ t('table.title') }}</h1>
-        <UiSelectButton v-model="selectedCurrency" :options="currencies" :allow-empty="false" />
+        <UiSelectButton v-model="selectedCurrency" :options="currencyOptions" :allowEmpty="false" />
+        <UiSelectButton v-model="selectedTableSize" :options="tableSizeOptions" :allowEmpty="false" />
       </div>
     </template>
 
-    <template #add-row>
-      <UiButton @click="handleAddRow" class="data-table__add-btn">
-        <i class="pi pi-plus" style="color: black" v-if="table.data.length < 8" />
-        {{ btnContent }}
-      </UiButton>
+    <template #deleteRow="{ index }">
+      <UiButton @click="handleDeleteRow(index)" class="data-table__delete-btn" outlined :icon="Icons.DELETE" />
+    </template>
+
+    <template #addRow>
+      <UiButton @click="handleAddRow" class="data-table__add-btn" :label="addBtnText" :icon="Icons.PLUS" />
+    </template>
+  </DataTable>
+
+  <DataTable
+    v-else
+    :table
+    :notEditableColumns
+    class="data-table"
+    :currency="selectedCurrency"
+    stripedRows
+    removableSort
+    rowHover
+    scrollable
+  >
+    <template #header>
+      <div class="data-table__header">
+        <h1 class="data-table__title">{{ t('table.title') }}</h1>
+        <UiSelectButton v-model="selectedTableSize" :options="tableSizeOptions" :allowEmpty="false" />
+      </div>
     </template>
   </DataTable>
 </template>
 
 <style scoped lang="scss">
+$highlighted-cell-color: #34d399;
+
 .data-table {
-  width: 90vw;
+  min-width: 40vw;
+  max-width: 90vw;
 
   &__header {
     display: flex;
@@ -142,14 +238,30 @@ table.value.data.forEach((deal) => {
   &__add-btn {
     margin-left: auto;
     margin-top: 1rem;
-
     min-width: 180px;
     max-width: 200px;
-
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+  }
+
+  &__delete-btn {
+    display: flex;
+    justify-content: center;
+    padding-inline: 10px;
+  }
+}
+
+:deep() {
+  .data-table__marked-cell {
+    transition: color 1.2s ease-in;
+    color: $highlighted-cell-color;
+  }
+
+  .data-table__unmarked-cell {
+    transition: color 0.9s ease-in-out;
+    color: $main-text-color;
   }
 }
 </style>
