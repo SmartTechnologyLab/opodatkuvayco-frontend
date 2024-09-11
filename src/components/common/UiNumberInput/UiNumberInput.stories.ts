@@ -75,8 +75,5 @@ export const InputWithSuffix: Story = {
     template: `
       <UiNumberInput v-bind="{...args}" />
     `
-  }),
-  args: {
-    suffix: '%'
-  }
+  })
 }

@@ -1,0 +1,35 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`UiButton component > emits click event when button get clicked 1`] = `
+{
+  "click": [
+    [],
+  ],
+}
+`;
+
+exports[`UiButton component > have not attribute class on element a 1`] = `undefined`;
+
+exports[`UiButton component > have not attribute class on element a 2`] = `"submit-btn"`;
+
+exports[`UiButton component > have not attribute class on element router link 1`] = `undefined`;
+
+exports[`UiButton component > have parent element of anchor if it has href attribute 1`] = `"#about"`;
+
+exports[`UiButton component > have parent element of router link if it has to attribute 1`] = `true`;
+
+exports[`UiButton component > have parent element of router link if it has to attribute 2`] = `"/home"`;
+
+exports[`UiButton component > passes value to defaul slot 1`] = `"Submit"`;
+
+exports[`UiButton component > renders with provided props 1`] = `"pi pi-check"`;
+
+exports[`UiButton component > renders with provided props 2`] = `"danger"`;
+
+exports[`UiButton component > renders with provided props 3`] = `true`;
+
+exports[`UiButton component > renders with provided props 4`] = `true`;
+
+exports[`UiButton component > renders with provided props 5`] = `true`;
+
+exports[`UiButton component > renders without props 1`] = `true`;

@@ -1,16 +1,12 @@
 import { config } from '@vue/test-utils'
-import { vi } from 'vitest'
-
-vi.mock('vue-i18n', () => ({
-  useI18n: () => ({
-    t: (key: string) => key,
-    d: (date: Date) => date,
-    n: (num: number) => num
-  })
-}))
+import { i18n } from '../src/i18n/index'
 
 config.global.mocks = {
   $t: (msg: string) => msg,
   $d: (date: Date) => date,
   $n: (num: number) => num
 }
+
+config.global.plugins = [i18n]
+
+config.global.renderStubDefaultSlot = true
