@@ -23,6 +23,7 @@
     "*.{js,ts,vue}": "eslint"
   },
   "dependencies": {
+    "chart.js": "^4.4.4",
     "pinia": "^2.1.7",
     "primeicons": "^6.0.1",
     "primevue": "^3.48.1",
