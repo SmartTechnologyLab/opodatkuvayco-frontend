@@ -1,0 +1,35 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TaxCalculator component > Calctulating the difference correctly 1`] = `"-1"`;
+
+exports[`TaxCalculator component > Calctulating the division correctly 1`] = `"1"`;
+
+exports[`TaxCalculator component > Calctulating the multiplication correctly 1`] = `"6"`;
+
+exports[`TaxCalculator component > Calctulating the sum correctly 1`] = `"3"`;
+
+exports[`TaxCalculator component > Deletes file correctly 1`] = `false`;
+
+exports[`TaxCalculator component > Equal button has type of submit when files is defined 1`] = `"submit"`;
+
+exports[`TaxCalculator component > Equal button reset type to button when clear button clicked 1`] = `"submit"`;
+
+exports[`TaxCalculator component > Equal button reset type to button when clear button clicked 2`] = `"button"`;
+
+exports[`TaxCalculator component > Handles file input change 1`] = `true`;
+
+exports[`TaxCalculator component > Handles file input change 2`] = `"example.json"`;
+
+exports[`TaxCalculator component > Set the number to negative correctly 1`] = `"0"`;
+
+exports[`TaxCalculator component > When result is null or isCalculating is false - FileInput renders 1`] = `true`;
+
+exports[`TaxCalculator component > When result is null or isCalculating is false - FileInput renders 2`] = `false`;
+
+exports[`TaxCalculator component > When the button with number is clicked, the result input is mounted into DOM 1`] = `false`;
+
+exports[`TaxCalculator component > When the button with number is clicked, the result input is mounted into DOM 2`] = `true`;
+
+exports[`TaxCalculator component > When the reset button clicked, the result input is unmounted from DOM and the FileInput renders 1`] = `true`;
+
+exports[`TaxCalculator component > When the reset button clicked, the result input is unmounted from DOM and the FileInput renders 2`] = `false`;

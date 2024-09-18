@@ -10,8 +10,6 @@ const props = defineProps<{
   currency?: Currency
   minFractionDigits?: number
   maxFractionDigits?: number
-  prefix?: string
-  suffix?: string
 }>()
 </script>
 

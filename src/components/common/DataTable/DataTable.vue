@@ -4,7 +4,7 @@ import Column from 'primevue/column'
 import Card from 'primevue/card'
 import { isNil, path } from 'ramda'
 import { useI18n } from 'vue-i18n'
-import { computed, type Ref } from 'vue'
+import { computed, useAttrs, useSlots, type Ref } from 'vue'
 import { type Deal } from '@/components/common/DataTable/mocks'
 import type { Currencies, Table } from '@/components/common/DataTable/types'
 import UiInput from '@/components/common/UiInput/UiInput.vue'
@@ -17,12 +17,10 @@ import { currenciesName, FormatType, dynamicCurrencies } from '@/components/comm
 
 const props = defineProps<{
   table: Table
-  sortableColumn?: boolean
-  removeSortable?: boolean
   notEditableColumns?: string[]
   editMode?: 'cell' | 'row' | undefined
-  resizableColumns?: boolean
   currency?: Currency
+  highLightedCells?: Record<number, unknown[]>
 }>()
 
 defineEmits<{
@@ -30,6 +28,12 @@ defineEmits<{
 }>()
 
 const { d, n } = useI18n()
+
+const attrs = useAttrs()
+
+const slots = useSlots()
+
+const currencyType = computed(() => currenciesName[props.currency as Currencies])
 
 const getFormattedData = (data: Ref<Deal[]>, field: string, type?: FormatType) => {
   const value = path(field.split('.'), data)
@@ -50,8 +54,6 @@ const isColumnsEditable = (notEditableColumns: string[] | undefined, field: stri
   return !notEditableColumns?.includes(field)
 }
 
-const currencyType = computed(() => currenciesName[props.currency as Currencies])
-
 const tableCurrency = (currency: FormatType) => {
   if (currency === FormatType.CurrencyUAH) {
     return currenciesSymbols[Currency.UAH]
@@ -59,41 +61,52 @@ const tableCurrency = (currency: FormatType) => {
 
   return dynamicCurrencies.includes(currency) ? currenciesSymbols[props.currency as Currency] : ''
 }
+
+const isCellShouldBeMarked = (field: string, index: number) => {
+  return props?.highLightedCells && props?.highLightedCells[index] && props.highLightedCells[index].includes(field)
+}
+
+const maxDate = new Date()
 </script>
 
 <template>
-  <Card>
+  <Card class="data-table">
     <template #title>
       <slot name="header" />
     </template>
 
     <template #content>
-      <DataTable
-        :value="table.data"
-        size="small"
-        :removableSort="removeSortable"
-        @cell-edit-complete="$emit('onCellEdit', $event)"
-        :editMode="editMode"
-        scrollable
-        :resizable-columns="resizableColumns"
-      >
+      <DataTable v-bind="{ ...attrs }" :value="table.data" @cell-edit-complete="$emit('onCellEdit', $event)" :editMode>
+        <Column v-if="slots.deleteRow">
+          <template #body="{ index }">
+            <slot name="deleteRow" :index="index" />
+          </template>
+        </Column>
+
         <Column
-          v-for="{ field, header, type } in table.headers"
-          :sortable="sortableColumn"
+          v-for="{ field, header, type, sortable } in table.headers"
+          :sortable
           :key="field"
           :field
           :header="`${$t(header)} ${tableCurrency(type as FormatType)}`"
-          style="min-width: 100px"
         >
-          <template #body="{ data, field }">
-            <slot :name="field" :value="path(field.split('.'), data)" :type="type">
-              {{ isNil(type) ? path(field.split('.'), data) || '-' : getFormattedData(data, field, type) }}
-            </slot>
+          <template #body="{ data, field, index }">
+            <div
+              :key="index"
+              :class="{
+                'data-table__marked-cell': isCellShouldBeMarked(field, index),
+                'data-table__unmarked-cell': !isCellShouldBeMarked(field, index)
+              }"
+            >
+              <slot :name="field" :value="path(field.split('.'), data)" :type="type" :field :index>
+                {{ isNil(type) ? path(field.split('.'), data) || '-' : getFormattedData(data, field, type) }}
+              </slot>
+            </div>
           </template>
 
           <template #editor="{ data, field }" v-if="isColumnsEditable(notEditableColumns, field)">
             <template v-if="calendarFields.includes(field)">
-              <UiCalendar v-model="data[field]" :dateFormat="DateFormat.DOTTED" />
+              <UiCalendar v-model="data[field]" :dateFormat="DateFormat.DOTTED" :maxDate />
             </template>
             <template v-else-if="currencyFields.includes(field)">
               <UiNumberInput v-model="data[field]" mode="currency" :currency="currencyType" />
@@ -110,9 +123,9 @@ const tableCurrency = (currency: FormatType) => {
 
         <template #empty>{{ $t('table.empty') }}</template>
       </DataTable>
-      <slot name="add-row" />
+      <slot name="addRow" />
     </template>
   </Card>
 </template>
 
-<style scoped></style>
+<style scoped lang="scss"></style>
