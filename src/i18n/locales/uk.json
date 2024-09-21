@@ -23,5 +23,13 @@
   "navBar": {
     "companyName": "Оподаткувайко",
     "logo-alt": "Логотип Оподаткувайко"
+  },
+  "charts": {
+    "purchase": "придбань",
+    "sale": "продажів",
+    "titles": {
+      "soldMonthlyGraph": "Діаграма {operation} за рік",
+      "soldMonthlyGraphByAsset": "Діаграма {operation} за рік по активам"
+    }
   }
 }

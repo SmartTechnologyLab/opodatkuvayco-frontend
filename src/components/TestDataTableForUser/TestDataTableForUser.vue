@@ -21,6 +21,7 @@ import type { Currencies } from '@/components/common/DataTable/types'
 import type { TableSizes } from '@/components/TestDataTableForUser/common/types'
 import { groupAndSumByTicker, recalculateDeal, updatedDealRates } from '@/components/TestDataTableForUser/helpers'
 import { flattenedEntries } from '@/helpers/flattenedEntries'
+import FileInput from '../common/FileInput/FileInput.vue'
 
 const TIMEOUT_MS = 3000
 
@@ -125,9 +126,45 @@ const handleAddRow = () => {
   }
 }
 
+const selectedFiles = ref<File[]>([])
+
+const handleFileChange = async (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const files = target?.files
+
+  if (files) {
+    selectedFiles.value.push(...files)
+  }
+
+  const formData = new FormData()
+
+  selectedFiles.value.forEach((file) => {
+    formData.append('file', file)
+  })
+
+  const response = await fetch('http://localhost:3000/report/deals', {
+    method: 'POST',
+    body: formData
+  })
+
+  const data = await response.json()
+
+  originalData.value = data.deals
+}
+
 const handleDeleteRow = (rowIndex: number) => {
   table.value.data = table.value.data.filter((_, index) => index !== rowIndex)
 }
+
+watch(
+  originalData,
+  () => {
+    table.value.data = tableData.value
+  },
+  {
+    deep: true
+  }
+)
 
 watch(
   () => table.value.data.length < 8,
@@ -195,6 +232,8 @@ onUnmounted(() => {
 
     <template #addRow>
       <UiButton @click="handleAddRow" class="data-table__add-btn" :label="addBtnText" :icon="Icons.PLUS" />
+
+      <FileInput @change="handleFileChange" />
     </template>
   </DataTable>
 

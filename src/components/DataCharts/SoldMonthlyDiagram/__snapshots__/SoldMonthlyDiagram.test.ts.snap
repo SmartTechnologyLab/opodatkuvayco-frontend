@@ -1,0 +1,55 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SoldMonthlyDiagram > should group result when operation is purchase 1`] = `
+{
+  "datasets": [
+    {
+      "data": [
+        7321.86,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+      ],
+      "label": "MSFT",
+    },
+  ],
+  "labels": [
+    "січень",
+  ],
+}
+`;
+
+exports[`SoldMonthlyDiagram > should group result when operation is sale 1`] = `
+{
+  "datasets": [
+    {
+      "data": [
+        23166,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+      ],
+      "label": "MSFT",
+    },
+  ],
+  "labels": [
+    "січень",
+  ],
+}
+`;

@@ -1,10 +1,13 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import RevenueChart from '@/components/DataCharts/RevenueChart.vue'
+</script>
 
 <template>
-  <Suspense>
-    <div>Register page</div>
+  <!-- <Suspense> -->
+  <!-- <div>Register page</div> -->
+  <RevenueChart />
 
-    <!-- ToDo: add spinner for loading state -->
-    <template #fallback> Loading... </template>
-  </Suspense>
+  <!-- ToDo: add spinner for loading state -->
+  <!-- <template #fallback> Loading... </template> -->
+  <!-- </Suspense> -->
 </template>

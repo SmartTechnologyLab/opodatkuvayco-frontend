@@ -1,0 +1,61 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`RevenueDiagramByMonth > should calculate data when deals passed 1`] = `
+{
+  "datasets": [
+    {
+      "backgroundColor": [
+        "",
+        "",
+      ],
+      "data": [
+        [
+          "січень",
+        ],
+        [
+          {
+            "data": [
+              23166,
+            ],
+            "label": "MSFT",
+          },
+        ],
+      ],
+    },
+  ],
+  "labels": [
+    "labels",
+    "datasets",
+  ],
+}
+`;
+
+exports[`RevenueDiagramByMonth > should change operation and recalculate the result 1`] = `
+{
+  "datasets": [
+    {
+      "backgroundColor": [
+        "",
+        "",
+      ],
+      "data": [
+        [
+          "січень",
+        ],
+        [
+          {
+            "data": [
+              7321.86,
+            ],
+            "label": "MSFT",
+          },
+        ],
+      ],
+    },
+  ],
+  "labels": [
+    "labels",
+    "datasets",
+  ],
+}
+`;
