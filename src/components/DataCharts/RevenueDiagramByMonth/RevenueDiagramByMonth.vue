@@ -19,7 +19,7 @@ const { deals, operation } = toRefs(props)
 const currentOperationText = computed(() => (operation.value === 'purchase' ? t('charts.purchase') : t('charts.sale')))
 
 const chartDataByMonth = computed(() => {
-  const revenueByPurchaseDate = getRevenueByPurchaseMonth(operation.value)(deals.value)
+  const revenueByPurchaseDate = getRevenueByPurchaseMonth(operation.value, `${operation.value}.uah`)(deals.value)
 
   return setChartData(Object.values(revenueByPurchaseDate), Object.keys(revenueByPurchaseDate))
 })

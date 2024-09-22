@@ -17,7 +17,9 @@ const { t } = useI18n()
 
 const { deals, stacked, operation } = toRefs(props)
 
-const monthlySoldChartData = computed(() => getResultByTickerEachMonth(operation.value)(deals.value))
+const monthlySoldChartData = computed(() =>
+  getResultByTickerEachMonth(operation.value, `${operation.value}.uah`)(deals.value)
+)
 
 const currentOperationText = computed(() => (operation.value === 'purchase' ? t('charts.purchase') : t('charts.sale')))
 

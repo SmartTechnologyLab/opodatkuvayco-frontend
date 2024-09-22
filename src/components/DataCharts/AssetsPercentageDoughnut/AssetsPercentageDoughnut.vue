@@ -12,12 +12,11 @@ const props = defineProps<{
 
 const { deals } = toRefs(props)
 
-const totalAssetsPercentage = computed(() =>
-  setChartData(
-    Object.values(getTradesPercentageResultByTicker(deals.value)),
-    Object.keys(getTradesPercentageResultByTicker(deals.value))
-  )
-)
+const totalAssetsPercentage = computed(() => {
+  const tradesPercentageValue = getTradesPercentageResultByTicker('quantity')(deals.value)
+
+  return setChartData(Object.values(tradesPercentageValue), Object.keys(tradesPercentageValue))
+})
 </script>
 
 <template>

@@ -1,9 +1,10 @@
 import type { Deal, Operation } from '@/components/common/DataTable/mocks'
 import type { ChartData } from '@/components/common/UiChart/common/types'
 import { getMonthesMap, getMonthNameByNumber } from '@/lib/dateUtils'
-import { pipe, curry } from 'ramda'
+import type { NestedKeyOf } from '@/lib/types/nestedKeyOf'
+import { pipe, curry, path } from 'ramda'
 
-const groupPurchaseByMonth = curry((operation: Operation, deals: Deal[]) => {
+const groupDealsByMonth = curry((operation: Operation, deals: Deal[]) => {
   return deals.reduce(
     (acc, deal) => {
       const month = getMonthNameByNumber(deal[operation].date)
@@ -12,11 +13,11 @@ const groupPurchaseByMonth = curry((operation: Operation, deals: Deal[]) => {
         acc[month] = []
       }
 
-      acc[month].push(deal[operation].uah)
+      acc[month].push(deal)
 
       return acc
     },
-    {} as Record<string, number[]>
+    {} as Record<string, Deal[]>
   )
 })
 
@@ -53,37 +54,47 @@ const groupPurchaseByTicker = (deals: Deal[]): Record<string, Deal[]> => {
   )
 }
 
-const sumDealsPropertyByEachMonth = (
-  dealsMap: Record<string, Record<string, Deal[]>>
-): Record<string, Record<string, number>> => {
-  const result: Record<string, Record<string, number>> = {}
+const sumDealsPropertyByEachMonth = curry(
+  (
+    dealProperty: NestedKeyOf<Deal>,
+    dealsMap: Record<string, Record<string, Deal[]>>
+  ): Record<string, Record<string, number>> => {
+    const result: Record<string, Record<string, number>> = {}
 
-  for (const key in dealsMap) {
-    for (const month in dealsMap[key]) {
-      if (!result[key]) {
-        result[key] = {}
-      }
+    for (const key in dealsMap) {
+      for (const month in dealsMap[key]) {
+        if (!result[key]) {
+          result[key] = {}
+        }
 
-      if (!dealsMap[key][month].length) {
-        result[key][month] = 0
-      } else {
-        result[key][month] = dealsMap[key][month].reduce((acc, deal) => acc + deal.purchase.uah, 0)
+        if (!dealsMap[key][month].length) {
+          result[key][month] = 0
+        } else {
+          result[key][month] = dealsMap[key][month].reduce((acc, deal) => acc + path(dealProperty.split('.'), deal), 0)
+        }
       }
     }
-  }
 
-  return result
-}
+    return result
+  }
+)
 
 const getFilteredMonthsWithTrades = (dealsByMonthMap: Record<string, Record<string, number>>) => {
   const monthes: string[] = []
 
   for (const key in dealsByMonthMap) {
-    for (const month in dealsByMonthMap[key]) {
+    const dealsByMonthMapEntries = Object.entries(dealsByMonthMap[key])
+
+    dealsByMonthMapEntries.forEach(([month], currentIndx) => {
       if (!!dealsByMonthMap[key][month] && !monthes.includes(month)) {
         monthes.push(month)
+      } else if (
+        Object.values(dealsByMonthMap[key]).some((value, index) => value > 0 && index > currentIndx) &&
+        !monthes.includes(month)
+      ) {
+        monthes.push(month)
       }
-    }
+    })
   }
 
   return monthes
@@ -121,25 +132,17 @@ const getAllTickersValue = (deals: Deal[]) => {
   }, [] as string[])
 }
 
-const arraySum = (arr: Record<string, number[]>): Record<string, number> => {
-  const resultMap: Record<string, number> = {}
+const sumDealValues = curry(
+  (dealProperty: NestedKeyOf<Deal>, dealsMap: Record<string, Deal[]>): Record<string, number> => {
+    const result: Record<string, number> = {}
 
-  for (const key in arr) {
-    resultMap[key] = arr[key].reduce((acc, curr) => acc + curr, 0)
+    for (const key in dealsMap) {
+      result[key] = dealsMap[key].reduce((acc, deal) => acc + path(dealProperty.split('.'), deal), 0)
+    }
+
+    return result
   }
-
-  return resultMap
-}
-
-const sumDealValues = (dealsMap: Record<string, Deal[]>): Record<string, number> => {
-  const result: Record<string, number> = {}
-
-  for (const key in dealsMap) {
-    result[key] = dealsMap[key].reduce((acc, value) => acc + value.quantity, 0)
-  }
-
-  return result
-}
+)
 
 const getAverageValue = (groupedDeals: Record<string, number>): Record<string, number> => {
   const totalValue = Object.values(groupedDeals).reduce((acc, curr) => acc + curr, 0)
@@ -153,11 +156,13 @@ const getAverageValue = (groupedDeals: Record<string, number>): Record<string, n
   return dealsAverageMap
 }
 
-const getTradesPercentageResultByTicker = pipe(groupPurchaseByTicker, sumDealValues, getAverageValue)
+const getTradesPercentageResultByTicker = (dealProperty: NestedKeyOf<Deal>) =>
+  pipe(groupPurchaseByTicker, sumDealValues(dealProperty), getAverageValue)
 
-const getResultByTickerEachMonth = (operation: Operation) =>
-  pipe(groupDealsWithMonthMap(operation), sumDealsPropertyByEachMonth, resultArrayOfDealsByEachMonth)
+const getResultByTickerEachMonth = (operation: Operation, dealProperty: NestedKeyOf<Deal>) =>
+  pipe(groupDealsWithMonthMap(operation), sumDealsPropertyByEachMonth(dealProperty), resultArrayOfDealsByEachMonth)
 
-const getRevenueByPurchaseMonth = (operation: Operation) => pipe(groupPurchaseByMonth(operation), arraySum)
+const getRevenueByPurchaseMonth = (operation: Operation, dealProperty: NestedKeyOf<Deal>) =>
+  pipe(groupDealsByMonth(operation), sumDealValues(dealProperty))
 
 export { getTradesPercentageResultByTicker, getRevenueByPurchaseMonth, getAllTickersValue, getResultByTickerEachMonth }

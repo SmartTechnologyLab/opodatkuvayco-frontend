@@ -4,9 +4,8 @@ import RevenueChart from '@/components/DataCharts/RevenueChart.vue'
 
 <template>
   <!-- <Suspense> -->
-  <!-- <div>Register page</div> -->
+  <div>Register page</div>
   <RevenueChart />
-
   <!-- ToDo: add spinner for loading state -->
   <!-- <template #fallback> Loading... </template> -->
   <!-- </Suspense> -->
