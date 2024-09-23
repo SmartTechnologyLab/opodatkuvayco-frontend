@@ -1,30 +1,27 @@
 <script setup lang="ts">
-import DataTable from '@/components/common/DataTable/DataTable.vue'
 import { resultHeaders } from '@/components/common/DataTable/constants'
-import { getDeal, type Deal } from '@/components/common/DataTable/mocks'
-import type { DataTableCellEditCompleteEvent } from 'primevue/datatable'
-import { assocPath, difference, isEmpty } from 'ramda'
+import { getDeal, type Deal, type DealOptions } from '@/components/common/DataTable/mocks'
+import { difference, isEmpty } from 'ramda'
 import { computed, onUnmounted, ref, watch } from 'vue'
 import {
-  currencyOptions,
   notEditableColumns as notEditableColumnsLargeTable,
   TableSize,
   tableSizeOptions
 } from '@/components/TestDataTableForUser/common/constants'
-import { useI18n } from 'vue-i18n'
 import { getCurrencyExchange } from '@/api/getCurrencyExchange'
 import UiButton from '@/components/common/UiButton/UiButton.vue'
 import { Currency } from '@/constants/currencies'
 import UiSelectButton from '@/components/common/UiSelectButton/UiSelectButton.vue'
-import { Icons } from '@/components/common/UiButton/constants'
 import type { Currencies } from '@/components/common/DataTable/types'
 import type { TableSizes } from '@/components/TestDataTableForUser/common/types'
 import { groupAndSumByTicker, recalculateDeal, updatedDealRates } from '@/components/TestDataTableForUser/helpers'
 import { flattenedEntries } from '@/helpers/flattenedEntries'
+import Toolbar from 'primevue/toolbar'
+import EditDealDialog from '@/components/EditDealDialog/EditDealDialog.vue'
+import { Icons } from '@/components/common/UiButton/constants'
+import DataTable from '@/components/common/DataTable/DataTable.vue'
 
 const TIMEOUT_MS = 3000
-
-const { t } = useI18n()
 
 const rowData = ref({
   ticker: 'DAL',
@@ -37,11 +34,19 @@ const rowData = ref({
   saleCommission: 1.62
 })
 
+const isDialogVisible = ref(false)
+
+const editingDeal = ref<{
+  deal: Deal
+  index: number | null
+}>({
+  deal: {} as Deal,
+  index: null
+})
+
 const selectedCurrency = ref<Currencies>(Currency.USD)
 
 const selectedTableSize = ref<TableSizes>(TableSize.LG)
-
-const addBtnText = ref(t('table.btnAddRow'))
 
 const originalData = ref([getDeal(rowData.value)])
 
@@ -93,45 +98,80 @@ const checkDifference = (newRow: Deal, index: number) => {
   })
 }
 
-const onCellEditComplete = async (event: DataTableCellEditCompleteEvent) => {
-  const { newValue, field, index, newData } = event
+const handleEditDeal = (deal: Deal, index: number) => {
+  editingDeal.value = {
+    deal,
+    index
+  }
 
-  if (newValue) {
-    if (field === 'purchase.date') {
-      const { rate } = await getCurrencyExchange(selectedCurrency.value, newValue)
-      table.value.data[index].purchase.rate = rate
-    }
+  isDialogVisible.value = true
+}
 
-    if (field === 'sale.date') {
-      const { rate } = await getCurrencyExchange(selectedCurrency.value, newValue)
-      table.value.data[index].sale.rate = rate
-    }
+const handleEditeDeal = async (editedDeal: Deal, index: number) => {
+  const currentDeal = table.value.data[index]
 
-    const fieldPath = field.split('.')
-    const updatedRow = assocPath(fieldPath, newValue, newData)
+  if (editedDeal.purchase.date !== currentDeal.purchase.date) {
+    const { rate } = await getCurrencyExchange(selectedCurrency.value, String(editedDeal.purchase.date))
+    editedDeal.purchase.rate = rate
+  }
 
-    const recalculatedDeal = recalculateDeal(updatedRow)
+  if (editedDeal.sale.date !== currentDeal.sale.date) {
+    const { rate } = await getCurrencyExchange(selectedCurrency.value, String(editedDeal.sale.date))
+    editedDeal.sale.rate = rate
+  }
 
-    checkDifference(recalculatedDeal, index)
+  const recalculatedDeal = recalculateDeal(editedDeal)
 
-    table.value.data[index] = recalculatedDeal
+  checkDifference(recalculatedDeal, index)
+
+  table.value.data[index] = recalculatedDeal
+
+  isDialogVisible.value = false
+  editingDeal.value = {
+    deal: {} as Deal,
+    index: null
   }
 }
 
-const handleAddRow = () => {
-  if (table.value.data.length < 8) {
-    const newDeal = getDeal()
-    table.value.data.push(newDeal)
-  }
+const handleAddNewDeal = async (newDeal: DealOptions) => {
+  const deal = getDeal(newDeal)
+
+  const [{ rate: purchaseRate }, { rate: saleRate }] = await Promise.all([
+    getCurrencyExchange(selectedCurrency.value, String(deal.purchase.date)),
+    getCurrencyExchange(selectedCurrency.value, String(deal.sale.date))
+  ])
+
+  deal.purchase.rate = purchaseRate
+  deal.sale.rate = saleRate
+
+  originalData.value.push(deal)
+  isDialogVisible.value = false
+}
+
+const handleOpenEditDialog = () => {
+  isDialogVisible.value = true
 }
 
 const handleDeleteRow = (rowIndex: number) => {
   table.value.data = table.value.data.filter((_, index) => index !== rowIndex)
 }
 
+const handleCloseDialog = () => {
+  editingDeal.value = {
+    deal: {} as Deal,
+    index: null
+  }
+  isDialogVisible.value = false
+}
+
 watch(
-  () => table.value.data.length < 8,
-  () => (addBtnText.value = t('table.btnYourLimitLeft'))
+  originalData,
+  () => {
+    table.value.data = tableData.value
+  },
+  {
+    deep: true
+  }
 )
 
 watch(selectedCurrency, async () => {
@@ -167,14 +207,20 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <EditDealDialog
+    @submit="handleAddNewDeal"
+    @edit="handleEditeDeal"
+    @close="handleCloseDialog"
+    :visible="isDialogVisible"
+    :deal="editingDeal.deal"
+    :dealIndex="editingDeal.index"
+  />
+
   <DataTable
     v-if="selectedTableSize === TableSize.LG"
     :high-lighted-cells="highlightedCells"
     class="data-table"
     :table
-    @onCellEdit="onCellEditComplete($event)"
-    :notEditableColumns
-    edit-mode="cell"
     :currency="selectedCurrency"
     stripedRows
     removableSort
@@ -182,19 +228,23 @@ onUnmounted(() => {
     scrollable
   >
     <template #header>
-      <div class="data-table__header">
-        <h1 class="data-table__title">{{ t('table.title') }}</h1>
-        <UiSelectButton v-model="selectedCurrency" :options="currencyOptions" :allowEmpty="false" />
-        <UiSelectButton v-model="selectedTableSize" :options="tableSizeOptions" :allowEmpty="false" />
+      <Toolbar class="data-table__toolbar">
+        <template #start>
+          <UiButton text :icon="Icons.PLUS" label="Додати" @click="handleOpenEditDialog" />
+        </template>
+
+        <template #end>
+          <UiButton label="Завантажити" />
+        </template>
+      </Toolbar>
+    </template>
+
+    <template #editRow="{ index, data }">
+      <div class="data-table__editable-wrapper">
+        <UiButton @click="handleEditDeal(data, index)" text :icon="Icons.EDIT" />
+
+        <UiButton @click="handleDeleteRow(index)" text :icon="Icons.DELETE" />
       </div>
-    </template>
-
-    <template #deleteRow="{ index }">
-      <UiButton @click="handleDeleteRow(index)" class="data-table__delete-btn" outlined :icon="Icons.DELETE" />
-    </template>
-
-    <template #addRow>
-      <UiButton @click="handleAddRow" class="data-table__add-btn" :label="addBtnText" :icon="Icons.PLUS" />
     </template>
   </DataTable>
 
@@ -211,7 +261,6 @@ onUnmounted(() => {
   >
     <template #header>
       <div class="data-table__header">
-        <h1 class="data-table__title">{{ t('table.title') }}</h1>
         <UiSelectButton v-model="selectedTableSize" :options="tableSizeOptions" :allowEmpty="false" />
       </div>
     </template>
@@ -246,11 +295,35 @@ $highlighted-cell-color: #34d399;
     gap: 0.5rem;
   }
 
+  &__editable-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
   &__delete-btn {
     display: flex;
     justify-content: center;
     padding-inline: 10px;
   }
+
+  &__toolbar {
+    margin: 1.5rem 1.5rem 0 1.5rem;
+  }
+
+  &__utils-buttons {
+    display: flex;
+    gap: 1rem;
+  }
+
+  &__header {
+    width: max-content;
+  }
+}
+
+.p-datatable .p-column-header-content {
+  width: max-content;
 }
 
 :deep() {
@@ -261,7 +334,6 @@ $highlighted-cell-color: #34d399;
 
   .data-table__unmarked-cell {
     transition: color 0.9s ease-in-out;
-    color: $main-text-color;
   }
 }
 </style>

@@ -53,7 +53,9 @@ const componentAttrs = computed(() => {
     </Button>
   </Component>
 
-  <Button v-bind="{ ...props, ...attrs }" @click="$emit('click')" v-else>
+  <Button v-else v-bind="{ ...props, ...attrs }" @click="$emit('click')">
     <slot />
   </Button>
 </template>
+
+<style scoped lang="scss"></style>

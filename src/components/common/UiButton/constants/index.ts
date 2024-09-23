@@ -3,7 +3,9 @@ export enum Icons {
   USER = 'pi pi-user',
   CROSS = 'pi pi-times',
   DELETE = 'pi pi-trash',
-  PLUS = 'pi pi-plus'
+  PLUS = 'pi pi-plus',
+  EDIT = 'pi pi-pencil',
+  IMPORT = 'pi pi-file-arrow-up'
 }
 
 export enum Severities {

@@ -22,7 +22,9 @@ export type Deal = {
   total: number
 }
 
-type DealOptions = {
+export type Operation = 'sale' | 'purchase'
+
+export type DealOptions = {
   purchaseCommission?: number
   purchaseDate?: Date
   purchasePrice?: number
