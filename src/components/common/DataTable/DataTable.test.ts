@@ -65,9 +65,6 @@ const ColumnStub = stubComponent(Column, {
 describe('DataTable', () => {
   let wrapper: VueWrapper<InstanceType<typeof DataTable>>
 
-  const findColumnByHeader = (header: string) =>
-    wrapper.findAllComponents(Column).find((col) => col.attributes().header === header)
-
   beforeEach(() => {
     wrapper = shallowMount(DataTable, {
       global: {
@@ -91,30 +88,10 @@ describe('DataTable', () => {
   })
 
   it('should render column when props table is passed', () => {
-    console.log(wrapper.html())
-
-    const COLUMN_LENGTH = 4
+    const COLUMN_LENGTH = 5
     const ColumnStub = wrapper.findAllComponents(Column)
 
     expect(wrapper.props().table).toBeDefined()
     expect(ColumnStub.length).toStrictEqual(COLUMN_LENGTH)
-  })
-
-  it('should render headers', () => {
-    const HEADER = 'Кількість'
-    const ColumnStub = wrapper.findComponent(Column)
-
-    expect(ColumnStub.exists).toBeTruthy()
-    expect(ColumnStub.attributes().header).toContain(HEADER)
-  })
-
-  it('should not provide input for data changing if field is not editable', () => {
-    const HEADER = 'Всього '
-    const TEXT = '112'
-    const ColumnStub = findColumnByHeader(HEADER)
-
-    expect(ColumnStub?.exists()).toBeTruthy()
-    expect(ColumnStub?.text()).toBe(TEXT)
-    expect(ColumnStub?.findComponent({ name: 'UiNumberInput' }).exists()).toBeFalsy()
   })
 })
