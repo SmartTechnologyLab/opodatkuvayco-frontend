@@ -40,6 +40,8 @@ jobs:
             ${{ runner.os }}-node-
       - name: Install dependencies
         run: npm ci
+      - name: Create remote directory
+        run: ssh -i ${{ secrets.DEV_REMOTE_KEY }} ${{ secrets.DEV_REMOTE_USER }}@${{ secrets.DEV_STORYBOOK_PATH }} "mkdir -p ${{ secrets.DEV_REMOTE_PATH }}.${{ github.head_ref }}"
       - name: Build Storybook
         run: npm run build-storybook
       - name: rsync deploy storybook
@@ -78,6 +80,8 @@ jobs:
         run: npm ci
       - name: Build Project
         run: npm run build
+      - name: Create remote directory
+        run: ssh -i ${{ secrets.DEV_REMOTE_KEY }} ${{ secrets.DEV_REMOTE_USER }}@${{ secrets.DEV_REMOTE_HOST }} "mkdir -p ${{ secrets.DEV_REMOTE_PATH }}.${{ github.head_ref }}"      
       - name: rsync deploy project
         uses: burnett01/rsync-deployments@5.2.1
         with:
