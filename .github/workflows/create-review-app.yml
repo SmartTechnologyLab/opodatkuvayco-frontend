@@ -50,7 +50,7 @@ jobs:
           remote_host: ${{ secrets.DEV_REMOTE_HOST }}
           remote_user: ${{ secrets.DEV_REMOTE_USER }}
           remote_key: ${{ secrets.DEV_REMOTE_KEY }}
-          remote_path: ${{ secrets.DEV_STORYBOOK_PATH }}/${{ github.head_ref }}
+          remote_path: ${{ secrets.DEV_STORYBOOK_PATH }}
       - name: Post review storybook URL
         if: success()
         uses: mshick/add-pr-comment@v1
@@ -86,7 +86,7 @@ jobs:
           remote_host: ${{ secrets.DEV_REMOTE_HOST }}
           remote_user: ${{ secrets.DEV_REMOTE_USER }}
           remote_key: ${{ secrets.DEV_REMOTE_KEY }}
-          remote_path: ${{ secrets.DEV_REMOTE_PATH }}/${{ github.head_ref }}
+          remote_path: ${{ secrets.DEV_REMOTE_PATH }}
       - name: Post review app URL
         if: success()
         uses: mshick/add-pr-comment@v1
