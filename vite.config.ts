@@ -10,7 +10,7 @@ export default defineConfig({
     vue(),
     eslint({
       emitWarning: true,
-      exclude: [/virtual:/, /node_modules/, /sb-preview/],
+      exclude: [/virtual:/, /node_modules/, /sb-preview/]
     }),
     checker({ typescript: true })
   ],
@@ -21,9 +21,9 @@ export default defineConfig({
   },
   css: {
     preprocessorOptions: {
-        scss: {
-            additionalData: `@import '@/assets/scss/resources/index.scss';`,
-        },
-    },
-},
+      scss: {
+        additionalData: `@import '@/assets/scss/resources/index.scss';`
+      }
+    }
+  }
 })
