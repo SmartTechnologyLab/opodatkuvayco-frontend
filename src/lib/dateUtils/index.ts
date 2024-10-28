@@ -1,6 +1,8 @@
 import dayjs from 'dayjs'
 import { i18n } from '@/i18n'
 import 'dayjs/locale/uk'
+import { MONTH_NUMBERS } from '@/lib/dateUtils/consts/monthNumbers'
+import { FULL_MONTH } from '@/lib/dateUtils/consts/dateFormats'
 
 dayjs.locale(i18n.global.locale.value)
 
@@ -14,13 +16,8 @@ export const getMonthNameByNumber = (date: Date) => {
   return dayjs().month(monthNumber).format('MMMM')
 }
 
-const monthNumbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-
-export const getMonthes = (): string[] => {
-  return monthNumbers.map((monthNumber) => {
-    return dayjs().month(monthNumber).format('MMMM')
-  })
-}
+export const getMonthes = (): string[] =>
+  MONTH_NUMBERS.map((monthNumber) => dayjs().month(monthNumber).format(FULL_MONTH))
 
 export const getMonthesMap = () => {
   const monthes = [...getMonthes()]
