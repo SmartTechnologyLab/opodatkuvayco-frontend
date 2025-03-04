@@ -1,49 +1,27 @@
 name: Deploy Development
+
 on:
   push:
     branches:
       - development
 
 permissions:
-  contents: read # for checkout
+  contents: read
 
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.13.1"
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: Install dependencies
-        run: npm ci
+  ci:
+    uses: ./.github/workflows/reusable-ci.yml
+    with:
+      node_version: "20.13.1"
 
   build_and_deploy_storybook:
-    needs: setup
+    needs: [ci]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Cache dependencies
-        uses: actions/cache@v4
+      - name: Run common steps for storybook deployment
+        uses: ./.github/actions/common-steps
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: Install dependencies
-        run: npm ci
+          node_version: "20.13.1"
       - name: Build Storybook
         run: npm run build-storybook
       - name: rsync deploy storybook
@@ -57,20 +35,13 @@ jobs:
           remote_path: ${{ secrets.DEV_STORYBOOK_PATH }}
 
   build_and_deploy_project:
-    needs: setup
+    needs: [ci]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Cache dependencies
-        uses: actions/cache@v4
+      - name: Run common steps for project deployment
+        uses: ..github/actions/common-steps
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: Install dependencies
-        run: npm ci
+          node_version: "20.13.1"
       - name: Build Project
         run: npm run build
       - name: rsync deploy project
