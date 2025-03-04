@@ -8,43 +8,44 @@ on:
 permissions:
   contents: read # for checkout
 
+
+x-checkout: &checkout
+  name: Checkout
+  uses: actions/checkout@v4
+
+x-cache: &cache
+  name: Cache dependencies
+  uses: actions/cache@v4
+  with:
+    path: ~/.npm
+    key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+    restore-keys: |
+      ${{ runner.os }}-node-
+
+x-install: &install
+  name: Install dependencies
+  run: npm ci
+
 jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - <<: *checkout
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20.13.1"
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: Install dependencies
-        run: npm ci
+      - <<: *cache
+      - <<: *install
+
 
   lint:
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: Install dependencies
-        run: npm ci
+      - <<: *checkout
+      - <<: *cache
+      - <<: *install
       - name: Linter
         run: npx lint-staged
 
@@ -52,53 +53,29 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: Install dependencies
-        run: npm ci
+      - <<: *checkout
+      - <<: *cache
+      - <<: *install
       - name: Type check
         run: npm run type-check
 
   unit_tests:
-    needs: setup
+    needs: [lint, type_check]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: Install dependencies
-        run: npm ci
+      - <<: *checkout
+      - <<: *cache
+      - <<: *install
       - name: Unit tests
         run: npm run test
 
   build:
-    needs: [lint, type_check, unit_tests]
+    needs: [ unit_tests ]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: Install dependencies
-        run: npm ci
+      - <<: *checkout
+      - <<: *cache
+      - <<: *install
       - name: Build project
         run: npm run build
       - name: Build storybook
