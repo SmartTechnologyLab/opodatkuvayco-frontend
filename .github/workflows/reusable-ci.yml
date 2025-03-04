@@ -1,0 +1,52 @@
+name: "Reusable CI Workflow"
+
+on:
+  workflow_call:
+    inputs:
+      node_version:
+        description: "Node.js version"
+        required: false
+        type: string
+        default: "20.13.1"
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run common steps for setup
+        uses: ./.github/actions/common-steps
+        with:
+          node_version: ${{ inputs.node_version }}
+
+  lint:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run common steps for lint
+        uses: ./.github/actions/common-steps
+        with:
+          node_version: ${{ inputs.node_version }}
+      - name: Run Linter
+        run: npx lint-staged
+
+  type_check:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run common steps for type check
+        uses: ./.github/actions/common-steps
+        with:
+          node_version: ${{ inputs.node_version }}
+      - name: Run Type Check
+        run: npm run type-check
+
+  unit_tests:
+    needs: [lint, type_check]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run common steps for unit tests
+        uses: ./.github/actions/common-steps
+        with:
+          node_version: ${{ inputs.node_version }}
+      - name: Run Unit Tests
+        run: npm run test

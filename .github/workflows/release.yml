@@ -8,72 +8,20 @@ on:
 permissions:
   contents: read
 
-x-checkout: &checkout
-  name: Checkout
-  uses: actions/checkout@v4
-
-x-cache: &cache
-  name: Cache dependencies
-  uses: actions/cache@v4
-  with:
-    path: ~/.npm
-    key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-    restore-keys: |
-      ${{ runner.os }}-node-
-
-x-install: &install
-  name: Install dependencies
-  run: npm ci
-
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-    steps:
-      - <<: *checkout
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.13.1"
-      - <<: *cache
-      - <<: *install
-
-  lint:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - <<: *checkout
-      - <<: *cache
-      - <<: *install
-      - name: Linter
-        run: npx lint-staged
-
-  type_check:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - <<: *checkout
-      - <<: *cache
-      - <<: *install
-      - name: Type check
-        run: npm run type-check
-
-  unit_tests:
-    needs: [lint, type_check]
-    runs-on: ubuntu-latest
-    steps:
-      - <<: *checkout
-      - <<: *cache
-      - <<: *install
-      - name: Unit tests
-        run: npm run test
+  ci:
+    uses: ./.github/workflows/reusable-ci.yml
+    with:
+      node_version: "20.13.1"
 
   build:
-    needs: [unit_tests]
+    needs: [ci]
     runs-on: ubuntu-latest
     steps:
-      - <<: *checkout
-      - <<: *cache
-      - <<: *install
+      - name: Run common steps for build
+        uses: ..github/actions/common-steps
+        with:
+          node_version: "20.13.1"
       - name: Build project
         run: npm run build
       - name: Upload build artifact
@@ -83,12 +31,15 @@ jobs:
           path: ./dist
 
   deploy:
-    needs: build
+    needs: [build]
     runs-on: ubuntu-latest
     environment:
       name: production
     steps:
-      - <<: *checkout
+      - name: Run common steps for deploy
+        uses: ./.github/actions/common-steps
+        with:
+          node_version: "20.13.1"
       - name: Download build artifact
         uses: actions/download-artifact@v3
         with:
@@ -105,12 +56,13 @@ jobs:
           remote_path: ${{ secrets.PROD_REMOTE_PATH }}
 
   release:
-    needs: deploy
+    needs: [deploy]
     runs-on: ubuntu-latest
     steps:
-      - <<: *checkout
-      - <<: *cache
-      - <<: *install
+      - name: Run common steps for release
+        uses: ./.github/actions/common-steps
+        with:
+          node_version: "20.13.1"
       - name: Run Release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

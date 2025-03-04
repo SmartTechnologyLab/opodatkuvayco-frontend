@@ -1,0 +1,28 @@
+name: "Common Steps"
+description: "Composite action to perform common steps: checkout, setup Node.js, cache dependencies, and install dependencies."
+inputs:
+  node_version:
+    description: "Node.js version"
+    required: false
+    default: "20.13.1"
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node_version }}
+
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Install dependencies
+      run: npm ci
