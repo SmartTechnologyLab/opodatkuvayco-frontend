@@ -4,97 +4,192 @@ on:
   push:
     branches:
       - main
-
-permissions:
-  contents: read
-
-x-checkout: &checkout
-  name: Checkout
-  uses: actions/checkout@v4
-
-x-cache: &cache
-  name: Cache dependencies
-  uses: actions/cache@v4
-  with:
-    path: ~/.npm
-    key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-    restore-keys: |
-      ${{ runner.os }}-node-
-
-x-install: &install
-  name: Install dependencies
-  run: npm ci
+  workflow_dispatch:
 
 jobs:
   setup:
+    name: Setup
     runs-on: ubuntu-latest
     steps:
-      - <<: *checkout
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20.13.1"
-      - <<: *cache
-      - <<: *install
+          node-version: "20.18.3"
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
 
   lint:
-    needs: setup
+    needs: [setup]
+    name: Lint
     runs-on: ubuntu-latest
     steps:
-      - <<: *checkout
-      - <<: *cache
-      - <<: *install
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.18.3"
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Linter
         run: npx lint-staged
 
-  type_check:
-    needs: setup
+  type:
+    needs: [setup]
+    name: Type check
     runs-on: ubuntu-latest
     steps:
-      - <<: *checkout
-      - <<: *cache
-      - <<: *install
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.18.3"
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Type check
         run: npm run type-check
 
-  unit_tests:
-    needs: [lint, type_check]
+  tests:
+    needs: [lint, type]
+    name: Unit tests
     runs-on: ubuntu-latest
     steps:
-      - <<: *checkout
-      - <<: *cache
-      - <<: *install
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.18.3"
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Unit tests
         run: npm run test
 
   build:
-    needs: [unit_tests]
+    needs: [tests]
+    name: Build
     runs-on: ubuntu-latest
     steps:
-      - <<: *checkout
-      - <<: *cache
-      - <<: *install
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.18.3"
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Build project
         run: npm run build
+
       - name: Upload build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-artifact
           path: ./dist
 
+
+
+  release:
+    needs: [build]
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: npm run release
+
+
   deploy:
-    needs: build
+    needs: [release]
+    name: Deploy
     runs-on: ubuntu-latest
     environment:
       name: production
     steps:
-      - <<: *checkout
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Download build artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build-artifact
           path: ./dist
-      - name: rsync deploy project
+
+      - name: Deploy project
         uses: burnett01/rsync-deployments@5.2.1
         with:
           switches: -avzr --delete
@@ -103,15 +198,3 @@ jobs:
           remote_user: ${{ secrets.DEV_REMOTE_USER }}
           remote_key: ${{ secrets.DEV_REMOTE_KEY }}
           remote_path: ${{ secrets.PROD_REMOTE_PATH }}
-
-  release:
-    needs: deploy
-    runs-on: ubuntu-latest
-    steps:
-      - <<: *checkout
-      - <<: *cache
-      - <<: *install
-      - name: Run Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: npm run release
