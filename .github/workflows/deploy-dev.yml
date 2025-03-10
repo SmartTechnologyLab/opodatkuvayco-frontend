@@ -9,16 +9,19 @@ permissions:
 
 jobs:
   setup:
+    name: Setup
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20.13.1"
+          node-version: "20.18.3"
+
       - name: Cache dependencies
         uses: actions/cache@v4
         with:
@@ -26,15 +29,23 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
+
       - name: Install dependencies
         run: npm ci
 
-  build_and_deploy_storybook:
+  lint:
     needs: setup
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.18.3"
+
       - name: Cache dependencies
         uses: actions/cache@v4
         with:
@@ -42,11 +53,96 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
+
       - name: Install dependencies
         run: npm ci
+
+      - name: Linter
+        run: npx lint-staged
+
+  type:
+    needs: setup
+    name: Type check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.18.3"
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npm run type-check
+
+  tests:
+    needs: [lint, type]
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.18.3"
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Unit tests
+        run: npm run test
+
+
+  build-and-deploy-storybook:
+    needs: [tests]
+    name: Build and Deploy Storybook
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.18.3"
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Build Storybook
         run: npm run build-storybook
-      - name: rsync deploy storybook
+
+      - name: Deploy storybook
         uses: burnett01/rsync-deployments@5.2.1
         with:
           switches: -avzr --delete
@@ -56,12 +152,19 @@ jobs:
           remote_key: ${{ secrets.DEV_REMOTE_KEY }}
           remote_path: ${{ secrets.DEV_STORYBOOK_PATH }}
 
-  build_and_deploy_project:
-    needs: setup
+  build-and-deploy-project:
+    needs: [tests]
+    name: Build and Deploy Project
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.18.3"
+
       - name: Cache dependencies
         uses: actions/cache@v4
         with:
@@ -69,11 +172,14 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
+
       - name: Install dependencies
         run: npm ci
+
       - name: Build Project
         run: npm run build
-      - name: rsync deploy project
+
+      - name: Deploy project
         uses: burnett01/rsync-deployments@5.2.1
         with:
           switches: -avzr --delete
