@@ -43,10 +43,9 @@
       }
     ],
     [
-      "@semantic-release/git",
+      "semantic-release-github-pullrequest",
       {
-        "assets": ["CHANGELOG.md", "package.json"],
-        "message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}"
+        "assets": ["CHANGELOG.md", "package.json"]
       }
     ]
   ]
