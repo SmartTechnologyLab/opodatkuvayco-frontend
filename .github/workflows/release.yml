@@ -161,7 +161,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          persist-credentials: false  # Отключаем сохранение стандартного GITHUB_TOKEN
+          persist-credentials: false  # Disable automatic storing of GITHUB_TOKEN in runner environment
+          fetch-depth: 0 # Access to the entire repository, including the development branch
 
       - name: Cache dependencies
         uses: actions/cache@v4
