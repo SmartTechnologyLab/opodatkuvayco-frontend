@@ -70,7 +70,7 @@ jobs:
 
 
   deploy:
-    needs: [release]
+    needs: [build]
     name: Deploy
     runs-on: ubuntu-latest
     environment:
@@ -97,7 +97,7 @@ jobs:
 
 
   release:
-    needs: [ deploy ]
+    needs: [deploy]
     name: Release
     permissions:
       contents: write # to be able to publish a GitHub release
