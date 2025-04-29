@@ -1,28 +1,3 @@
-<script setup lang="ts">
-import { ref } from 'vue'
-import LoginModal from '@/components/container/HomePage/LoginModal.vue'
-import RegistrationModal from '@/components/container/HomePage/RegistrationModal.vue'
-
-const showLoginModal = ref(false)
-const showRegistrationModal = ref(false)
-
-const openLoginModal = () => {
-  showLoginModal.value = true
-}
-
-const openRegistrationModal = () => {
-  showRegistrationModal.value = true
-}
-
-const closeLoginModal = () => {
-  showLoginModal.value = false
-}
-
-const closeRegistrationModal = () => {
-  showRegistrationModal.value = false
-}
-</script>
-
 <template>
   <header class="bg-white shadow-sm">
     <!-- Navbar -->
@@ -39,33 +14,10 @@ const closeRegistrationModal = () => {
           <a href="#pricing" class="hover:text-neon-green transition-colors duration-300 cursor-pointer">Тарифи</a>
           <a href="#faq" class="hover:text-neon-green transition-colors duration-300 cursor-pointer">FAQ</a>
         </div>
-        <div class="flex items-center space-x-4">
-          <button
-            @click="openLoginModal"
-            class="px-4 py-2 text-sm border border-neon-green text-neon-green hover:bg-neon-green hover:text-gray-900 transition-colors duration-300 !rounded-button whitespace-nowrap cursor-pointer"
-          >
-            Увійти
-          </button>
-          <button
-            @click="openRegistrationModal"
-            class="px-4 py-2 text-sm bg-neon-green text-gray-900 hover:bg-neon-green-dark transition-colors duration-300 !rounded-button whitespace-nowrap cursor-pointer"
-          >
-            Реєстрація
-          </button>
-        </div>
+        <div class="flex items-center space-x-4"></div>
       </div>
     </nav>
   </header>
-
-  <!-- Login Modal -->
-  <LoginModal v-model="showLoginModal" @login="closeLoginModal" @switch-to-register="openRegistrationModal" />
-
-  <!-- Registration Modal -->
-  <RegistrationModal
-    v-model="showRegistrationModal"
-    @regist="closeRegistrationModal"
-    @switch-to-login="openLoginModal"
-  />
 </template>
 
 <style scoped lang="scss">
