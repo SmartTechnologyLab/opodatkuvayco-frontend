@@ -82,6 +82,8 @@ jobs:
     needs: [setup]
     name: Build and Deploy Project
     runs-on: ubuntu-latest
+    env:
+      VITE_API_URL: ${{ vars.VITE_API_URL }}
     environment:
       name: staging
     steps:

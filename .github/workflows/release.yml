@@ -73,6 +73,8 @@ jobs:
     needs: [build]
     name: Deploy
     runs-on: ubuntu-latest
+    env:
+      VITE_API_URL: ${{ vars.VITE_API_URL }}
     environment:
       name: production
     steps:
