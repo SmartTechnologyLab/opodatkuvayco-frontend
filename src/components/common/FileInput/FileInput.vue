@@ -11,6 +11,7 @@ const attrs = useAttrs()
 <template>
   <label class="file-input">
     <span class="file-input__download">{{ t('main.calc.file-download') }}</span>
+
     <input v-bind="{ ...attrs }" @change="$emit('change', $event)" type="file" style="display: none" />
   </label>
 </template>
