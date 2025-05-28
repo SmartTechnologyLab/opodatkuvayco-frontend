@@ -84,6 +84,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VITE_API_URL: ${{ vars.VITE_API_URL }}
+      VITE_MILITARY_RATE: ${{ vars.VITE_MILITARY_RATE }}
+      VITE_TAX_RATE: ${{ vars.VITE_TAX_RATE }}
+      VITE_DIVIDEND_RATE: ${{ vars.VITE_DIVIDEND_RATE }}
     environment:
       name: staging
     steps:

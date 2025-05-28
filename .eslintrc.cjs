@@ -14,6 +14,14 @@ module.exports = {
     ecmaVersion: 'latest'
   },
   rules: {
-    'vue/component-name-in-template-casing': ['error', 'PascalCase']
+    'vue/component-name-in-template-casing': ['error', 'PascalCase'],
+    'vue/padding-line-between-blocks': ['error', 'always'],
+    'vue/padding-line-between-tags': [
+      'error',
+      [
+        { blankLine: 'always', prev: '*', next: '*' },
+        { blankLine: 'never', prev: 'b', next: '*' }
+      ]
+    ]
   }
 }

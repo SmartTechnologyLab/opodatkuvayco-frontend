@@ -46,6 +46,7 @@ const toggleFaq = (index: number) => {
     <div class="container mx-auto px-6">
       <div class="text-center mb-12">
         <h2 class="text-3xl font-bold mb-4">Часті <span class="text-neon-green">запитання</span></h2>
+
         <p class="text-gray-400 max-w-2xl mx-auto">
           Відповіді на найпоширеніші запитання про реєстрацію та використання сервісу
         </p>
@@ -59,8 +60,10 @@ const toggleFaq = (index: number) => {
               class="flex justify-between items-center w-full px-6 py-4 text-left focus:outline-none cursor-pointer"
             >
               <span class="font-medium">{{ item.question }}</span>
+
               <i :class="item.isOpen ? 'fas fa-chevron-up text-neon-green' : 'fas fa-chevron-down text-gray-400'"></i>
             </button>
+
             <div v-if="item.isOpen" class="px-6 pb-4">
               <p class="text-gray-400">{{ item.answer }}</p>
             </div>
