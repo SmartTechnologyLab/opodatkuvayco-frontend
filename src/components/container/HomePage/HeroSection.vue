@@ -1,29 +1,34 @@
 <template>
   <!-- Hero Section -->
   <section class="relative py-20 overflow-hidden">
-    <div class="container mx-auto px-6 flex flex-col lg:flex-row items-center">
+    <div class="container mx-auto px-6 flex flex-col lg:flex-row items-center gap-12">
       <div class="lg:w-1/2 z-10">
         <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
           Автоматизований розрахунок
           <span class="text-neon-green">податків</span> з інвестицій
         </h1>
+
         <p class="text-gray-400 text-lg mb-8">
           Забудьте про складність ручного розрахунку податків. Наш сервіс підтримує звіти від Interactive Brokers та
           Freedom Finance, забезпечуючи точність та економію вашого часу.
         </p>
+
         <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-          <button
+          <a
+            href="#demo"
             class="px-8 py-3 bg-neon-green text-gray-900 font-medium hover:bg-neon-green-dark transition-all duration-300 shadow-neon !rounded-button whitespace-nowrap cursor-pointer"
           >
             Спробувати безкоштовно
-          </button>
-          <button
-            class="px-8 py-3 border border-neon-green text-neon-green font-medium hover:bg-gray-800 transition-all duration-300 !rounded-button whitespace-nowrap cursor-pointer"
-          >
-            Дізнатись більше
-          </button>
+          </a>
+
+          <!--          <button-->
+          <!--            class="px-8 py-3 border border-neon-green text-neon-green font-medium hover:bg-gray-800 transition-all duration-300 !rounded-button whitespace-nowrap cursor-pointer"-->
+          <!--          >-->
+          <!--            Дізнатись більше-->
+          <!--          </button>-->
         </div>
       </div>
+
       <div class="lg:w-1/2 mt-12 lg:mt-0">
         <div class="relative">
           <img

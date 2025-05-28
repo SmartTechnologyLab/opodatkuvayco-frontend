@@ -4,10 +4,12 @@
     <div class="container mx-auto px-6">
       <div class="text-center mb-12">
         <h2 class="text-3xl font-bold mb-4">Спробуйте <span class="text-neon-green">прямо зараз</span></h2>
+
         <p class="text-gray-400 max-w-2xl mx-auto">
           Завантажте свій звіт брокера або використайте наш демо-приклад, щоб побачити, як працює сервіс
         </p>
       </div>
+
       <div class="max-w-6xl mx-auto bg-gray-900 p-6 rounded-lg border border-gray-700 shadow-xl">
         <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mb-6">
           <button
@@ -17,6 +19,7 @@
           >
             <i class="fas fa-upload mr-2"></i> Завантажити звіт
           </button>
+
           <button
             class="flex-1 px-4 py-3 bg-gray-700 hover:bg-neon-green-dark transition-colors duration-300 rounded-md text-center cursor-pointer"
             :class="{ 'bg-neon-green': activeTab === 'demo', 'text-gray-900': activeTab === 'demo' }"
@@ -33,160 +36,72 @@
           {{ errorMessage }}
         </div>
 
-        <div v-if="activeTab === 'download'" class="overflow-x-auto border border-gray-700 rounded-lg">
-          <table class="min-w-full divide-y divide-gray-700">
-            <thead class="bg-gray-800">
-              <tr>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Дата
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Тікер
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Кількість
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Купівля
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Продаж
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Прибуток
-                </th>
-              </tr>
-            </thead>
-            <tbody v-if="reportData?.deals" class="bg-gray-900 divide-y divide-gray-800">
-              <tr v-for="deal in reportData?.deals" :key="deal.id">
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{{ $d(deal.sale.date) }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{{ deal.ticker }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{{ deal.quantity }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                  {{ $n(deal.purchase.uah, { style: 'currency', currency: Currency.UAH }) }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                  {{ $n(deal.sale.uah, { style: 'currency', currency: Currency.UAH }) }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{{ $n(deal.total) }}</td>
-              </tr>
-            </tbody>
-
-            <tbody v-else>
-              <tr>
-                <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-400">Немає даних для відображення</td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="overflow-x-auto border border-gray-700 rounded-lg">
+          <keep-alive>
+            <TestDataTableForUser :key="reportData?.total" :data="reportData?.deals || []" :loading="isLoading" />
+          </keep-alive>
         </div>
 
-        <!-- Demo Table -->
-        <div v-if="activeTab === 'demo'" class="overflow-x-auto border border-gray-700 rounded-lg">
-          <table class="min-w-full divide-y divide-gray-700">
-            <thead class="bg-gray-800">
-              <tr>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Дата
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Тікер
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Тип операції
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Кількість
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Ціна
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Сума
-                </th>
-              </tr>
-            </thead>
-            <tbody class="bg-gray-900 divide-y divide-gray-800">
-              <tr>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">2025-04-15</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">AAPL</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-green-400">Купівля</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">10</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">$190.25</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">$1,902.50</td>
-              </tr>
-              <tr>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">2025-04-10</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">MSFT</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-red-400">Продаж</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">5</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">$415.80</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">$2,079.00</td>
-              </tr>
-              <tr>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">2025-03-28</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">AMZN</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-green-400">Купівля</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">3</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">$180.50</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">$541.50</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="mt-6 p-4 bg-gray-800 rounded-lg">
-          <div v-if="activeTab === 'demo'" class="flex justify-between items-center">
-            <div>
+        <div v-if="reportData?.total" class="mt-6 p-4 bg-gray-800 rounded-lg">
+          <!-- Используем flex-col на маленьких экранах и flex-row на средних и больших -->
+          <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+            <div class="mb-2 md:mb-0">
               <h3 class="text-lg font-semibold">Результат розрахунку:</h3>
-              <p class="text-gray-400 text-sm">Дані за 2025 рік</p>
+
+              <p class="text-gray-400 text-sm">Дані за {{ YEAR }} рік</p>
             </div>
 
-            <div class="text-right">
-              <p class="text-xl font-bold text-neon-green">1,425.75 грн</p>
-              <p class="text-gray-400 text-sm">Податок до сплати</p>
-            </div>
-          </div>
+            <div class="flex flex-col sm:flex-row gap-4 sm:gap-8">
+              <div v-if="reportData?.totalTaxFee" class="text-left sm:text-right">
+                <p class="text-xl font-bold text-neon-green">
+                  {{ $n(reportData.totalTaxFee, { style: 'currency', currency: Currency.UAH }) }}
+                </p>
 
-          <div v-if="activeTab === 'download'" class="flex justify-between items-center">
-            <div>
-              <h3 class="text-lg font-semibold">Результат розрахунку:</h3>
-              <p class="text-gray-400 text-sm">Дані за 2025 рік</p>
-            </div>
-            <div v-if="reportData?.totalTaxFee" class="text-right">
-              <p class="text-xl font-bold text-neon-green">
-                {{ $n(reportData.totalTaxFee, { style: 'currency', currency: Currency.UAH }) }}
-              </p>
-              <p class="text-gray-400 text-sm">Податок до сплати</p>
-            </div>
-            <div v-if="reportData?.totalMilitaryFee" class="text-right">
-              <p class="text-xl font-bold text-neon-green">
-                {{ $n(reportData.totalMilitaryFee, { style: 'currency', currency: Currency.UAH }) }}
-              </p>
-              <p class="text-gray-400 text-sm">Військовий збір до сплати</p>
-            </div>
-            <div v-if="reportData?.total" class="text-right">
-              <p class="text-xl font-bold text-neon-green">
-                {{ $n(reportData.total, { style: 'currency', currency: Currency.UAH }) }}
-              </p>
-              <p class="text-gray-400 text-sm">Прибуток</p>
+                <p class="text-gray-400 text-sm">ПДФО до сплати</p>
+              </div>
+
+              <div v-if="reportData?.totalMilitaryFee" class="text-left sm:text-right">
+                <p class="text-xl font-bold text-neon-green">
+                  {{ $n(reportData.totalMilitaryFee, { style: 'currency', currency: Currency.UAH }) }}
+                </p>
+
+                <p class="text-gray-400 text-sm">Військовий збір до сплати</p>
+              </div>
+
+              <div v-if="reportData?.total" class="text-left sm:text-right">
+                <p
+                  :class="{
+                    'text-xl': true,
+                    'font-bold': true,
+                    'text-neon-green': reportData.total >= 0,
+                    'text-red-400': reportData.total < 0
+                  }"
+                >
+                  {{ $n(reportData.total, { style: 'currency', currency: Currency.UAH }) }}
+                </p>
+
+                <p class="text-gray-400 text-sm">{{ reportData.total >= 0 ? 'Прибуток' : 'Збиток' }}</p>
+              </div>
             </div>
           </div>
         </div>
 
-        <div v-if="activeTab !== 'download'" class="mt-6 flex justify-center">
-          <button
-            class="px-8 py-3 bg-neon-green text-gray-900 font-medium hover:bg-neon-green-dark transition-all duration-300 shadow-neon rounded-md cursor-pointer"
-            @click="activeTab = 'download'"
-          >
-            Отримати повний розрахунок
-          </button>
-        </div>
+        <!--        <div v-if="activeTab !== 'download'" class="mt-6 flex justify-center">-->
+        <!--          <button-->
+        <!--            class="px-8 py-3 bg-neon-green text-gray-900 font-medium hover:bg-neon-green-dark transition-all duration-300 shadow-neon rounded-md cursor-pointer"-->
+        <!--            @click="activeTab = 'download'"-->
+        <!--          >-->
+        <!--            Отримати повний розрахунок-->
+        <!--          </button>-->
+        <!--        </div>-->
 
         <div v-if="activeTab === 'download'" class="mt-6 flex justify-center w-full">
           <label
             for="file-upload"
             class="px-8 w-full flex justify-center py-3 bg-neon-green text-gray-900 font-medium hover:bg-neon-green-dark transition-all duration-300 shadow-neon rounded-md cursor-pointer"
           >
-            <i class="fas fa-file-upload mr-2"></i> Завантажити звіт
+            <i class="fas fa-file-upload mr-2"></i>
+            Завантажити звіт
             <input id="file-upload" type="file" multiple class="hidden" @input="onFileUpload" />
           </label>
         </div>
@@ -196,9 +111,10 @@
 </template>
 
 <script setup lang="ts">
-import type { Deal } from '@/components/common/DataTable/mocks'
+import { type Deal, getDeal, getReport } from '@/components/common/DataTable/mocks'
 import { Currency } from '@/constants/currencies'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+import TestDataTableForUser from '@/components/TestDataTableForUser/TestDataTableForUser.vue'
 
 const activeTab = ref<'demo' | 'download'>('demo')
 
@@ -207,11 +123,41 @@ const reportData = ref<{
   totalTaxFee: number
   totalMilitaryFee: number
   deals: Deal[]
-}>()
+} | null>(null)
+
+const fetchData = ref<{
+  total: number
+  totalTaxFee: number
+  totalMilitaryFee: number
+  deals: Deal[]
+} | null>(null)
+
+const YEAR = new Date().getFullYear() - 1
+
+watch(
+  [activeTab, fetchData],
+  () => {
+    if (activeTab.value === 'demo') {
+      const demoData = [getDeal(), getDeal(), getDeal()]
+      const demoTotal = getReport(demoData)
+
+      reportData.value = {
+        deals: demoData,
+        ...demoTotal
+      }
+    } else {
+      reportData.value = fetchData.value ? { ...fetchData.value } : null
+    }
+  },
+  { immediate: true }
+)
 
 const errorMessage = ref('')
+const isLoading = ref(false)
 
 const onFileUpload = async (event: Event) => {
+  isLoading.value = true
+
   try {
     errorMessage.value = ''
     const target = event.target as HTMLInputElement
@@ -239,12 +185,14 @@ const onFileUpload = async (event: Event) => {
       throw new Error(data.message || 'Failed to upload file')
     }
 
-    reportData.value = data
+    fetchData.value = data
 
-    console.log('Report data:', reportData.value)
+    console.log('Report data:', data)
   } catch (error) {
     console.error('Error uploading file:', error)
     errorMessage.value = (error as Error).message
+  } finally {
+    isLoading.value = false
   }
 }
 </script>

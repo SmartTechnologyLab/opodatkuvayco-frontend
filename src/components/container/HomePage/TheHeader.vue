@@ -6,14 +6,20 @@
         <div class="flex items-center">
           <span class="text-2xl font-bold text-neon-green">Оподаткувайко</span>
         </div>
+
         <div class="hidden md:flex items-center space-x-8">
-          <a href="#features" class="hover:text-neon-green transition-colors duration-300 cursor-pointer">Можливості</a>
-          <a href="#calculator" class="hover:text-neon-green transition-colors duration-300 cursor-pointer">
-            Калькулятор
-          </a>
-          <a href="#pricing" class="hover:text-neon-green transition-colors duration-300 cursor-pointer">Тарифи</a>
-          <a href="#faq" class="hover:text-neon-green transition-colors duration-300 cursor-pointer">FAQ</a>
+          <a href="#demo" class="hover:text-neon-green transition-colors duration-300 cursor-pointer">Demo</a>
+          <!--                    <a href="#features" class="hover:text-neon-green transition-colors duration-300 cursor-pointer">Можливості</a>-->
+
+          <!--          <a href="#calculator" class="hover:text-neon-green transition-colors duration-300 cursor-pointer">-->
+          <!--            Калькулятор-->
+          <!--          </a>-->
+
+          <!--          <a href="#pricing" class="hover:text-neon-green transition-colors duration-300 cursor-pointer">Тарифи</a>-->
+
+          <!--          <a href="#faq" class="hover:text-neon-green transition-colors duration-300 cursor-pointer">FAQ</a>-->
         </div>
+
         <div class="flex items-center space-x-4"></div>
       </div>
     </nav>

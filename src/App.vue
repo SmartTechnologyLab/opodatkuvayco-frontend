@@ -43,7 +43,20 @@ const showFooter = computed(() => !routesWithoutNavBar.includes(route.path))
     @openRegistrationModal="openRegistrationModal"
     @logout="handleLogout"
   />
+
   <RouterView />
 
   <TheFooter v-if="showFooter" />
 </template>
+
+<style>
+/* Плавная прокрутка для всех якорных ссылок */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Скрытые якоря с учетом высоты фиксированного хедера */
+:target {
+  scroll-margin-top: 80px; /* Регулируйте в зависимости от высоты вашего хедера */
+}
+</style>

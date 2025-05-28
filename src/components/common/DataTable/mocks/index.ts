@@ -37,6 +37,12 @@ type DealOptions = {
 
 const tickers = ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'FB']
 
+const MILITARY_RATE = parseFloat(import.meta.env.VITE_MILITARY_RATE)
+const TAX_RATE = parseFloat(import.meta.env.VITE_TAX_RATE)
+
+console.debug(`Military Rate: ${MILITARY_RATE}, Tax Rate: ${TAX_RATE}`)
+// const DIVIDEND_RATE = parseFloat(import.meta.env.VITE_DIVIDEND_RATE)
+
 const randomDate = (start: Date, end: Date): Date => {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()))
 }
@@ -93,5 +99,17 @@ export const getDeal = ({
     ticker: ticker || tickers[Math.floor(Math.random() * tickers.length)],
     total: saleUah - purchaseUah,
     percent: saleUah / purchaseUah - 1
+  }
+}
+
+export const getReport = (deals: Deal[]): { total: number; totalMilitaryFee: number; totalTaxFee: number } => {
+  const total = deals.reduce((acc, deal) => acc + deal.total, 0)
+  const totalMilitaryFee = total > 0 ? total * MILITARY_RATE : 0
+  const totalTaxFee = total > 0 ? total * TAX_RATE : 0
+
+  return {
+    total,
+    totalMilitaryFee,
+    totalTaxFee
   }
 }

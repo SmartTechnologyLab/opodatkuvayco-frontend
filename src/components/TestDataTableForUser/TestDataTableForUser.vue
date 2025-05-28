@@ -1,21 +1,20 @@
 <script setup lang="ts">
 import DataTable from '@/components/common/DataTable/DataTable.vue'
 import { resultHeaders } from '@/components/common/DataTable/constants'
-import { getDeal, type Deal } from '@/components/common/DataTable/mocks'
+import { type Deal, getDeal } from '@/components/common/DataTable/mocks'
 import type { DataTableCellEditCompleteEvent } from 'primevue/datatable'
 import { assocPath, difference, isEmpty } from 'ramda'
 import { computed, onUnmounted, ref, watch } from 'vue'
 import {
-  currencyOptions,
   notEditableColumns as notEditableColumnsLargeTable,
-  TableSize,
-  tableSizeOptions
+  TableSize
+  // tableSizeOptions
 } from '@/components/TestDataTableForUser/common/constants'
 import { useI18n } from 'vue-i18n'
 import { getCurrencyExchange } from '@/api/getCurrencyExchange'
 import UiButton from '@/components/common/UiButton/UiButton.vue'
 import { Currency } from '@/constants/currencies'
-import UiSelectButton from '@/components/common/UiSelectButton/UiSelectButton.vue'
+// import UiSelectButton from '@/components/common/UiSelectButton/UiSelectButton.vue'
 import { Icons } from '@/components/common/UiButton/constants'
 import type { Currencies } from '@/components/common/DataTable/types'
 import type { TableSizes } from '@/components/TestDataTableForUser/common/types'
@@ -24,26 +23,30 @@ import { flattenedEntries } from '@/helpers/flattenedEntries'
 
 const TIMEOUT_MS = 3000
 
-const { t } = useI18n()
+const { t, n } = useI18n()
 
-const rowData = ref({
-  ticker: 'DAL',
-  quantity: 2,
-  purchaseRate: 29.2549,
-  purchasePrice: 28.88,
-  purchaseCommission: 1.49,
-  saleRate: 36.5686,
-  salePrice: 42.42,
-  saleCommission: 1.62
-})
+// const rowData = ref({
+//   ticker: 'DAL',
+//   quantity: 2,
+//   purchaseRate: 29.2549,
+//   purchasePrice: 28.88,
+//   purchaseCommission: 1.49,
+//   saleRate: 36.5686,
+//   salePrice: 42.42,
+//   saleCommission: 1.62
+// })
+
+const { data } = defineProps<{
+  data: Deal[]
+}>()
 
 const selectedCurrency = ref<Currencies>(Currency.USD)
 
-const selectedTableSize = ref<TableSizes>(TableSize.LG)
+const selectedTableSize = ref<TableSizes>(TableSize.SM)
 
 const addBtnText = ref(t('table.btnAddRow'))
 
-const originalData = ref([getDeal(rowData.value)])
+// const originalData = ref([getDeal(rowData.value)])
 
 const highlightedCells = ref<Record<number, unknown[]>>({})
 
@@ -58,16 +61,16 @@ const headers = computed(() => {
 
 const tableData = computed(() => {
   if (selectedTableSize.value === TableSize.SM) {
-    return groupAndSumByTicker(originalData.value)
+    return groupAndSumByTicker(data)
   }
 
-  return originalData.value
+  return data
 })
 
-const table = ref({
+const table = computed(() => ({
   headers: headers.value,
   data: tableData.value
-})
+}))
 
 const notEditableColumns = computed(() => {
   if (selectedTableSize.value === TableSize.LG) {
@@ -125,9 +128,9 @@ const handleAddRow = () => {
   }
 }
 
-const handleDeleteRow = (rowIndex: number) => {
-  table.value.data = table.value.data.filter((_, index) => index !== rowIndex)
-}
+// const handleDeleteRow = (rowIndex: number) => {
+//   table.value.data = table.value.data.filter((_, index) => index !== rowIndex)
+// }
 
 watch(
   () => table.value.data.length < 8,
@@ -167,6 +170,8 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <!--  <UiSelectButton severity="secondary" v-model="selectedTableSize" :options="tableSizeOptions" :allowEmpty="false" />-->
+
   <DataTable
     v-if="selectedTableSize === TableSize.LG"
     :high-lighted-cells="highlightedCells"
@@ -174,27 +179,22 @@ onUnmounted(() => {
     :table
     @onCellEdit="onCellEditComplete($event)"
     :notEditableColumns
-    edit-mode="cell"
     :currency="selectedCurrency"
     stripedRows
     removableSort
     rowHover
     scrollable
   >
-    <template #header>
-      <div class="data-table__header">
-        <h1 class="data-table__title">{{ t('table.title') }}</h1>
-        <UiSelectButton v-model="selectedCurrency" :options="currencyOptions" :allowEmpty="false" />
-        <UiSelectButton v-model="selectedTableSize" :options="tableSizeOptions" :allowEmpty="false" />
-      </div>
-    </template>
-
-    <template #deleteRow="{ index }">
-      <UiButton @click="handleDeleteRow(index)" class="data-table__delete-btn" outlined :icon="Icons.DELETE" />
-    </template>
+    <!--    <template #deleteRow="{ index }">-->
+    <!--      <UiButton @click="handleDeleteRow(index)" class="data-table__delete-btn" outlined :icon="Icons.DELETE" />-->
+    <!--    </template>-->
 
     <template #addRow>
       <UiButton @click="handleAddRow" class="data-table__add-btn" :label="addBtnText" :icon="Icons.PLUS" />
+    </template>
+
+    <template #total="{ value }">
+      <div :class="{ 'text-red-400': value < 0, 'text-green-400': value >= 0 }">{{ value }}</div>
     </template>
   </DataTable>
 
@@ -209,10 +209,9 @@ onUnmounted(() => {
     rowHover
     scrollable
   >
-    <template #header>
-      <div class="data-table__header">
-        <h1 class="data-table__title">{{ t('table.title') }}</h1>
-        <UiSelectButton v-model="selectedTableSize" :options="tableSizeOptions" :allowEmpty="false" />
+    <template #total="{ value }">
+      <div :class="{ 'text-red-400': value < 0, 'text-green-400': value >= 0 }">
+        {{ n(value, { style: 'currency', currency: Currency.UAH }) }}
       </div>
     </template>
   </DataTable>

@@ -19,6 +19,9 @@ body {
 
 #app {
   width: 100%;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Custom button styles that work with Tailwind */
