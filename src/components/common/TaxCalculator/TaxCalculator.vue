@@ -88,6 +88,7 @@ const equalBtnType = computed(() => (selectedFiles.value.length && !result.value
           <UIButton :icon="Icons.CROSS" @click="handleDeleteFile(file)" class="calc__delete-btn" />
         </li>
       </ul>
+
       <div class="calc__toggle" />
     </div>
 
