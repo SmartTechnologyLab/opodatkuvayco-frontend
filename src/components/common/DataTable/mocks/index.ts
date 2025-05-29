@@ -37,8 +37,12 @@ type DealOptions = {
 
 const tickers = ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'FB']
 
-const MILITARY_RATE = parseFloat(import.meta.env.VITE_MILITARY_RATE)
-const TAX_RATE = parseFloat(import.meta.env.VITE_TAX_RATE)
+const MILITARY_RATE = !isNaN(parseFloat(import.meta.env.VITE_MILITARY_RATE)) 
+  ? parseFloat(import.meta.env.VITE_MILITARY_RATE) 
+  : 0.015; // Default value for military rate
+const TAX_RATE = !isNaN(parseFloat(import.meta.env.VITE_TAX_RATE)) 
+  ? parseFloat(import.meta.env.VITE_TAX_RATE) 
+  : 0.05; // Default value for tax rate
 
 console.debug(`Military Rate: ${MILITARY_RATE}, Tax Rate: ${TAX_RATE}`)
 // const DIVIDEND_RATE = parseFloat(import.meta.env.VITE_DIVIDEND_RATE)
