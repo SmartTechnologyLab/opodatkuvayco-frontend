@@ -1,7 +1,7 @@
 name: PullRequest
 
 env:
-  NODE_VERSION: 20.18.3
+  NODE_VERSION: ${{ vars.NODE_VERSION }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -118,10 +118,6 @@ jobs:
 
       - name: Unit tests
         run: npm run test
-        env:
-          TZ: Europe/Kiev
-          LANG: uk_UA.UTF-8
-          LC_ALL: uk_UA.UTF-8
 
   build:
     needs: [tests]
