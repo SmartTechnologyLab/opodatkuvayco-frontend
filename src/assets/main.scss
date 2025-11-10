@@ -191,7 +191,7 @@ input[type='range']::-moz-range-thumb {
   box-shadow:
     0 0 10px rgba(0, 255, 148, 0.5),
     0 0 20px rgba(0, 255, 148, 0.2);
-  border-radius: var(--rounded-button, 9999px);
+  border-radius: var(--rounded-button, 8px);
   transition: all 0.3s;
   white-space: nowrap;
   cursor: pointer;
