@@ -214,7 +214,7 @@ input[type='range']::-moz-range-thumb {
   color: #00ff99;
   font-weight: 500;
   font-size: 1.125rem;
-  border-radius: var(--rounded-button, 9999px);
+  border-radius: var(--rounded-button, 8px);
   transition: all 0.3s;
   white-space: nowrap;
   cursor: pointer;
