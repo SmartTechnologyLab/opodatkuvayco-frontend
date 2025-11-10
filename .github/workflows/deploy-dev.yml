@@ -1,7 +1,7 @@
 name: Deploy Development
 
 env:
-  NODE_VERSION: 20.18.3
+  NODE_VERSION: ${{ vars.NODE_VERSION }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
