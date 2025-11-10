@@ -14,7 +14,7 @@
           class="bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-neon-green transition-all duration-300 h-full flex flex-col"
         >
           <div class="mb-4 text-neon-green">
-            <i class="fab fa-google-drive text-4xl"></i>
+            <font-awesome-icon :icon="['fab', 'google-drive']" class="text-4xl" />
           </div>
 
           <h3 class="text-xl font-semibold mb-3">Google Таблиця</h3>
@@ -25,111 +25,111 @@
 
           <ul class="mb-6 text-gray-400">
             <li class="flex items-start mb-2">
-              <i class="fas fa-check text-neon-green mt-1 mr-2"></i>
+              <font-awesome-icon :icon="['fas', 'check']" class="text-neon-green mt-1 mr-2" />
 
-              <span>Базові розрахунки</span>
+              <span>Повні розрахунки</span>
             </li>
 
             <li class="flex items-start mb-2">
-              <i class="fas fa-check text-neon-green mt-1 mr-2"></i>
+              <font-awesome-icon :icon="['fas', 'check']" class="text-neon-green mt-1 mr-2" />
 
               <span>Без реєстрації</span>
             </li>
 
-            <li class="flex items-start">
-              <i class="fas fa-check text-neon-green mt-1 mr-2"></i>
+            <li class="flex items-start mb-2">
+              <font-awesome-icon :icon="['fas', 'check']" class="text-neon-green mt-1 mr-2" />
 
               <span>Ручне введення даних</span>
             </li>
           </ul>
 
-          <button
-            class="mt-auto px-4 py-2 border border-neon-green text-neon-green hover:bg-neon-green hover:text-gray-900 transition-colors duration-300 rounded-md cursor-pointer"
+          <a
+            href="https://docs.google.com/spreadsheets/d/1xJFAMV8DaXg4x-fgMB6LZZ6b4zJ_52HJVjFl-Vij7w0/edit?gid=0#gid=0"
+            target="_blank"
+            class="secondary-btn btn-sm text-center"
           >
             Отримати таблицю
-          </button>
+          </a>
         </div>
         <!-- Option 2 -->
         <div
           class="bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-neon-green transition-all duration-300 h-full flex flex-col"
         >
           <div class="mb-4 text-neon-green">
-            <i class="fas fa-calculator text-4xl"></i>
+            <font-awesome-icon :icon="['fas', 'calculator']" class="text-4xl" />
           </div>
 
           <h3 class="text-xl font-semibold mb-3">Онлайн-калькулятор</h3>
 
           <p class="text-gray-400 mb-4 flex-grow">
-            Безкоштовний онлайн-інструмент для розрахунку податків без збереження даних.
+            Безкоштовний онлайн-інструмент для розрахунку податків на основі звіту брокера Freedom Finance.
           </p>
 
           <ul class="mb-6 text-gray-400">
             <li class="flex items-start mb-2">
-              <i class="fas fa-check text-neon-green mt-1 mr-2"></i>
+              <font-awesome-icon :icon="['fas', 'check']" class="text-neon-green mt-1 mr-2" />
 
-              <span>Повні розрахунки</span>
+              <span>Потрібні розрахунки</span>
             </li>
 
             <li class="flex items-start mb-2">
-              <i class="fas fa-check text-neon-green mt-1 mr-2"></i>
+              <font-awesome-icon :icon="['fas', 'check']" class="text-neon-green mt-1 mr-2" />
 
-              <span>Проста реєстрація</span>
+              <span>Без реєстрації</span>
             </li>
 
             <li class="flex items-start">
-              <i class="fas fa-check text-neon-green mt-1 mr-2"></i>
+              <font-awesome-icon :icon="['fas', 'check']" class="text-neon-green mt-1 mr-2" />
 
               <span>Завантаження звітів</span>
             </li>
           </ul>
 
-          <button
-            class="mt-auto px-4 py-2 bg-neon-green text-gray-900 hover:bg-neon-green-dark transition-colors duration-300 rounded-md cursor-pointer"
-          >
-            Спробувати зараз
-          </button>
+          <a href="#demo" class="primary-btn btn-sm text-center"> Спробувати зараз </a>
         </div>
         <!-- Option 3 -->
         <div
-          class="bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-neon-green transition-all duration-300 h-full flex flex-col"
+          class="bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-neon-green transition-all duration-300 h-full flex flex-col relative overflow-hidden"
         >
+          <div class="absolute top-3 right-3 bg-neon-green text-gray-900 px-3 py-1 rounded-full text-sm font-medium">
+            Скоро
+          </div>
+
           <div class="mb-4 text-neon-green">
-            <i class="fas fa-robot text-4xl"></i>
+            <font-awesome-icon :icon="['fas', 'robot']" class="text-4xl" />
           </div>
 
           <h3 class="text-xl font-semibold mb-3">Преміум автоматизація</h3>
 
           <p class="text-gray-400 mb-4 flex-grow">
-            Повністю автоматизований розрахунок з історією та додатковими функціями.
+            Очікується інтеграція з Interactive Brokers та розширені можливості для професійних інвесторів.
           </p>
 
           <ul class="mb-6 text-gray-400">
             <li class="flex items-start mb-2">
-              <i class="fas fa-check text-neon-green mt-1 mr-2"></i>
+              <font-awesome-icon :icon="['fas', 'check']" class="text-neon-green mt-1 mr-2" />
 
-              <span>Автоматичні розрахунки</span>
+              <span>Персональний кабінет</span>
             </li>
 
             <li class="flex items-start mb-2">
-              <i class="fas fa-check text-neon-green mt-1 mr-2"></i>
+              <font-awesome-icon :icon="['fas', 'check']" class="text-neon-green mt-1 mr-2" />
 
-              <span>Збереження історії</span>
+              <span>API підключення до брокерів</span>
             </li>
 
             <li class="flex items-start">
-              <i class="fas fa-check text-neon-green mt-1 mr-2"></i>
+              <font-awesome-icon :icon="['fas', 'check']" class="text-neon-green mt-1 mr-2" />
 
-              <span>Експорт у різні формати</span>
+              <span>Збереження звітів</span>
             </li>
           </ul>
 
-          <button
-            class="mt-auto px-4 py-2 border border-neon-green text-neon-green hover:bg-neon-green hover:text-gray-900 transition-colors duration-300 rounded-md cursor-pointer"
-          >
-            Дізнатись більше
-          </button>
+          <button class="secondary-btn btn-sm" disabled>Очікується</button>
         </div>
       </div>
     </div>
   </section>
 </template>
+
+<script setup lang="ts"></script>

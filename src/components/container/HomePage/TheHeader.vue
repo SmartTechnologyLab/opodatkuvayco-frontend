@@ -1,14 +1,34 @@
 <template>
-  <header class="bg-white shadow-sm">
+  <header class="bg-white shadow-sm sticky top-0 z-50">
     <!-- Navbar -->
     <nav class="border-b border-gray-800 bg-gray-900 py-4">
       <div class="container mx-auto flex items-center justify-between px-6">
         <div class="flex items-center">
-          <span class="text-2xl font-bold text-neon-green">Оподаткувайко</span>
+          <router-link to="/" @click="scrollToTop" class="text-2xl font-bold text-neon-green cursor-pointer">
+            Оподаткувайко
+          </router-link>
         </div>
 
         <div class="hidden md:flex items-center space-x-8">
-          <a href="#demo" class="hover:text-neon-green transition-colors duration-300 cursor-pointer">Demo</a>
+          <router-link
+            @click="scrollToTop"
+            to="/"
+            class="hover:text-neon-green transition-colors duration-300 cursor-pointer"
+          >
+            Головна
+          </router-link>
+
+          <router-link to="/about" class="hover:text-neon-green transition-colors duration-300 cursor-pointer">
+            Про нас
+          </router-link>
+
+          <router-link
+            to="/"
+            class="hover:text-neon-green transition-colors duration-300 cursor-pointer"
+            @click="scrollToDemo"
+          >
+            Demo
+          </router-link>
           <!--                    <a href="#features" class="hover:text-neon-green transition-colors duration-300 cursor-pointer">Можливості</a>-->
 
           <!--          <a href="#calculator" class="hover:text-neon-green transition-colors duration-300 cursor-pointer">-->
@@ -26,17 +46,31 @@
   </header>
 </template>
 
-<style scoped lang="scss">
-.text-neon-green {
-  color: #00ff94;
+<script setup>
+import { useRouter } from 'vue-router'
+
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 }
-.bg-neon-green {
-  background-color: #00ff94;
+
+const router = useRouter()
+
+function scrollToDemo(event) {
+  event.preventDefault()
+  if (router.currentRoute.value.path !== '/') {
+    router.push('/').then(() => {
+      setTimeout(() => {
+        const demoSection = document.getElementById('demo')
+        if (demoSection) {
+          demoSection.scrollIntoView({ behavior: 'smooth' })
+        }
+      }, 300)
+    })
+  } else {
+    const demoSection = document.getElementById('demo')
+    if (demoSection) {
+      demoSection.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
 }
-.bg-neon-green-dark {
-  background-color: #00cc78;
-}
-.border-neon-green {
-  border-color: #00ff94;
-}
-</style>
+</script>
