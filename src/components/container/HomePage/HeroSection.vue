@@ -1,42 +1,47 @@
 <template>
   <!-- Hero Section -->
-  <section class="relative py-20 overflow-hidden">
-    <div class="container mx-auto px-6 flex flex-col lg:flex-row items-center gap-12">
-      <div class="lg:w-1/2 z-10">
-        <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+  <section class="relative py-32 overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+    <div
+      class="absolute inset-0 bg-[url('https://readdy.ai/api/search-image?query=Abstract%20futuristic%20grid%20pattern%20with%20glowing%20neon%20green%20lines%20and%20dots%20scattered%20across%20a%20dark%20background%20creating%20a%20modern%20tech%20aesthetic%20perfect%20for%20financial%20technology%20with%20subtle%20geometric%20shapes%20and%20smooth%20gradients&width=1440&height=800&seq=hero-bg&orientation=landscape')] opacity-10"
+    ></div>
+
+    <div class="container mx-auto px-6">
+      <div class="max-w-4xl mx-auto text-center relative z-10">
+        <h1
+          class="text-5xl md:text-6xl font-bold mb-8 leading-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300"
+        >
           Автоматизований розрахунок
           <span class="text-neon-green">податків</span> з інвестицій
         </h1>
 
-        <p class="text-gray-400 text-lg mb-8">
+        <p class="text-gray-300 text-xl mb-12 leading-relaxed">
           Забудьте про складність ручного розрахунку податків. Наш сервіс підтримує звіти від Interactive Brokers та
           Freedom Finance, забезпечуючи точність та економію вашого часу.
         </p>
 
-        <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-          <a
-            href="#demo"
-            class="px-8 py-3 bg-neon-green text-gray-900 font-medium hover:bg-neon-green-dark transition-all duration-300 shadow-neon !rounded-button whitespace-nowrap cursor-pointer"
-          >
-            Спробувати безкоштовно
-          </a>
-
-          <!--          <button-->
-          <!--            class="px-8 py-3 border border-neon-green text-neon-green font-medium hover:bg-gray-800 transition-all duration-300 !rounded-button whitespace-nowrap cursor-pointer"-->
-          <!--          >-->
-          <!--            Дізнатись більше-->
-          <!--          </button>-->
+        <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6 max-w-sm mx-auto">
+          <a href="#demo" class="primary-btn"> Спробувати безкоштовно </a>
         </div>
-      </div>
 
-      <div class="lg:w-1/2 mt-12 lg:mt-0">
-        <div class="relative">
-          <img
-            src="https://readdy.ai/api/search-image?query=A%20professional%203D%20visualization%20of%20financial%20data%20and%20tax%20calculations%20featuring%20elegant%20neon%20green%20elements%20seamlessly%20blending%20into%20a%20deep%20dark%20background%2C%20with%20smooth%20gradients%20and%20perfect%20edge%20transitions%2C%20showing%20holographic%20charts%20and%20numbers%20floating%20in%20space%2C%20ultra%20high%20quality%20render%20with%20perfect%20composition&width=600&height=500&seq=hero-image&orientation=landscape"
-            alt="Візуалізація податкових розрахунків"
-            class="rounded-lg shadow-2xl object-contain w-full h-full"
-          />
-        </div>
+        <!--        <div class="mt-16 grid grid-cols-3 gap-8">-->
+        <!--          <div class="text-center">-->
+        <!--            <div class="text-4xl font-bold text-neon-green mb-2">1000+</div>-->
+
+        <!--            <div class="text-gray-400">Активних користувачів</div>-->
+        <!--          </div>-->
+
+        <!--          <div class="text-center">-->
+        <!--            <div class="text-4xl font-bold text-neon-green mb-2">99.9%</div>-->
+
+        <!--            <div class="text-gray-400">Точність розрахунків</div>-->
+        <!--          </div>-->
+
+        <!--          <div class="text-center">-->
+        <!--            <div class="text-4xl font-bold text-neon-green mb-2">24/7</div>-->
+
+        <!--            <div class="text-gray-400">Технічна підтримка</div>-->
+        <!--          </div>-->
+        <!--        </div>-->
       </div>
     </div>
   </section>

@@ -13,19 +13,17 @@
       <div class="max-w-6xl mx-auto bg-gray-900 p-6 rounded-lg border border-gray-700 shadow-xl">
         <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mb-6">
           <button
-            class="flex-1 px-4 py-3 bg-gray-700 hover:bg-gray-600 transition-colors duration-300 rounded-md text-center cursor-pointer"
-            :class="{ 'bg-neon-green': activeTab === 'download', 'text-gray-900': activeTab === 'download' }"
+            :class="[activeTab === 'download' ? 'primary-btn' : 'secondary-btn', 'btn-sm']"
             @click="activeTab = 'download'"
           >
-            <i class="fas fa-upload mr-2"></i> Завантажити звіт
+            Розрахувати
           </button>
 
           <button
-            class="flex-1 px-4 py-3 bg-gray-700 hover:bg-neon-green-dark transition-colors duration-300 rounded-md text-center cursor-pointer"
-            :class="{ 'bg-neon-green': activeTab === 'demo', 'text-gray-900': activeTab === 'demo' }"
+            :class="[activeTab === 'demo' ? 'primary-btn' : 'secondary-btn', 'btn-sm']"
             @click="activeTab = 'demo'"
           >
-            <i class="fas fa-play mr-2"></i> Демо-приклад
+            Демо-приклад
           </button>
         </div>
 
@@ -100,7 +98,6 @@
             for="file-upload"
             class="px-8 w-full flex justify-center py-3 bg-neon-green text-gray-900 font-medium hover:bg-neon-green-dark transition-all duration-300 shadow-neon rounded-md cursor-pointer"
           >
-            <i class="fas fa-file-upload mr-2"></i>
             Завантажити звіт
             <input id="file-upload" type="file" multiple class="hidden" @input="onFileUpload" />
           </label>

@@ -4,5 +4,6 @@ export default {
   theme: {
     extend: {}
   },
-  plugins: []
+  plugins: [],
+  safelist: ['fa', 'fas', 'fa-solid', 'fa-check', 'fa-star', 'fab', 'fa-google-drive']
 }

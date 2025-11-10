@@ -9,23 +9,23 @@
             Інноваційний інструмент для автоматизованого розрахунку податків з інвестиційної діяльності.
           </p>
 
-          <div class="flex space-x-4">
-            <a href="#" class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer">
-              <i class="fab fa-facebook-f"></i>
-            </a>
+          <!--          <div class="flex space-x-4">-->
+          <!--            <a href="#" class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer">-->
+          <!--              <i class="fab fa-facebook-f"></i>-->
+          <!--            </a>-->
 
-            <a href="#" class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer">
-              <i class="fab fa-twitter"></i>
-            </a>
+          <!--            <a href="#" class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer">-->
+          <!--              <i class="fab fa-twitter"></i>-->
+          <!--            </a>-->
 
-            <a href="#" class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer">
-              <i class="fab fa-instagram"></i>
-            </a>
+          <!--            <a href="#" class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer">-->
+          <!--              <i class="fab fa-instagram"></i>-->
+          <!--            </a>-->
 
-            <a href="#" class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer">
-              <i class="fab fa-linkedin-in"></i>
-            </a>
-          </div>
+          <!--            <a href="#" class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer">-->
+          <!--              <i class="fab fa-linkedin-in"></i>-->
+          <!--            </a>-->
+          <!--          </div>-->
         </div>
 
         <div>
@@ -33,8 +33,12 @@
 
           <ul class="space-y-2">
             <li>
-              <a href="#" class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer">
-                Google Таблиця
+              <a
+                href="https://docs.google.com/spreadsheets/d/1xJFAMV8DaXg4x-fgMB6LZZ6b4zJ_52HJVjFl-Vij7w0/edit?gid=0#gid=0"
+                target="_blank"
+                class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer"
+              >
+                Безкоштовна Google Таблиця
               </a>
             </li>
 
@@ -62,27 +66,35 @@
           <h3 class="text-lg font-semibold text-white mb-4">Підтримка</h3>
 
           <ul class="space-y-2">
+            <!--            <li>-->
+            <!--              <a href="#" class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer">-->
+            <!--                Документація-->
+            <!--              </a>-->
+            <!--            </li>-->
+
+            <!--            <li>-->
+            <!--              <a href="#" class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer">-->
+            <!--                Часті питання-->
+            <!--              </a>-->
+            <!--            </li>-->
+
             <li>
-              <a href="#" class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer">
-                Документація
+              <a
+                href="https://web.telegram.org/a/#-1001206498039"
+                target="_blank"
+                class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer"
+              >
+                Telegram‑канал
               </a>
             </li>
 
             <li>
-              <a href="#" class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer">
-                Часті питання
-              </a>
-            </li>
-
-            <li>
-              <a href="#" class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer">
-                Зв'язатися з нами
-              </a>
-            </li>
-
-            <li>
-              <a href="#" class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer">
-                Навчальні матеріали
+              <a
+                href="https://telegra.ph/Splata-podatk%D1%96v-z-%D1%96nvestic%D1%96jnoi-d%D1%96yalnost%D1%96-fondovij-rinok-04-28"
+                target="_blank"
+                class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer"
+              >
+                Інструкція зі сплати податків
               </a>
             </li>
           </ul>
@@ -93,27 +105,30 @@
 
           <ul class="space-y-2">
             <li>
-              <a href="#" class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer">
-                Умови використання
-              </a>
+              <router-link
+                to="/terms"
+                class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer"
+              >
+                Публічна оферта
+              </router-link>
             </li>
 
             <li>
-              <a href="#" class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer">
+              <router-link
+                to="/policy"
+                class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer"
+              >
                 Політика конфіденційності
-              </a>
+              </router-link>
             </li>
 
             <li>
-              <a href="#" class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer">
-                Правила обробки даних
-              </a>
-            </li>
-
-            <li>
-              <a href="#" class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer">
-                Юридична інформація
-              </a>
+              <router-link
+                to="/about"
+                class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer"
+              >
+                Про нас
+              </router-link>
             </li>
           </ul>
         </div>

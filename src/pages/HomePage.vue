@@ -2,13 +2,13 @@
 <template>
   <div class="bg-gray-900 text-white">
     <!-- Hero Section -->
-    <HeroSection />
+    <HeroSection id="hero" />
 
     <!-- Demo Section -->
     <DemoSection id="demo" />
 
     <!-- Options Section -->
-    <!--    <OptionsSection />-->
+    <OptionsSection />
 
     <!-- Benefits Section -->
     <!--    <BenefitsSection />-->
@@ -41,7 +41,7 @@ import DemoSection from '@/components/container/HomePage/DemoSection.vue'
 // import FeaturesSection from '@/components/container/HomePage/FeaturesSection.vue'
 // import TestimonialsSection from '@/components/container/HomePage/TestimonialsSection.vue'
 // import CtaSection from '@/components/container/HomePage/CtaSection.vue'
-// import OptionsSection from '@/components/container/HomePage/OptionsSection.vue'
+import OptionsSection from '@/components/container/HomePage/OptionsSection.vue'
 // import BenefitsSection from '@/components/container/HomePage/BenefitsSection.vue'
 // import SecuritySection from '@/components/container/HomePage/SecuritySection.vue'
 // import FaqSection from '@/components/container/HomePage/FaqSection.vue'

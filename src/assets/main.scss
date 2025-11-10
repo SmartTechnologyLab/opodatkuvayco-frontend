@@ -1,6 +1,5 @@
-/* Import variables and custom styles */
-@import 'base.scss';
-@import '@/assets/scss/resources/_variables.scss';
+@use 'base.scss';
+@use '@/assets/scss/resources/variables' as vars;
 
 /* Import Tailwind directives */
 @tailwind base;
@@ -11,7 +10,7 @@
 body {
   display: flex;
   justify-content: center;
-  background: $body-background;
+  background: vars.$body-background;
   font-family: 'Inter', 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -37,6 +36,11 @@ body {
   @apply border border-neon-green text-neon-green hover:bg-neon-green hover:text-gray-900;
 }
 
+.btn-sm {
+  padding: 0.8rem 1.25rem !important;
+  font-size: 1rem !important;
+}
+
 /* Fix for modal scrolling */
 .modal-open {
   overflow: hidden;
@@ -45,8 +49,8 @@ body {
 /* Глобальные CSS-переменные для приложения */
 :root {
   /* Основные цвета */
-  --neon-green: #39ff14;
-  --neon-green-dark: #32db10;
+  --neon-green: #14ffa5;
+  --neon-green-dark: #10db9e;
   --gray-900: #111827;
   --gray-800: #1f2937;
   --gray-700: #374151;
@@ -54,18 +58,21 @@ body {
   --gray-400: #9ca3af;
   --gray-300: #d1d5db;
   --red-400: #f87171;
-  --green-400: #4ade80;
+  --green-400: #4aded2;
 
   /* Тени */
-  --shadow-neon: 0 0 10px 2px rgba(57, 255, 20, 0.3);
+  --shadow-neon: 0 0 10px 2px rgba(20, 255, 220, 0.3);
 
   /* Скругления */
   --rounded-button: 8px;
 }
 
-/* Вспомогательные классы, которые напрямую используют CSS-переменные */
 .text-neon-green {
   color: var(--neon-green);
+}
+
+.border-neon-green {
+  border-color: var(--neon-green);
 }
 
 .bg-neon-green {
@@ -145,18 +152,7 @@ body {
   background-position: center;
   background-repeat: no-repeat;
 }
-.text-neon-green {
-  color: #00ff94;
-}
-.bg-neon-green {
-  background-color: #00ff94;
-}
-.bg-neon-green-dark {
-  background-color: #00cc78;
-}
-.border-neon-green {
-  border-color: #00ff94;
-}
+
 /* Remove number input arrows */
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
@@ -184,4 +180,61 @@ input[type='range']::-moz-range-thumb {
   background: #00ff94;
   cursor: pointer;
   border: none;
+}
+
+.primary-btn {
+  padding: 1rem 2.5rem;
+  background-color: #00ff99;
+  color: #222;
+  font-weight: 500;
+  font-size: 1.125rem;
+  box-shadow:
+    0 0 10px rgba(0, 255, 148, 0.5),
+    0 0 20px rgba(0, 255, 148, 0.2);
+  border-radius: var(--rounded-button, 9999px);
+  transition: all 0.3s;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+.primary-btn:hover {
+  background-color: #14ffb8;
+}
+.primary-btn:disabled {
+  background-color: #e5e7eb;
+  color: #9ca3af;
+  border: 2px solid #d1d5db;
+  cursor: not-allowed;
+  opacity: 0.7;
+  box-shadow: none;
+}
+.secondary-btn {
+  padding: 1rem 2.5rem;
+  border: 2px solid #00ff99;
+  color: #00ff99;
+  font-weight: 500;
+  font-size: 1.125rem;
+  border-radius: var(--rounded-button, 9999px);
+  transition: all 0.3s;
+  white-space: nowrap;
+  cursor: pointer;
+  background: none;
+}
+.secondary-btn:hover {
+  background-color: #00ff99;
+  color: #222;
+}
+.secondary-btn:disabled {
+  background: none;
+  color: #9ca3af;
+  border: 2px solid var(--gray-600);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.fa,
+.fas,
+.fa-solid {
+  font-family: 'Font Awesome 6 Free', sans-serif;
+  font-weight: 900;
 }
