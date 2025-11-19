@@ -39,8 +39,6 @@
 
           <!--          <a href="#faq" class="hover:text-neon-green transition-colors duration-300 cursor-pointer">FAQ</a>-->
         </div>
-
-        <div class="flex items-center space-x-4"></div>
       </div>
     </nav>
   </header>
