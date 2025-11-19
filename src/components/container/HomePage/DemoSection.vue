@@ -183,8 +183,6 @@ const onFileUpload = async (event: Event) => {
     }
 
     fetchData.value = data
-
-    console.log('Report data:', data)
   } catch (error) {
     console.error('Error uploading file:', error)
     errorMessage.value = (error as Error).message
@@ -192,6 +190,12 @@ const onFileUpload = async (event: Event) => {
     isLoading.value = false
   }
 }
+
+watch(isLoading, () => {
+  if (isLoading.value) {
+    fetchData.value = null
+  }
+})
 </script>
 
 <style scoped>
