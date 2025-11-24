@@ -21,16 +21,22 @@
 
         <p class="text-gray-400 text-base mb-8">
           Підтримайте наш проєкт — розповідайте про нас друзям, підписуйтесь на наш
-          <a href="https://t.me/investuvayco" target="_blank" class="text-neon-green underline">Telegram-канал</a> та
-          слідкуйте за оновленнями!
+          <a href="https://t.me/investuvayco" @click="handleTelegramClick" class="text-neon-green underline"
+            >Telegram-канал</a
+          >
+          та слідкуйте за оновленнями!
         </p>
       </div>
     </div>
   </section>
 </template>
 
-<script setup>
-// Немає додаткової логіки
+<script setup lang="ts">
+import { handleTelegramLink } from '@/helpers/telegram'
+
+function handleTelegramClick(event: Event) {
+  handleTelegramLink(event, 'investuvayco')
+}
 </script>
 
 <style scoped>
