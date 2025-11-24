@@ -509,7 +509,11 @@
               <p>
                 <strong>Telegram:</strong>
 
-                <a href="https://t.me/investuvayco" target="_blank" class="text-neon-green hover:underline ml-2">
+                <a
+                  href="https://t.me/investuvayco"
+                  @click="handleTelegramClick"
+                  class="text-neon-green hover:underline ml-2"
+                >
                   @investuvayco
                 </a>
               </p>
@@ -528,8 +532,12 @@
   </section>
 </template>
 
-<script setup>
-// Немає додаткової логіки
+<script setup lang="ts">
+import { handleTelegramLink } from '@/helpers/telegram'
+
+function handleTelegramClick(event: Event) {
+  handleTelegramLink(event, 'investuvayco')
+}
 </script>
 
 <style scoped>
