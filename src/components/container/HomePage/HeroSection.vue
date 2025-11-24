@@ -2,7 +2,7 @@
   <!-- Hero Section -->
   <section class="relative py-32 overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
     <div
-      class="absolute inset-0 bg-[url('https://readdy.ai/api/search-image?query=Abstract%20futuristic%20grid%20pattern%20with%20glowing%20neon%20green%20lines%20and%20dots%20scattered%20across%20a%20dark%20background%20creating%20a%20modern%20tech%20aesthetic%20perfect%20for%20financial%20technology%20with%20subtle%20geometric%20shapes%20and%20smooth%20gradients&width=1440&height=800&seq=hero-bg&orientation=landscape')] opacity-10"
+      class="absolute inset-0 bg-[url('/hero-bg.svg')] opacity-10"
     ></div>
 
     <div class="container mx-auto px-6">
