@@ -16,12 +16,29 @@ export function openTelegramLink(username: string): void {
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 
   if (isMobile) {
-    // On mobile, try deep link first
+    // Track if page becomes hidden (app opened)
+    let appOpened = false
+    const startTime = Date.now()
+
+    const visibilityHandler = () => {
+      if (document.hidden) {
+        appOpened = true
+      }
+    }
+
+    document.addEventListener('visibilitychange', visibilityHandler)
+
+    // Try to open deep link
     window.location.href = deepLink
 
-    // Fallback to web after a delay if app didn't open
+    // Check after delay if app didn't open
     setTimeout(() => {
-      window.open(webLink, '_blank')
+      document.removeEventListener('visibilitychange', visibilityHandler)
+
+      // If page is still visible and not enough time passed, app likely didn't open
+      if (!appOpened && !document.hidden && Date.now() - startTime < 2000) {
+        window.open(webLink, '_blank')
+      }
     }, 1500)
   } else {
     // On desktop, open web version (it will prompt to open in app if installed)
@@ -45,12 +62,30 @@ export function openTelegramChat(chatId: string): void {
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 
   if (isMobile) {
+    // Track if page becomes hidden (app opened)
+    let appOpened = false
+    const startTime = Date.now()
+
+    const visibilityHandler = () => {
+      if (document.hidden) {
+        appOpened = true
+      }
+    }
+
+    document.addEventListener('visibilitychange', visibilityHandler)
+
+    // Try to open deep link
     const deepLink = `tg://resolve?domain=c/${cleanChatId}`
     window.location.href = deepLink
 
-    // Fallback to web
+    // Check after delay if app didn't open
     setTimeout(() => {
-      window.open(webLink, '_blank')
+      document.removeEventListener('visibilitychange', visibilityHandler)
+
+      // If page is still visible and not enough time passed, app likely didn't open
+      if (!appOpened && !document.hidden && Date.now() - startTime < 2000) {
+        window.open(webLink, '_blank')
+      }
     }, 1500)
   } else {
     window.open(webLink, '_blank')
