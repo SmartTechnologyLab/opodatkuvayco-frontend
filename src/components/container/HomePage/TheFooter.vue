@@ -80,7 +80,7 @@
 
             <li>
               <a
-                href="https://web.telegram.org/a/#-1001206498039"
+                href="https://t.me/investuvayco"
                 @click="handleTelegramChatClick"
                 class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer"
               >
@@ -159,6 +159,6 @@
 import { handleTelegramLink } from '@/helpers/telegram'
 
 function handleTelegramChatClick(event: Event) {
-  handleTelegramLink(event, 'https://web.telegram.org/a/#-1001206498039')
+  handleTelegramLink(event, 'investuvayco')
 }
 </script>
