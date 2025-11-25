@@ -23,7 +23,12 @@
           Підтримайте наш проєкт — розповідайте про нас друзям, підписуйтесь на наш
           <a href="https://t.me/investuvayco" @click="handleTelegramClick" class="text-neon-green underline"
             >Telegram-канал</a
+          <a href="https://t.me/investuvayco" 
+            @click="handleTelegramClick" 
+            class="text-neon-green underline"
           >
+            Telegram-канал
+          </a>
           та слідкуйте за оновленнями!
         </p>
       </div>
