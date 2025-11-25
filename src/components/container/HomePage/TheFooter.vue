@@ -81,7 +81,7 @@
             <li>
               <a
                 href="https://web.telegram.org/a/#-1001206498039"
-                target="_blank"
+                @click="handleTelegramChatClick"
                 class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer"
               >
                 Telegram‑канал
@@ -154,3 +154,11 @@
     </div>
   </footer>
 </template>
+
+<script setup lang="ts">
+import { handleTelegramLink } from '@/helpers/telegram'
+
+function handleTelegramChatClick(event: Event) {
+  handleTelegramLink(event, 'https://web.telegram.org/a/#-1001206498039')
+}
+</script>
