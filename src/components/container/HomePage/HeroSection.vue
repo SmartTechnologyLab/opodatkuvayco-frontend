@@ -2,7 +2,7 @@
   <!-- Hero Section -->
   <section class="relative py-32 overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
     <div
-      class="absolute inset-0 bg-[url('/hero-bg.svg')] opacity-10"
+      class="absolute inset-0 bg-[url('/hero-bg.svg')] opacity-20"
     ></div>
 
     <div class="container mx-auto px-6">
