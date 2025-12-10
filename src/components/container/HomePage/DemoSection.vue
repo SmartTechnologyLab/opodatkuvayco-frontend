@@ -102,6 +102,23 @@
             <input id="file-upload" type="file" multiple class="hidden" @input="onFileUpload" />
           </label>
         </div>
+
+        <!-- Disclaimer -->
+        <div v-if="reportData?.total" class="mt-6 p-4 bg-gray-800 bg-opacity-60 rounded-lg border border-gray-700">
+          <p class="text-gray-300 text-sm leading-relaxed">
+            <span class="font-semibold text-neon-green">⚠️ Важливо:</span> Всі розрахунки носять консультативний характер.
+            Ми прагнемо максимально точно проводити розрахунки, але у нас недостатньо інформації по різних кейсах та фінансових інструментах,
+            оскільки у нас немає прикладів звітів по них. Якщо у вас є специфічні угоди, ми будемо раді отримати від вас звіти з ними,
+            і тоді ми зможемо зробити наш сервіс більш точним та зручним для вас.
+            <a
+              href="https://t.me/investuvayco"
+              @click="handleTelegramClick"
+              class="text-neon-green hover:text-neon-green-dark underline font-medium transition-colors"
+            >
+              Пишіть нам в Telegram
+            </a>.
+          </p>
+        </div>
       </div>
     </div>
   </section>
@@ -112,6 +129,7 @@ import { type Deal, getDeal, getReport } from '@/components/common/DataTable/moc
 import { Currency } from '@/constants/currencies'
 import { ref, watch } from 'vue'
 import TestDataTableForUser from '@/components/TestDataTableForUser/TestDataTableForUser.vue'
+import { handleTelegramLink } from '@/helpers/telegram'
 
 const activeTab = ref<'demo' | 'download'>('demo')
 
@@ -196,6 +214,10 @@ watch(isLoading, () => {
     fetchData.value = null
   }
 })
+
+function handleTelegramClick(event: Event) {
+  handleTelegramLink(event, 'investuvayco')
+}
 </script>
 
 <style scoped>
