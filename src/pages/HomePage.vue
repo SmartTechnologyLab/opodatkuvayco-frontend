@@ -45,4 +45,10 @@ import OptionsSection from '@/components/container/HomePage/OptionsSection.vue'
 // import BenefitsSection from '@/components/container/HomePage/BenefitsSection.vue'
 // import SecuritySection from '@/components/container/HomePage/SecuritySection.vue'
 // import FaqSection from '@/components/container/HomePage/FaqSection.vue'
+
+// SEO
+import { useSeo } from '@/composables/useSeo'
+import { seoConfig } from '@/config/seo'
+
+useSeo(seoConfig.home)
 </script>

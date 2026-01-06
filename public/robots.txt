@@ -1,0 +1,9 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Disallow authentication and registration pages
+Disallow: /register
+
+# Sitemap
+Sitemap: https://opodatkuvayco.com/sitemap.xml
