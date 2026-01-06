@@ -212,10 +212,15 @@
 
 <script setup lang="ts">
 import { handleTelegramLink } from '@/helpers/telegram'
+import { useSeo } from '@/composables/useSeo'
+import { seoConfig } from '@/config/seo'
 
 function handleTelegramClick(event: Event) {
   handleTelegramLink(event, 'investuvayco')
 }
+
+// SEO
+useSeo(seoConfig.policy)
 </script>
 
 <style scoped>
