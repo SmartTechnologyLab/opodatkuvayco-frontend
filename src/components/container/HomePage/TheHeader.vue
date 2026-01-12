@@ -22,13 +22,13 @@
             Про нас
           </router-link>
 
-          <router-link
-            to="/"
+          <a
+            href="#demo"
             class="hover:text-neon-green transition-colors duration-300 cursor-pointer"
-            @click="scrollToDemo"
+            @click.prevent="scrollToDemo"
           >
             Demo
-          </router-link>
+          </a>
           <!--                    <a href="#features" class="hover:text-neon-green transition-colors duration-300 cursor-pointer">Можливості</a>-->
 
           <!--          <a href="#calculator" class="hover:text-neon-green transition-colors duration-300 cursor-pointer">-->
@@ -55,10 +55,12 @@ const router = useRouter()
 
 function scrollToDemo(event) {
   event.preventDefault()
+
   if (router.currentRoute.value.path !== '/') {
     router.push('/').then(() => {
       setTimeout(() => {
         const demoSection = document.getElementById('demo')
+
         if (demoSection) {
           demoSection.scrollIntoView({ behavior: 'smooth' })
         }
@@ -66,6 +68,7 @@ function scrollToDemo(event) {
     })
   } else {
     const demoSection = document.getElementById('demo')
+
     if (demoSection) {
       demoSection.scrollIntoView({ behavior: 'smooth' })
     }
