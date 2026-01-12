@@ -17,10 +17,10 @@ export interface SeoMetaConfig {
 }
 
 const defaultConfig: SeoMetaConfig = {
-  title: 'Opodatkuvayco - Калькулятор податків та оподаткування',
+  title: 'Оподаткувайко - Автоматизований розрахунок податків з інвестицій',
   description:
-    'Безкоштовний калькулятор податків для ФОП та фізичних осіб. Розрахуйте податки, ЄСВ та інші платежі онлайн.',
-  keywords: 'калькулятор податків, оподаткування, ФОП, податки Україна, ЄСВ, розрахунок податків',
+    'Інноваційний інструмент для автоматизованого розрахунку податків з інвестиційної діяльності. Підтримка Interactive Brokers та Freedom Finance.',
+  keywords: 'податки з інвестицій, розрахунок податків інвестиції, Interactive Brokers податки, Freedom Finance податки, брокерський звіт, податки трейдинг',
   ogImage: 'https://opodatkuvayco.com/og-image.jpg',
   robots: 'index, follow'
 }

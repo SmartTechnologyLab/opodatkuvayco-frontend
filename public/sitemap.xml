@@ -7,7 +7,7 @@
   <!-- Homepage -->
   <url>
     <loc>https://opodatkuvayco.com/</loc>
-    <lastmod>2026-01-06</lastmod>
+    <lastmod>2026-01-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -15,7 +15,7 @@
   <!-- About Page -->
   <url>
     <loc>https://opodatkuvayco.com/about</loc>
-    <lastmod>2026-01-06</lastmod>
+    <lastmod>2026-01-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -23,7 +23,7 @@
   <!-- Policy Page -->
   <url>
     <loc>https://opodatkuvayco.com/policy</loc>
-    <lastmod>2026-01-06</lastmod>
+    <lastmod>2026-01-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -31,7 +31,7 @@
   <!-- Terms Page -->
   <url>
     <loc>https://opodatkuvayco.com/terms</loc>
-    <lastmod>2026-01-06</lastmod>
+    <lastmod>2026-01-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
