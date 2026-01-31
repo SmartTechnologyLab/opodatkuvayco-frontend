@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCheck, faStar, faCalculator, faRobot } from '@fortawesome/free-solid-svg-icons'
 import { faGoogleDrive } from '@fortawesome/free-brands-svg-icons'
+import { initAnalytics } from '@/plugins/analytics'
 
 library.add(faCheck, faStar, faCalculator, faRobot, faGoogleDrive)
 
@@ -19,5 +20,7 @@ generalConfig(app)
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(createPinia())
 app.use(router)
+
+initAnalytics(router)
 
 app.mount('#app')

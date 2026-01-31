@@ -15,8 +15,10 @@
         >
           {{ errorMessage }}
         </div>
+
         <div>
           <label class="block text-gray-400 mb-2" for="email">Електронна пошта</label>
+
           <input
             id="email"
             type="email"
@@ -25,8 +27,10 @@
             required
           />
         </div>
+
         <div>
           <label class="block text-gray-400 mb-2" for="password">Пароль</label>
+
           <input
             id="password"
             type="password"
@@ -35,6 +39,7 @@
             required
           />
         </div>
+
         <div class="flex items-center justify-between">
           <label class="flex items-center">
             <input
@@ -42,16 +47,20 @@
               v-model="rememberMe"
               class="form-checkbox bg-gray-700 border-gray-600 text-neon-green rounded"
             />
+
             <span class="ml-2 text-gray-400">Запам'ятати мене</span>
           </label>
+
           <a href="#" class="text-neon-green hover:text-neon-green-dark">Забули пароль?</a>
         </div>
+
         <button
           type="submit"
           :disabled="isLoading"
           class="w-full py-3 bg-neon-green text-gray-900 font-medium hover:bg-neon-green-dark transition-all duration-300 !rounded-button whitespace-nowrap relative disabled:opacity-70 disabled:cursor-not-allowed"
         >
           <span :class="{ 'opacity-0': isLoading }">Увійти</span>
+
           <div v-if="isLoading" class="absolute inset-0 flex items-center justify-center">
             <svg
               class="animate-spin h-5 w-5 text-gray-900"
@@ -60,6 +69,7 @@
               viewBox="0 0 24 24"
             >
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+
               <path
                 class="opacity-75"
                 fill="currentColor"
@@ -75,21 +85,25 @@
           <div class="absolute inset-0 flex items-center">
             <div class="w-full border-t border-gray-600"></div>
           </div>
+
           <div class="relative flex justify-center text-sm">
             <span class="px-2 bg-gray-800 text-gray-400">Або увійти через</span>
           </div>
         </div>
+
         <div class="mt-6 grid grid-cols-3 gap-3">
           <button
             class="flex justify-center items-center py-2 px-4 border border-gray-600 rounded-md hover:border-neon-green transition-colors duration-300"
           >
             <i class="fab fa-google text-gray-400"></i>
           </button>
+
           <button
             class="flex justify-center items-center py-2 px-4 border border-gray-600 rounded-md hover:border-neon-green transition-colors duration-300"
           >
             <i class="fab fa-facebook-f text-gray-400"></i>
           </button>
+
           <button
             class="flex justify-center items-center py-2 px-4 border border-gray-600 rounded-md hover:border-neon-green transition-colors duration-300"
           >
