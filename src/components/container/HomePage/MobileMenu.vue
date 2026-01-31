@@ -12,6 +12,7 @@
       >
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
       </svg>
+
       <svg
         v-else
         xmlns="http://www.w3.org/2000/svg"
@@ -33,12 +34,14 @@
           class="text-gray-300 hover:text-neon-green transition-colors duration-300"
           >Функції</a
         >
+
         <a
           href="#calculator"
           @click="isOpen = false"
           class="text-gray-300 hover:text-neon-green transition-colors duration-300"
           >Калькулятор</a
         >
+
         <a href="#" @click="isOpen = false" class="text-gray-300 hover:text-neon-green transition-colors duration-300"
           >Про нас</a
         >
@@ -47,6 +50,7 @@
       <div class="flex flex-col space-y-3 pt-3 border-t border-gray-700">
         <template v-if="isAuthenticated">
           <span class="text-gray-300">Вітаємо, {{ user?.name || 'користувач' }}!</span>
+
           <button
             @click="
               $emit('logout')
@@ -57,6 +61,7 @@
             Вийти
           </button>
         </template>
+
         <template v-else>
           <button
             @click="
@@ -67,6 +72,7 @@
           >
             Увійти
           </button>
+
           <button
             @click="
               $emit('openRegistrationModal')
