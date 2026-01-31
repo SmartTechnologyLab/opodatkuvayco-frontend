@@ -6,8 +6,10 @@
       <button @click="closeModal" class="absolute top-4 right-4 text-gray-400 hover:text-white">
         <i class="fas fa-times"></i> Close
       </button>
+
       <div class="text-center mb-8">
         <h1 class="text-3xl font-bold mb-2">Реєстрація</h1>
+
         <p class="text-gray-400">Створіть обліковий запис для використання сервісу</p>
       </div>
 
@@ -15,10 +17,12 @@
         <!-- Name field -->
         <div class="mb-4">
           <label for="name" class="block text-sm font-medium text-gray-400 mb-1">Ім'я</label>
+
           <div class="relative">
             <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">
               <i class="fas fa-user"></i>
             </span>
+
             <input
               type="text"
               id="name"
@@ -28,6 +32,7 @@
               required
             />
           </div>
+
           <p v-if="errors.name" class="mt-1 text-sm text-red-400">
             {{ errors.name }}
           </p>
@@ -36,10 +41,12 @@
         <!-- Email field -->
         <div class="mb-4">
           <label for="email" class="block text-sm font-medium text-gray-400 mb-1">Електронна пошта</label>
+
           <div class="relative">
             <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">
               <i class="fas fa-envelope"></i>
             </span>
+
             <input
               type="email"
               id="email"
@@ -49,6 +56,7 @@
               required
             />
           </div>
+
           <p v-if="errors.email" class="mt-1 text-sm text-red-400">
             {{ errors.email }}
           </p>
@@ -57,10 +65,12 @@
         <!-- Password field -->
         <div class="mb-4">
           <label for="password" class="block text-sm font-medium text-gray-400 mb-1">Пароль</label>
+
           <div class="relative">
             <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">
               <i class="fas fa-lock"></i>
             </span>
+
             <input
               :type="showPassword ? 'text' : 'password'"
               id="password"
@@ -69,6 +79,7 @@
               placeholder="Мінімум 8 символів"
               required
             />
+
             <button
               type="button"
               @click="showPassword = !showPassword"
@@ -77,6 +88,7 @@
               <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
             </button>
           </div>
+
           <p v-if="errors.password" class="mt-1 text-sm text-red-400">
             {{ errors.password }}
           </p>
@@ -85,10 +97,12 @@
         <!-- Confirm Password field -->
         <div class="mb-6">
           <label for="confirmPassword" class="block text-sm font-medium text-gray-400 mb-1">Підтвердження паролю</label>
+
           <div class="relative">
             <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">
               <i class="fas fa-lock"></i>
             </span>
+
             <input
               :type="showConfirmPassword ? 'text' : 'password'"
               id="confirmPassword"
@@ -97,6 +111,7 @@
               placeholder="Повторіть пароль"
               required
             />
+
             <button
               type="button"
               @click="showConfirmPassword = !showConfirmPassword"
@@ -105,6 +120,7 @@
               <i :class="showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
             </button>
           </div>
+
           <p v-if="errors.confirmPassword" class="mt-1 text-sm text-red-400">
             {{ errors.confirmPassword }}
           </p>
@@ -122,6 +138,7 @@
                 required
               />
             </div>
+
             <label for="terms" class="ml-2 text-sm text-gray-400">
               Я погоджуюсь з
               <a href="#" class="text-neon-green hover:underline cursor-pointer">умовами використання</a>
@@ -129,6 +146,7 @@
               <a href="#" class="text-neon-green hover:underline cursor-pointer">політикою конфіденційності</a>
             </label>
           </div>
+
           <p v-if="errors.acceptTerms" class="mt-1 text-sm text-red-400">
             {{ errors.acceptTerms }}
           </p>
@@ -146,7 +164,9 @@
       <!-- Social login divider -->
       <div class="flex items-center my-6">
         <div class="flex-grow h-px bg-gray-700"></div>
+
         <span class="px-4 text-sm text-gray-400">або</span>
+
         <div class="flex-grow h-px bg-gray-700"></div>
       </div>
 
@@ -157,6 +177,7 @@
         >
           <i class="fab fa-google mr-2"></i> Продовжити з Google
         </button>
+
         <button
           class="w-full py-2 px-4 bg-gray-700 hover:bg-gray-600 text-white flex items-center justify-center rounded-md transition-colors duration-300 !rounded-button whitespace-nowrap cursor-pointer"
         >
