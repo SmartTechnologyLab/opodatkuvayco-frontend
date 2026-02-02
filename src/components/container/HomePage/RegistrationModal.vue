@@ -198,8 +198,11 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useAnalytics } from '@/composables/useAnalytics'
 
-// Определение props и emit событий
+const { trackRegistration } = useAnalytics()
+
+// Props and emits definition
 defineProps({
   modelValue: {
     type: Boolean,
@@ -209,8 +212,8 @@ defineProps({
 
 const emit = defineEmits(['update:modelValue', 'register', 'switch-to-login'])
 
+// Close modal and reset form data
 const closeModal = () => {
-  // Reset form data
   formData.value = {
     name: '',
     email: '',
@@ -221,13 +224,13 @@ const closeModal = () => {
   emit('update:modelValue', false)
 }
 
-// Метод для переключения на окно входа
+// Switch to login modal
 const switchToLogin = () => {
   closeModal()
   emit('switch-to-login')
 }
 
-// Form data
+// Form data state
 const formData = ref({
   name: '',
   email: '',
@@ -236,7 +239,7 @@ const formData = ref({
   acceptTerms: false
 })
 
-// Form errors
+// Form validation errors
 const errors = ref({
   name: '',
   email: '',
@@ -245,20 +248,11 @@ const errors = ref({
   acceptTerms: ''
 })
 
-// Password visibility
+// Password visibility toggles
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
 
-// Toggle password visibility
-const togglePassword = () => {
-  showPassword.value = !showPassword.value
-}
-
-const toggleConfirmPassword = () => {
-  showConfirmPassword.value = !showConfirmPassword.value
-}
-
-// Form validation and submission
+// Form validation and submission handler
 const handleSubmit = () => {
   // Reset errors
   errors.value = {
@@ -307,7 +301,8 @@ const handleSubmit = () => {
   if (!hasErrors) {
     // Form is valid, submit it
     console.log('Form submitted:', formData.value)
-    // Here you would typically make an API call to register the user
+    // TODO: Replace with real API call to register the user
+    trackRegistration()
     alert('Реєстрація успішна! Перевірте вашу електронну пошту для підтвердження.')
   }
 }

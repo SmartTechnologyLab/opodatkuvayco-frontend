@@ -1,9 +1,17 @@
+<script setup lang="ts">
+import { useAnalytics } from '@/composables/useAnalytics'
+
+const { trackCtaClick } = useAnalytics()
+
+const handleCtaClick = () => {
+  trackCtaClick('hero-try-free')
+}
+</script>
+
 <template>
   <!-- Hero Section -->
   <section class="relative py-32 overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-    <div
-      class="absolute inset-0 bg-[url('/hero-bg.svg')] opacity-20"
-    ></div>
+    <div class="absolute inset-0 bg-[url('/hero-bg.svg')] opacity-20"></div>
 
     <div class="container mx-auto px-6">
       <div class="max-w-4xl mx-auto text-center relative z-10">
@@ -20,7 +28,7 @@
         </p>
 
         <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6 max-w-sm mx-auto">
-          <a href="#demo" class="primary-btn"> Спробувати безкоштовно </a>
+          <a href="#demo" class="primary-btn" @click="handleCtaClick"> Спробувати безкоштовно </a>
         </div>
 
         <!--        <div class="mt-16 grid grid-cols-3 gap-8">-->

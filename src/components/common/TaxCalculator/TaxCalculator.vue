@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n'
 import UIButton from '@/components/common/UiButton/UiButton.vue'
 import { Icons } from '@/components/common/UiButton/constants'
 import { operations, validChars, values } from '@/components/common/TaxCalculator/constants/index'
+import { useAnalytics } from '@/composables/useAnalytics'
 
 const selectedFiles = ref<File[]>([])
 const result = ref('')
@@ -12,6 +13,7 @@ const isNegative = ref(false)
 const isCalculating = ref(false)
 
 const { t } = useI18n()
+const { trackCalculatorUsed, trackFileUploaded } = useAnalytics()
 
 const addToResult = (num: string | number) => {
   if (num === '+/-') {
@@ -35,6 +37,7 @@ const reset = () => {
 const calculate = () => {
   result.value = eval(result.value) || 0
   isCalculating.value = true
+  trackCalculatorUsed('manual')
 }
 
 const handleFileChange = (event: Event) => {
@@ -43,6 +46,11 @@ const handleFileChange = (event: Event) => {
 
   if (files) {
     selectedFiles.value.push(...files)
+    // Track file upload for each file
+    Array.from(files).forEach((file) => {
+      const extension = file.name.split('.').pop()?.toLowerCase() || 'unknown'
+      trackFileUploaded(extension)
+    })
   }
 }
 

@@ -1,3 +1,20 @@
+<script setup lang="ts">
+import { useAnalytics } from '@/composables/useAnalytics'
+
+const { trackCtaClick } = useAnalytics()
+
+const emit = defineEmits(['open-register'])
+
+const handleStartNow = () => {
+  trackCtaClick('cta-start-now')
+}
+
+const handleCreateAccount = () => {
+  trackCtaClick('cta-create-account')
+  emit('open-register')
+}
+</script>
+
 <template>
   <section class="py-20 relative overflow-hidden">
     <div class="container mx-auto px-6 relative z-10">
@@ -13,12 +30,14 @@
         <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
           <button
             class="px-8 py-3 bg-neon-green text-gray-900 font-medium hover:bg-neon-green-dark transition-all duration-300 shadow-neon !rounded-button whitespace-nowrap cursor-pointer"
+            @click="handleStartNow"
           >
             Розпочати зараз
           </button>
 
           <button
             class="px-8 py-3 border border-neon-green text-neon-green font-medium hover:bg-gray-800 transition-all duration-300 !rounded-button whitespace-nowrap cursor-pointer"
+            @click="handleCreateAccount"
           >
             Створити акаунт
           </button>

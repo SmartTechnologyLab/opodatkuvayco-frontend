@@ -1,7 +1,10 @@
 <script setup lang="ts">
-// FAQ items
 import { ref } from 'vue'
+import { useAnalytics } from '@/composables/useAnalytics'
 
+const { trackFaqExpanded } = useAnalytics()
+
+// FAQ items data
 const faqItems = ref([
   {
     question: 'Чи можна використовувати сервіс без реєстрації?',
@@ -35,9 +38,16 @@ const faqItems = ref([
   }
 ])
 
-// Toggle FAQ item
+// Toggle FAQ item visibility and track analytics
 const toggleFaq = (index: number) => {
-  faqItems.value[index].isOpen = !faqItems.value[index].isOpen
+  const item = faqItems.value[index]
+  const wasOpen = item.isOpen
+  item.isOpen = !item.isOpen
+
+  // Track when FAQ is expanded (not collapsed)
+  if (!wasOpen) {
+    trackFaqExpanded(item.question)
+  }
 }
 </script>
 
