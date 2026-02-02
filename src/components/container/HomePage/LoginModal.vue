@@ -122,8 +122,11 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useAnalytics } from '@/composables/useAnalytics'
 
-// Определение props и emit событий
+const { trackLogin } = useAnalytics()
+
+// Props and emits definition
 defineProps({
   modelValue: {
     type: Boolean,
@@ -133,9 +136,14 @@ defineProps({
 
 const emit = defineEmits(['update:modelValue', 'login', 'switch-to-register'])
 
-// Локальные состояния
+// Local state
+const email = ref('')
+const password = ref('')
+const rememberMe = ref(false)
+const isLoading = ref(false)
+const errorMessage = ref('')
 
-// Метод для закрытия модального окна
+// Close modal and reset form
 const closeModal = () => {
   email.value = ''
   password.value = ''
@@ -143,11 +151,7 @@ const closeModal = () => {
   emit('update:modelValue', false)
 }
 
-const email = ref('')
-const password = ref('')
-const rememberMe = ref(false)
-const isLoading = ref(false)
-const errorMessage = ref('')
+// Form validation
 const validateForm = () => {
   if (!email.value) {
     errorMessage.value = 'Будь ласка, введіть електронну пошту'
@@ -163,6 +167,8 @@ const validateForm = () => {
   }
   return true
 }
+
+// Handle login form submission
 const handleLogin = async () => {
   errorMessage.value = ''
   if (!validateForm()) {
@@ -170,11 +176,12 @@ const handleLogin = async () => {
   }
   isLoading.value = true
   try {
-    // Імітація API запиту
+    // Simulate API request
     await new Promise((resolve) => setTimeout(resolve, 1500))
-    // Тут має бути реальний API запит
+    // TODO: Replace with real API call
     if (email.value === 'test@example.com' && password.value === 'password') {
-      // Успішний вхід
+      // Successful login
+      trackLogin()
       closeModal()
     } else {
       throw new Error('Невірний email або пароль')
@@ -186,7 +193,7 @@ const handleLogin = async () => {
   }
 }
 
-// Метод для переключения на окно регистрации
+// Switch to registration modal
 const switchToRegister = () => {
   closeModal()
   emit('switch-to-register')
