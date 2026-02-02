@@ -10,6 +10,9 @@
     <!-- Options Section -->
     <OptionsSection />
 
+    <!-- Donation Section -->
+    <DonationSection id="donation" />
+
     <!-- Benefits Section -->
     <!--    <BenefitsSection />-->
 
@@ -42,6 +45,7 @@ import DemoSection from '@/components/container/HomePage/DemoSection.vue'
 // import TestimonialsSection from '@/components/container/HomePage/TestimonialsSection.vue'
 // import CtaSection from '@/components/container/HomePage/CtaSection.vue'
 import OptionsSection from '@/components/container/HomePage/OptionsSection.vue'
+import DonationSection from '@/components/container/HomePage/DonationSection.vue'
 // import BenefitsSection from '@/components/container/HomePage/BenefitsSection.vue'
 // import SecuritySection from '@/components/container/HomePage/SecuritySection.vue'
 // import FaqSection from '@/components/container/HomePage/FaqSection.vue'

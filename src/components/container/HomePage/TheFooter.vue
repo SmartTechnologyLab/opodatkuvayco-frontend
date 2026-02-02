@@ -97,6 +97,15 @@
                 Інструкція зі сплати податків
               </a>
             </li>
+
+            <li>
+              <a
+                href="#donation"
+                class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer"
+              >
+                Підтримати проєкт
+              </a>
+            </li>
           </ul>
         </div>
 
