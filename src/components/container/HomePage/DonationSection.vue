@@ -33,20 +33,20 @@
             <p class="text-gray-400 text-sm">{{ t('donation.monobank.description') }}</p>
           </a>
 
-          <!-- PayPal -->
+          <!-- Crypto -->
           <a
-            href="https://www.paypal.com/donate/?hosted_button_id=YOUR_BUTTON_ID"
+            href="https://YOUR_CRYPTO_DONATION_LINK"
             target="_blank"
             rel="noopener noreferrer"
             class="donation-card group"
           >
             <div class="donation-icon">
-              <font-awesome-icon :icon="['fab', 'paypal']" class="text-3xl" />
+              <font-awesome-icon :icon="['fas', 'coins']" class="text-3xl" />
             </div>
 
-            <h3 class="text-lg font-semibold mb-2">{{ t('donation.paypal.title') }}</h3>
+            <h3 class="text-lg font-semibold mb-2">{{ t('donation.crypto.title') }}</h3>
 
-            <p class="text-gray-400 text-sm">{{ t('donation.paypal.description') }}</p>
+            <p class="text-gray-400 text-sm">{{ t('donation.crypto.description') }}</p>
           </a>
         </div>
 
