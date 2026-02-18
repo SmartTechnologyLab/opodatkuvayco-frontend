@@ -10,7 +10,7 @@ export const seoConfig: Record<string, SeoMetaConfig> = {
     ogTitle: 'Оподаткувайко - Розрахунок податків з інвестиційної діяльності',
     ogDescription:
       'Автоматизований розрахунок податків з інвестицій на основі брокерської звітності. Підтримка Interactive Brokers та Freedom Finance. Просто, точно, ефективно.',
-    canonical: 'https://opodatkuvayco.com/'
+    canonical: 'https://opodatkuv.ayco.group/'
   },
   about: {
     title: 'Про нас - Оподаткувайко',
@@ -20,7 +20,7 @@ export const seoConfig: Record<string, SeoMetaConfig> = {
     ogTitle: 'Про Оподаткувайко - Хто ми і що робимо',
     ogDescription:
       'Оподаткувайко допомагає інвесторам автоматизувати розрахунок податків на основі брокерської звітності. Підтримка Interactive Brokers та Freedom Finance.',
-    canonical: 'https://opodatkuvayco.com/about'
+    canonical: 'https://opodatkuv.ayco.group/about'
   },
   register: {
     title: 'Реєстрація - Оподаткувайко',
@@ -30,7 +30,7 @@ export const seoConfig: Record<string, SeoMetaConfig> = {
     ogTitle: 'Створити акаунт на Оподаткувайко',
     ogDescription:
       'Реєстрація дає доступ до розширених функцій: збереження історії розрахунків, завантаження брокерських звітів, експорт даних.',
-    canonical: 'https://opodatkuvayco.com/register',
+    canonical: 'https://opodatkuv.ayco.group/register',
     robots: 'noindex, nofollow'
   },
   policy: {
@@ -40,7 +40,7 @@ export const seoConfig: Record<string, SeoMetaConfig> = {
     keywords: 'політика конфіденційності, захист даних, приватність, GDPR',
     ogTitle: 'Політика конфіденційності - Opodatkuvayco',
     ogDescription: 'Як ми збираємо та захищаємо ваші персональні дані. Прозора політика конфіденційності.',
-    canonical: 'https://opodatkuvayco.com/policy',
+    canonical: 'https://opodatkuv.ayco.group/policy',
     robots: 'noindex, follow'
   },
   terms: {
@@ -50,7 +50,7 @@ export const seoConfig: Record<string, SeoMetaConfig> = {
     keywords: 'умови використання, правила, terms of service, користувацька угода',
     ogTitle: 'Умови використання сервісу - Opodatkuvayco',
     ogDescription: 'Правила та умови користування калькулятором податків Opodatkuvayco.',
-    canonical: 'https://opodatkuvayco.com/terms',
+    canonical: 'https://opodatkuv.ayco.group/terms',
     robots: 'noindex, follow'
   }
 }

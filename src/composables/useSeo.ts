@@ -20,14 +20,15 @@ const defaultConfig: SeoMetaConfig = {
   title: 'Оподаткувайко - Автоматизований розрахунок податків з інвестицій',
   description:
     'Інноваційний інструмент для автоматизованого розрахунку податків з інвестиційної діяльності. Підтримка Interactive Brokers та Freedom Finance.',
-  keywords: 'податки з інвестицій, розрахунок податків інвестиції, Interactive Brokers податки, Freedom Finance податки, брокерський звіт, податки трейдинг',
-  ogImage: 'https://opodatkuvayco.com/og-image.jpg',
+  keywords:
+    'податки з інвестицій, розрахунок податків інвестиції, Interactive Brokers податки, Freedom Finance податки, брокерський звіт, податки трейдинг',
+  ogImage: 'https://opodatkuv.ayco.group/og-image.jpg',
   robots: 'index, follow'
 }
 
 export function useSeo(config: SeoMetaConfig = {}) {
   const router = useRouter()
-  const siteUrl = 'https://opodatkuvayco.com'
+  const siteUrl = 'https://opodatkuv.ayco.group'
 
   const updateMetaTags = () => {
     const fullConfig = { ...defaultConfig, ...config }
@@ -51,11 +52,7 @@ export function useSeo(config: SeoMetaConfig = {}) {
 
     // Twitter tags
     updateMetaTag('property', 'twitter:title', fullConfig.twitterTitle || fullConfig.title)
-    updateMetaTag(
-      'property',
-      'twitter:description',
-      fullConfig.twitterDescription || fullConfig.description
-    )
+    updateMetaTag('property', 'twitter:description', fullConfig.twitterDescription || fullConfig.description)
     updateMetaTag('property', 'twitter:image', fullConfig.twitterImage || fullConfig.ogImage)
     updateMetaTag('property', 'twitter:url', fullConfig.ogUrl || `${siteUrl}${router.currentRoute.value.path}`)
 

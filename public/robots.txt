@@ -6,4 +6,4 @@ Allow: /
 Disallow: /register
 
 # Sitemap
-Sitemap: https://opodatkuvayco.com/sitemap.xml
+Sitemap: https://opodatkuv.ayco.group/sitemap.xml
