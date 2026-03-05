@@ -97,6 +97,17 @@
                 Інструкція зі сплати податків
               </a>
             </li>
+
+            <li>
+              <a
+                href="#"
+                @click.prevent="showDonateModal = true"
+                class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer"
+              >
+                <i class="fas fa-heart mr-1"></i>
+                Підтримати проект
+              </a>
+            </li>
           </ul>
         </div>
 
@@ -152,11 +163,17 @@
         <!--        </div>-->
       </div>
     </div>
+
+    <DonateModal v-model="showDonateModal" />
   </footer>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import DonateModal from './DonateModal.vue'
 import { handleTelegramLink } from '@/helpers/telegram'
+
+const showDonateModal = ref(false)
 
 function handleTelegramChatClick(event: Event) {
   handleTelegramLink(event, 'investuvayco')

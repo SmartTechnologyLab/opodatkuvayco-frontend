@@ -29,6 +29,14 @@
           >
             Demo
           </a>
+
+          <button
+            @click="showDonateModal = true"
+            class="text-neon-green border border-neon-green px-4 py-1.5 rounded-md hover:bg-neon-green hover:text-gray-900 transition-all duration-300 text-sm font-medium"
+          >
+            <i class="fas fa-heart mr-1.5"></i>
+            Підтримати
+          </button>
           <!--                    <a href="#features" class="hover:text-neon-green transition-colors duration-300 cursor-pointer">Можливості</a>-->
 
           <!--          <a href="#calculator" class="hover:text-neon-green transition-colors duration-300 cursor-pointer">-->
@@ -41,11 +49,16 @@
         </div>
       </div>
     </nav>
+    <DonateModal v-model="showDonateModal" />
   </header>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import DonateModal from './DonateModal.vue'
+
+const showDonateModal = ref(false)
 
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -53,7 +66,7 @@ const scrollToTop = () => {
 
 const router = useRouter()
 
-function scrollToDemo(event) {
+function scrollToDemo(event: Event) {
   event.preventDefault()
 
   if (router.currentRoute.value.path !== '/') {
