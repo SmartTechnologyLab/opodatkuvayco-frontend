@@ -49,6 +49,7 @@
         </div>
       </div>
     </nav>
+
     <DonateModal v-model="showDonateModal" />
   </header>
 </template>
