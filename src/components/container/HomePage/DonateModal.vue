@@ -25,7 +25,9 @@
 
         <div v-if="walletAddress">
           <div class="bg-white rounded-lg p-3 inline-block mb-4">
-            <canvas ref="qrCanvas"></canvas>
+            <canvas v-show="!qrError" ref="qrCanvas"></canvas>
+
+            <p v-if="qrError" class="text-red-400 text-xs p-4">Не вдалося згенерувати QR-код</p>
           </div>
 
           <div class="mb-2">
@@ -47,7 +49,9 @@
             </button>
           </div>
 
-          <p class="text-xs mt-2 h-4" :class="copied ? 'text-neon-green' : 'invisible'">Адресу скопійовано!</p>
+          <p class="text-xs mt-2 h-4" :class="copied ? 'text-neon-green' : copyError ? 'text-red-400' : 'invisible'">
+            {{ copied ? 'Адресу скопійовано!' : 'Не вдалося скопіювати адресу' }}
+          </p>
         </div>
 
         <div v-else class="text-gray-500 text-sm py-8">Адреса гаманця не налаштована.</div>
@@ -67,17 +71,29 @@ const { isVisible, closeModal } = useDonateModal()
 const walletAddress = import.meta.env.VITE_DONATE_USDT_ADDRESS || ''
 const qrCanvas = ref<HTMLCanvasElement | null>(null)
 const copied = ref(false)
+const copyError = ref(false)
+const qrError = ref(false)
 
 const { trackDonateModalOpened, trackDonateAddressCopied } = useAnalytics()
 
 async function copyAddress() {
   if (!walletAddress) return
-  await navigator.clipboard.writeText(walletAddress)
-  copied.value = true
-  trackDonateAddressCopied()
-  setTimeout(() => {
-    copied.value = false
-  }, 2000)
+  try {
+    if (!navigator.clipboard) {
+      throw new Error('Clipboard API not available')
+    }
+    await navigator.clipboard.writeText(walletAddress)
+    copied.value = true
+    trackDonateAddressCopied()
+    setTimeout(() => {
+      copied.value = false
+    }, 2000)
+  } catch {
+    copyError.value = true
+    setTimeout(() => {
+      copyError.value = false
+    }, 2000)
+  }
 }
 
 watch(isVisible, async (isOpen) => {
@@ -86,15 +102,20 @@ watch(isVisible, async (isOpen) => {
     if (walletAddress) {
       await nextTick()
       if (qrCanvas.value) {
-        QRCode.toCanvas(qrCanvas.value, walletAddress, {
-          width: 180,
-          margin: 0,
-          color: { dark: '#000000', light: '#ffffff' }
-        })
+        try {
+          await QRCode.toCanvas(qrCanvas.value, walletAddress, {
+            width: 180,
+            margin: 0,
+            color: { dark: '#000000', light: '#ffffff' }
+          })
+        } catch {
+          qrError.value = true
+        }
       }
     }
   } else {
     copied.value = false
+    qrError.value = false
   }
 })
 </script>
