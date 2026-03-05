@@ -103,20 +103,39 @@
           </label>
         </div>
 
+        <!-- Donate CTA -->
+        <div
+          v-if="reportData?.total"
+          class="mt-6 p-4 bg-gray-800 rounded-lg border border-gray-700 flex flex-col sm:flex-row items-center justify-between gap-4"
+        >
+          <p class="text-gray-300 text-sm">
+            <font-awesome-icon :icon="['fas', 'heart']" class="text-neon-green mr-1" />
+            Якщо сервіс був корисний — ви можете подякувати донатом
+          </p>
+
+          <button
+            @click="openDonateModal"
+            class="w-min text-neon-green border border-neon-green px-4 py-2 rounded-md hover:bg-neon-green hover:text-gray-900 transition-all duration-300 text-sm whitespace-nowrap"
+          >
+            Підтримати проект
+          </button>
+        </div>
+
         <!-- Disclaimer -->
         <div v-if="reportData?.total" class="mt-6 p-4 bg-gray-800 bg-opacity-60 rounded-lg border border-gray-700">
           <p class="text-gray-300 text-sm leading-relaxed">
-            <span class="font-semibold text-neon-green">⚠️ Важливо:</span> Всі розрахунки носять консультативний характер.
-            Ми прагнемо максимально точно проводити розрахунки, але у нас недостатньо інформації по різних кейсах та фінансових інструментах,
-            оскільки у нас немає прикладів звітів по них. Якщо у вас є специфічні угоди, ми будемо раді отримати від вас звіти з ними,
-            і тоді ми зможемо зробити наш сервіс більш точним та зручним для вас.
+            <span class="font-semibold text-neon-green">⚠️ Важливо:</span> Всі розрахунки носять консультативний
+            характер. Ми прагнемо максимально точно проводити розрахунки, але у нас недостатньо інформації по різних
+            кейсах та фінансових інструментах, оскільки у нас немає прикладів звітів по них. Якщо у вас є специфічні
+            угоди, ми будемо раді отримати від вас звіти з ними, і тоді ми зможемо зробити наш сервіс більш точним та
+            зручним для вас.
             <a
               href="https://t.me/investuvayco"
               @click="handleTelegramClick"
               class="text-neon-green hover:text-neon-green-dark underline font-medium transition-colors"
             >
-              Пишіть нам в Telegram
-            </a>.
+              Пишіть нам в Telegram </a
+            >.
           </p>
         </div>
       </div>
@@ -130,6 +149,9 @@ import { Currency } from '@/constants/currencies'
 import { ref, watch } from 'vue'
 import TestDataTableForUser from '@/components/TestDataTableForUser/TestDataTableForUser.vue'
 import { handleTelegramLink } from '@/helpers/telegram'
+import { useDonateModal } from '@/composables/useDonateModal'
+
+const { openModal: openDonateModal } = useDonateModal()
 
 const activeTab = ref<'demo' | 'download'>('demo')
 

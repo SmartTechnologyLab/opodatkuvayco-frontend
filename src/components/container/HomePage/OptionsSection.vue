@@ -8,7 +8,7 @@
         <p class="text-gray-400 max-w-2xl mx-auto">Оберіть найзручніший для вас спосіб роботи з нашим сервісом</p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <!-- Option 1 -->
         <div
           class="bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-neon-green transition-all duration-300 h-full flex flex-col"

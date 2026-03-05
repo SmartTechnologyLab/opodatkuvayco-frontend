@@ -4,11 +4,20 @@ import generalConfig from '@/config'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCheck, faStar, faCalculator, faRobot } from '@fortawesome/free-solid-svg-icons'
+import {
+  faCheck,
+  faStar,
+  faCalculator,
+  faRobot,
+  faHeart,
+  faCopy,
+  faXmark,
+  faBars
+} from '@fortawesome/free-solid-svg-icons'
 import { faGoogleDrive } from '@fortawesome/free-brands-svg-icons'
 import { initAnalytics } from '@/plugins/analytics'
 
-library.add(faCheck, faStar, faCalculator, faRobot, faGoogleDrive)
+library.add(faCheck, faStar, faCalculator, faRobot, faGoogleDrive, faHeart, faCopy, faXmark, faBars)
 
 import App from './App.vue'
 import router from './router'
