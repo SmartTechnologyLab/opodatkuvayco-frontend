@@ -44,6 +44,7 @@ jobs:
       VITE_MILITARY_RATE: ${{ vars.VITE_MILITARY_RATE }}
       VITE_TAX_RATE: ${{ vars.VITE_TAX_RATE }}
       VITE_DIVIDEND_RATE: ${{ vars.VITE_DIVIDEND_RATE }}
+      VITE_GA_MEASUREMENT_ID: ${{ vars.VITE_GA_MEASUREMENT_ID }}
     environment:
       name: production
     steps:
