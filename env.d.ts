@@ -12,6 +12,7 @@ declare module '*.vue' {
 
 interface ImportMetaEnv {
   readonly VITE_GA_MEASUREMENT_ID?: string
+  readonly VITE_DONATE_USDT_ADDRESS?: string
 }
 
 interface ImportMeta {
