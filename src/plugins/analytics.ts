@@ -31,11 +31,3 @@ export function initAnalytics(router: Router): void {
 
   console.info('[Analytics] Google Analytics initialized')
 }
-
-export function analyticsPlugin(router: Router) {
-  return {
-    install() {
-      initAnalytics(router)
-    }
-  }
-}
