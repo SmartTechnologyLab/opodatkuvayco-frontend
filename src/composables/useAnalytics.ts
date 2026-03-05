@@ -71,6 +71,20 @@ export function useAnalytics() {
     })
   }
 
+  const trackDonateModalOpened = (): void => {
+    trackEvent('donate_modal_opened', {
+      event_category: 'engagement',
+      event_label: 'crypto_usdt_trc20'
+    })
+  }
+
+  const trackDonateAddressCopied = (): void => {
+    trackEvent('donate_address_copied', {
+      event_category: 'conversion',
+      event_label: 'usdt_trc20'
+    })
+  }
+
   return {
     isEnabled,
     trackPageView,
@@ -80,6 +94,8 @@ export function useAnalytics() {
     trackRegistration,
     trackLogin,
     trackCtaClick,
-    trackFaqExpanded
+    trackFaqExpanded,
+    trackDonateModalOpened,
+    trackDonateAddressCopied
   }
 }
