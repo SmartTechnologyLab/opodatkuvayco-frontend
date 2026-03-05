@@ -2,6 +2,7 @@
 import { RouterView, useRoute } from 'vue-router'
 import TheHeader from '@/components/container/HomePage/TheHeader.vue'
 import TheFooter from '@/components/container/HomePage/TheFooter.vue'
+import DonateModal from '@/components/container/HomePage/DonateModal.vue'
 import { computed, ref } from 'vue'
 import { routesWithoutNavBar } from '@/router/common/routesWithoutNavBar.ts'
 
@@ -47,6 +48,8 @@ const showFooter = computed(() => !routesWithoutNavBar.includes(route.path))
   <RouterView />
 
   <TheFooter v-if="showFooter" />
+
+  <DonateModal />
 </template>
 
 <style>

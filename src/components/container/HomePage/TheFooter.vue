@@ -101,10 +101,10 @@
             <li>
               <a
                 href="#"
-                @click.prevent="showDonateModal = true"
+                @click.prevent="openDonateModal"
                 class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer"
               >
-                <i class="fas fa-heart mr-1"></i>
+                <font-awesome-icon :icon="['fas', 'heart']" class="mr-1" />
                 Підтримати проект
               </a>
             </li>
@@ -163,17 +163,14 @@
         <!--        </div>-->
       </div>
     </div>
-
-    <DonateModal v-model="showDonateModal" />
   </footer>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import DonateModal from './DonateModal.vue'
 import { handleTelegramLink } from '@/helpers/telegram'
+import { useDonateModal } from '@/composables/useDonateModal'
 
-const showDonateModal = ref(false)
+const { openModal: openDonateModal } = useDonateModal()
 
 function handleTelegramChatClick(event: Event) {
   handleTelegramLink(event, 'investuvayco')
