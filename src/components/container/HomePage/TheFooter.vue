@@ -89,13 +89,12 @@
             </li>
 
             <li>
-              <a
-                href="https://telegra.ph/Splata-podatk%D1%96v-z-%D1%96nvestic%D1%96jnoi-d%D1%96yalnost%D1%96-fondovij-rinok-04-28"
-                target="_blank"
+              <router-link
+                to="/guide"
                 class="text-gray-400 hover:text-neon-green transition-colors duration-300 cursor-pointer"
               >
                 Інструкція зі сплати податків
-              </a>
+              </router-link>
             </li>
 
             <li>

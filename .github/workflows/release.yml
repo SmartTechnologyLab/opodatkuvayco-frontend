@@ -45,6 +45,8 @@ jobs:
       VITE_TAX_RATE: ${{ vars.VITE_TAX_RATE }}
       VITE_DIVIDEND_RATE: ${{ vars.VITE_DIVIDEND_RATE }}
       VITE_GA_MEASUREMENT_ID: ${{ vars.VITE_GA_MEASUREMENT_ID }}
+      VITE_DONATE_USDT_ADDRESS: ${{ vars.VITE_DONATE_USDT_ADDRESS }}
+      VITE_TAX_FREE_THRESHOLD_UAH: ${{ vars.VITE_TAX_FREE_THRESHOLD_UAH }}
     environment:
       name: production
     steps:

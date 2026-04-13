@@ -1,4 +1,4 @@
-import type { Meta, StoryFn } from '@storybook/vue3'
+import type { Meta, StoryFn } from '@storybook/vue3-vite'
 import TestDataTableForUser from './TestDataTableForUser.vue'
 
 const meta: Meta<typeof TestDataTableForUser> = {

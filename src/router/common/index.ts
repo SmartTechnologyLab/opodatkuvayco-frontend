@@ -3,5 +3,6 @@ export enum Routes {
   REGISTER_PAGE = '/register',
   POLICY_PAGE = '/policy',
   TERMS_PAGE = '/terms',
-  ABOUT_PAGE = '/about'
+  ABOUT_PAGE = '/about',
+  GUIDE_PAGE = '/guide'
 }

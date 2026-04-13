@@ -45,7 +45,9 @@ const showFooter = computed(() => !routesWithoutNavBar.includes(route.path))
     @logout="handleLogout"
   />
 
-  <RouterView />
+  <main class="flex-1">
+    <RouterView />
+  </main>
 
   <TheFooter v-if="showFooter" />
 

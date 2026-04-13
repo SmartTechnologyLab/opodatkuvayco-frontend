@@ -1,0 +1,8 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-neon-green: #14ffa5;
+  --color-neon-green-dark: #10db9e;
+}
+
+@source "../**/*.{vue,js,ts,jsx,tsx}";
