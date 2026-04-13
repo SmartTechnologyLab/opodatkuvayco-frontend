@@ -39,14 +39,16 @@ const tickers = ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'FB']
 
 const MILITARY_RATE = !isNaN(parseFloat(import.meta.env.VITE_MILITARY_RATE))
   ? parseFloat(import.meta.env.VITE_MILITARY_RATE)
-  : 0.015 // Default value for military rate
-const TAX_RATE = !isNaN(parseFloat(import.meta.env.VITE_TAX_RATE)) ? parseFloat(import.meta.env.VITE_TAX_RATE) : 0.05 // Default value for tax rate
+  : 0.05 // 5% (збігається з UI MILITARY_RATE_PCT)
+const TAX_RATE = !isNaN(parseFloat(import.meta.env.VITE_TAX_RATE)) ? parseFloat(import.meta.env.VITE_TAX_RATE) : 0.18 // 18% (збігається з UI TAX_RATE_PCT)
 
 const TAX_FREE_THRESHOLD = !isNaN(parseFloat(import.meta.env.VITE_TAX_FREE_THRESHOLD_UAH))
   ? parseFloat(import.meta.env.VITE_TAX_FREE_THRESHOLD_UAH)
   : 4240 // Default: 3028 × 1.4 = 4240 UAH on 2025
 
-console.debug(`Military Rate: ${MILITARY_RATE}, Tax Rate: ${TAX_RATE}, Tax-free threshold: ${TAX_FREE_THRESHOLD}`)
+if (import.meta.env.DEV) {
+  console.debug(`Military Rate: ${MILITARY_RATE}, Tax Rate: ${TAX_RATE}, Tax-free threshold: ${TAX_FREE_THRESHOLD}`)
+}
 // const DIVIDEND_RATE = parseFloat(import.meta.env.VITE_DIVIDEND_RATE)
 
 const randomDate = (start: Date, end: Date): Date => {
