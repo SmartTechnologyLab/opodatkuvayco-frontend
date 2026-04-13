@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="isVisible"
-    class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50"
+    class="fixed inset-0 bg-gray-900/75 flex items-center justify-center z-50"
     @click.self="closeModal"
   >
     <div class="bg-gray-800 p-8 rounded-lg w-full max-w-sm relative border border-gray-700">

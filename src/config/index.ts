@@ -1,32 +1,69 @@
 import { i18n } from '@/i18n'
 import type { App } from 'vue'
 import PrimeVue from 'primevue/config'
+import { definePreset } from '@primeuix/themes'
+import Aura from '@primeuix/themes/aura'
+import '@/assets/tailwind.css'
 import '@/assets/main.scss'
-import 'primevue/resources/themes/aura-dark-green/theme.css'
 import '@/assets/scss/styles/index.scss'
 
+const AppPreset = definePreset(Aura, {
+  semantic: {
+    primary: {
+      50: '#e6fff4',
+      100: '#b3ffdc',
+      200: '#80ffc4',
+      300: '#4dffac',
+      400: '#1affa5',
+      500: '#0BFF84',
+      600: '#10db9e',
+      700: '#0bb280',
+      800: '#088962',
+      900: '#046044',
+      950: '#023a29'
+    },
+    colorScheme: {
+      dark: {
+        surface: {
+          0: '#ffffff',
+          50: '#f8fafc',
+          100: '#f1f5f9',
+          200: '#e2e8f0',
+          300: '#cbd5e1',
+          400: '#9ca3af',
+          500: '#4b5563',
+          600: '#374151',
+          700: '#1f2937',
+          800: '#1a1e2d',
+          900: '#111827',
+          950: '#0b0f1a'
+        },
+        primary: {
+          color: '#0BFF84',
+          contrastColor: '#111827',
+          hoverColor: '#10db9e',
+          activeColor: '#0bb280'
+        },
+        highlight: {
+          background: '#0BFF84',
+          focusBackground: '#10db9e',
+          color: '#111827',
+          focusColor: '#111827'
+        }
+      }
+    }
+  }
+})
+
 export default (app: App<Element>) => {
+  document.documentElement.classList.add('dark')
   app.use(i18n)
   app.use(PrimeVue, {
     ripple: true,
     theme: {
-      dark: true,
-      colors: {
-        // базові
-        primary: '#0BFF84', // neon-green (DemoSection)
-        surface: '#1a1e2d', // bg-gray-900
-        'surface-card': '#1f2937', // bg-gray-800
-        'surface-section': '#1a1e2d', // bg-gray-900
-        'surface-border': '#374151', // border-gray-700
-
-        // тексти
-        text: '#ffffff', // білий
-        'text-secondary': '#9ca3af', // text-gray-400
-
-        // акцентні стани
-        'highlight-bg': '#0BFF84', // neon-green для активних/вибраних
-        'highlight-text': '#111827', // text-gray-900 для світлого тексту на акцентному фоні
-        'hover-bg': '#4b5563' // bg-gray-600 для hover
+      preset: AppPreset,
+      options: {
+        darkModeSelector: '.dark'
       }
     }
   })

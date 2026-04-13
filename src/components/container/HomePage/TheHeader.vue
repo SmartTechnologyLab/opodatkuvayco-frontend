@@ -144,6 +144,7 @@ function scrollToDemo() {
 const navLinks = [
   { label: 'Головна', to: '/', onClick: scrollToTop },
   { label: 'Про нас', to: '/about' },
+  { label: 'Інструкція', to: '/guide' },
   { label: 'Demo', href: '#demo', onClick: scrollToDemo }
 ]
 

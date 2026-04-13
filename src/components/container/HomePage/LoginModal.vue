@@ -1,5 +1,5 @@
 <template>
-  <div v-if="modelValue" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
+  <div v-if="modelValue" class="fixed inset-0 bg-gray-900/75 flex items-center justify-center z-50">
     <div class="bg-gray-800 p-8 rounded-lg w-full max-w-md relative border border-gray-700">
       <!-- Close button -->
       <button @click="closeModal" class="absolute top-4 right-4 text-gray-400 hover:text-white">
@@ -9,10 +9,7 @@
       <h2 class="text-2xl font-bold mb-6 text-white">Увійти до системи</h2>
       <!-- Login form -->
       <form @submit.prevent="handleLogin" class="space-y-4">
-        <div
-          v-if="errorMessage"
-          class="p-3 bg-red-500 bg-opacity-20 border border-red-500 text-red-500 rounded-md mb-4"
-        >
+        <div v-if="errorMessage" class="p-3 bg-red-500/20 border border-red-400 text-red-100 rounded-md mb-4">
           {{ errorMessage }}
         </div>
 

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import UiNumberInput from './UiNumberInput.vue'
 import { Currency } from '@/constants/currencies'
 

@@ -29,10 +29,12 @@
 
         <div
           v-if="errorMessage && activeTab === 'download'"
-          class="p-3 bg-red-500 bg-opacity-20 border border-red-500 text-red-500 rounded-md mb-4"
+          class="p-3 bg-red-500/20 border border-red-400 text-red-100 rounded-md mb-4"
         >
           {{ errorMessage }}
         </div>
+
+        <h3 class="text-2xl font-bold mb-4">Акції</h3>
 
         <div class="overflow-x-auto border border-gray-700 rounded-lg">
           <keep-alive>
@@ -44,41 +46,135 @@
           <!-- Используем flex-col на маленьких экранах и flex-row на средних и больших -->
           <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
             <div class="mb-2 md:mb-0">
-              <h3 class="text-lg font-semibold">Результат розрахунку:</h3>
+              <h4 class="text-lg font-semibold">Результат розрахунку:</h4>
 
               <p class="text-gray-400 text-sm">Дані за {{ YEAR }} рік</p>
             </div>
 
             <div class="flex flex-col sm:flex-row gap-4 sm:gap-8">
+              <div v-if="reportData?.isTaxFree" class="text-left sm:text-right">
+                <p class="text-xl font-bold text-neon-green">Не оподатковується</p>
+
+                <p class="text-gray-400 text-sm">Прибуток у межах неоподатковуваного порогу</p>
+              </div>
+
               <div v-if="reportData?.totalTaxFee" class="text-left sm:text-right">
-                <p class="text-xl font-bold text-neon-green">
-                  {{ $n(reportData.totalTaxFee, { style: 'currency', currency: Currency.UAH }) }}
+                <p
+                  class="text-xl font-bold text-neon-green cursor-pointer hover:brightness-125 transition select-none"
+                  title="Клікніть, щоб скопіювати"
+                  @click="copy('tax', Number(reportData.totalTaxFee))"
+                >
+                  <span v-if="copiedKey === 'tax'">Скопійовано ✓</span>
+
+                  <span v-else>{{ $n(reportData.totalTaxFee, { style: 'currency', currency: Currency.UAH }) }}</span>
                 </p>
 
-                <p class="text-gray-400 text-sm">ПДФО до сплати</p>
+                <p class="text-gray-400 text-sm">ПДФО ({{ TAX_RATE_PCT }}%)</p>
               </div>
 
               <div v-if="reportData?.totalMilitaryFee" class="text-left sm:text-right">
-                <p class="text-xl font-bold text-neon-green">
-                  {{ $n(reportData.totalMilitaryFee, { style: 'currency', currency: Currency.UAH }) }}
+                <p
+                  class="text-xl font-bold text-neon-green cursor-pointer hover:brightness-125 transition select-none"
+                  title="Клікніть, щоб скопіювати"
+                  @click="copy('mil', Number(reportData.totalMilitaryFee))"
+                >
+                  <span v-if="copiedKey === 'mil'">Скопійовано ✓</span>
+
+                  <span v-else>{{
+                    $n(reportData.totalMilitaryFee, { style: 'currency', currency: Currency.UAH })
+                  }}</span>
                 </p>
 
-                <p class="text-gray-400 text-sm">Військовий збір до сплати</p>
+                <p class="text-gray-400 text-sm">Військовий збір ({{ MILITARY_RATE_PCT }}%)</p>
               </div>
 
               <div v-if="reportData?.total" class="text-left sm:text-right">
                 <p
-                  :class="{
-                    'text-xl': true,
-                    'font-bold': true,
-                    'text-neon-green': reportData.total >= 0,
-                    'text-red-400': reportData.total < 0
-                  }"
+                  :class="[
+                    'text-xl font-bold cursor-pointer hover:brightness-125 transition select-none',
+                    reportData.total >= 0 ? 'text-neon-green' : 'text-red-400'
+                  ]"
+                  title="Клікніть, щоб скопіювати"
+                  @click="copy('total', Number(reportData.total))"
                 >
-                  {{ $n(reportData.total, { style: 'currency', currency: Currency.UAH }) }}
+                  <span v-if="copiedKey === 'total'">Скопійовано ✓</span>
+
+                  <span v-else>{{ $n(reportData.total, { style: 'currency', currency: Currency.UAH }) }}</span>
                 </p>
 
                 <p class="text-gray-400 text-sm">{{ reportData.total >= 0 ? 'Прибуток' : 'Збиток' }}</p>
+              </div>
+            </div>
+          </div>
+
+          <p class="mt-4 text-gray-500 text-xs italic leading-relaxed">
+            Інвестиційний прибуток не підлягає оподаткуванню, якщо його розмір за рік не перевищує
+            {{ $n(TAX_FREE_THRESHOLD, { style: 'currency', currency: Currency.UAH }) }}
+            (прожитковий мінімум × 1,4 на 2025 р.). Величина береться з налаштувань і може змінюватись щороку. Перевірте
+            актуальне значення.
+          </p>
+        </div>
+
+        <!-- Dividends Section -->
+        <div v-if="dividendsData" class="mt-10">
+          <h3 class="text-2xl font-bold mb-4">Дивіденди</h3>
+
+          <DividendsDataTable :data="dividendsData.dividends" />
+
+          <div class="mt-6 p-4 bg-gray-800 rounded-lg">
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+              <div class="mb-2 md:mb-0">
+                <h4 class="text-lg font-semibold">Результат розрахунку:</h4>
+
+                <p class="text-gray-400 text-sm">Податок сплачується завжди (без неоподатковуваного порогу)</p>
+              </div>
+
+              <div class="flex flex-col sm:flex-row gap-4 sm:gap-8">
+                <div class="text-left sm:text-right">
+                  <p
+                    class="text-xl font-bold text-neon-green cursor-pointer hover:brightness-125 transition select-none"
+                    title="Клікніть, щоб скопіювати"
+                    @click="copy('div-pdfo', Number(dividendsData.pdfo))"
+                  >
+                    <span v-if="copiedKey === 'div-pdfo'">Скопійовано ✓</span>
+
+                    <span v-else>{{ $n(dividendsData.pdfo, { style: 'currency', currency: Currency.UAH }) }}</span>
+                  </p>
+
+                  <p class="text-gray-400 text-sm">ПДФО ({{ DIVIDEND_RATE_PCT }}%)</p>
+                </div>
+
+                <div class="text-left sm:text-right">
+                  <p
+                    class="text-xl font-bold text-neon-green cursor-pointer hover:brightness-125 transition select-none"
+                    title="Клікніть, щоб скопіювати"
+                    @click="copy('div-mil', Number(dividendsData.militaryFee))"
+                  >
+                    <span v-if="copiedKey === 'div-mil'">Скопійовано ✓</span>
+
+                    <span v-else>{{
+                      $n(dividendsData.militaryFee, { style: 'currency', currency: Currency.UAH })
+                    }}</span>
+                  </p>
+
+                  <p class="text-gray-400 text-sm">Військовий збір ({{ MILITARY_RATE_PCT }}%)</p>
+                </div>
+
+                <div class="text-left sm:text-right">
+                  <p
+                    class="text-xl font-bold text-neon-green cursor-pointer hover:brightness-125 transition select-none"
+                    title="Клікніть, щоб скопіювати"
+                    @click="copy('div-total', Number(dividendsData.totalAmountUah))"
+                  >
+                    <span v-if="copiedKey === 'div-total'">Скопійовано ✓</span>
+
+                    <span v-else>{{
+                      $n(dividendsData.totalAmountUah, { style: 'currency', currency: Currency.UAH })
+                    }}</span>
+                  </p>
+
+                  <p class="text-gray-400 text-sm">Загальна сума дивідендів</p>
+                </div>
               </div>
             </div>
           </div>
@@ -144,14 +240,21 @@
 </template>
 
 <script setup lang="ts">
-import { type Deal, getDeal, getReport } from '@/components/common/DataTable/mocks'
+import { type Deal, getDeal, getDividendsReport, getReport } from '@/components/common/DataTable/mocks'
+import type { DividendsReport } from '@/components/common/DataTable/types'
+import { computed } from 'vue'
 import { Currency } from '@/constants/currencies'
 import { ref, watch } from 'vue'
 import TestDataTableForUser from '@/components/TestDataTableForUser/TestDataTableForUser.vue'
+import DividendsDataTable from '@/components/TestDataTableForUser/DividendsDataTable.vue'
+
+const dividendsReport = getDividendsReport()
 import { handleTelegramLink } from '@/helpers/telegram'
 import { useDonateModal } from '@/composables/useDonateModal'
+import { useClipboard } from '@/composables/useClipboard'
 
 const { openModal: openDonateModal } = useDonateModal()
+const { copy, copiedKey } = useClipboard()
 
 const activeTab = ref<'demo' | 'download'>('demo')
 
@@ -159,6 +262,7 @@ const reportData = ref<{
   total: number
   totalTaxFee: number
   totalMilitaryFee: number
+  isTaxFree?: boolean
   deals: Deal[]
 } | null>(null)
 
@@ -166,10 +270,33 @@ const fetchData = ref<{
   total: number
   totalTaxFee: number
   totalMilitaryFee: number
+  isTaxFree?: boolean
   deals: Deal[]
+  dividends?: DividendsReport
 } | null>(null)
 
+const dividendsData = computed<DividendsReport | null>(() => {
+  if (activeTab.value === 'demo') return dividendsReport
+  const apiDividends = fetchData.value?.dividends
+  if (!apiDividends?.dividends?.length) return null
+  return apiDividends
+})
+
 const YEAR = new Date().getFullYear() - 1
+
+const TAX_FREE_THRESHOLD = !isNaN(parseFloat(import.meta.env.VITE_TAX_FREE_THRESHOLD_UAH))
+  ? parseFloat(import.meta.env.VITE_TAX_FREE_THRESHOLD_UAH)
+  : 4240
+
+const TAX_RATE_PCT = !isNaN(parseFloat(import.meta.env.VITE_TAX_RATE))
+  ? Math.round(parseFloat(import.meta.env.VITE_TAX_RATE) * 1000) / 10
+  : 18
+const MILITARY_RATE_PCT = !isNaN(parseFloat(import.meta.env.VITE_MILITARY_RATE))
+  ? Math.round(parseFloat(import.meta.env.VITE_MILITARY_RATE) * 1000) / 10
+  : 5
+const DIVIDEND_RATE_PCT = !isNaN(parseFloat(import.meta.env.VITE_DIVIDEND_RATE))
+  ? Math.round(parseFloat(import.meta.env.VITE_DIVIDEND_RATE) * 1000) / 10
+  : 9
 
 watch(
   [activeTab, fetchData],

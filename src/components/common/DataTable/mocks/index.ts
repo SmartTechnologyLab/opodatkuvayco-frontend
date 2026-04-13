@@ -37,14 +37,16 @@ type DealOptions = {
 
 const tickers = ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'FB']
 
-const MILITARY_RATE = !isNaN(parseFloat(import.meta.env.VITE_MILITARY_RATE)) 
-  ? parseFloat(import.meta.env.VITE_MILITARY_RATE) 
-  : 0.015; // Default value for military rate
-const TAX_RATE = !isNaN(parseFloat(import.meta.env.VITE_TAX_RATE)) 
-  ? parseFloat(import.meta.env.VITE_TAX_RATE) 
-  : 0.05; // Default value for tax rate
+const MILITARY_RATE = !isNaN(parseFloat(import.meta.env.VITE_MILITARY_RATE))
+  ? parseFloat(import.meta.env.VITE_MILITARY_RATE)
+  : 0.015 // Default value for military rate
+const TAX_RATE = !isNaN(parseFloat(import.meta.env.VITE_TAX_RATE)) ? parseFloat(import.meta.env.VITE_TAX_RATE) : 0.05 // Default value for tax rate
 
-console.debug(`Military Rate: ${MILITARY_RATE}, Tax Rate: ${TAX_RATE}`)
+const TAX_FREE_THRESHOLD = !isNaN(parseFloat(import.meta.env.VITE_TAX_FREE_THRESHOLD_UAH))
+  ? parseFloat(import.meta.env.VITE_TAX_FREE_THRESHOLD_UAH)
+  : 4240 // Default: 3028 × 1.4 = 4240 UAH on 2025
+
+console.debug(`Military Rate: ${MILITARY_RATE}, Tax Rate: ${TAX_RATE}, Tax-free threshold: ${TAX_FREE_THRESHOLD}`)
 // const DIVIDEND_RATE = parseFloat(import.meta.env.VITE_DIVIDEND_RATE)
 
 const randomDate = (start: Date, end: Date): Date => {
@@ -106,14 +108,129 @@ export const getDeal = ({
   }
 }
 
-export const getReport = (deals: Deal[]): { total: number; totalMilitaryFee: number; totalTaxFee: number } => {
+import type { Dividend, DividendsReport } from '@/components/common/DataTable/types'
+
+export const getDividendsReport = (): DividendsReport => {
+  const dividends: Dividend[] = [
+    {
+      id: 'b574fc8b',
+      date: '2021-07-02T00:00:00.000Z',
+      ticker: 'KO.US',
+      isin: 'US1912161007',
+      currency: 'USD',
+      amount: 0.59,
+      amountPerOne: 0.42,
+      quantity: 2,
+      externalTax: 0,
+      externalTaxCurrency: 'USD',
+      rate: 27.3841,
+      amountUah: 16.156619,
+      externalTaxUah: 0
+    },
+    {
+      id: 'ee2f999d',
+      date: '2021-09-10T00:00:00.000Z',
+      ticker: 'MSFT.US',
+      isin: 'US5949181045',
+      currency: 'USD',
+      amount: 0.39,
+      amountPerOne: 0.56,
+      quantity: 1,
+      externalTax: 0,
+      externalTaxCurrency: 'USD',
+      rate: 26.7264,
+      amountUah: 10.423296,
+      externalTaxUah: 0
+    },
+    {
+      id: 'a2e19c4b',
+      date: '2021-09-25T00:00:00.000Z',
+      ticker: 'HOG.US',
+      isin: 'US4128221086',
+      currency: 'USD',
+      amount: 1.05,
+      amountPerOne: 0.15,
+      quantity: 10,
+      externalTax: 0,
+      externalTaxCurrency: 'USD',
+      rate: 26.5272,
+      amountUah: 27.85356,
+      externalTaxUah: 0
+    },
+    {
+      id: 'e4546b1a',
+      date: '2021-10-01T00:00:00.000Z',
+      ticker: 'PEP.US',
+      isin: 'US7134481081',
+      currency: 'USD',
+      amount: 0.76,
+      amountPerOne: 1.075,
+      quantity: 1,
+      externalTax: 0,
+      externalTaxCurrency: 'USD',
+      rate: 26.6175,
+      amountUah: 20.2293,
+      externalTaxUah: 0
+    },
+    {
+      id: '46535472',
+      date: '2021-10-05T00:00:00.000Z',
+      ticker: 'KO.US',
+      isin: 'US1912161007',
+      currency: 'USD',
+      amount: 1.76,
+      amountPerOne: 0.42,
+      quantity: 6,
+      externalTax: 0,
+      externalTaxCurrency: 'USD',
+      rate: 26.5722,
+      amountUah: 46.767072,
+      externalTaxUah: 0
+    },
+    {
+      id: '48bd4784',
+      date: '2021-12-10T00:00:00.000Z',
+      ticker: 'MSFT.US',
+      isin: 'US5949181045',
+      currency: 'USD',
+      amount: 0.43,
+      amountPerOne: 0.62,
+      quantity: 1,
+      externalTax: 0,
+      externalTaxCurrency: 'USD',
+      rate: 27.1013,
+      amountUah: 11.653559,
+      externalTaxUah: 0
+    }
+  ]
+  const DIVIDEND_RATE = !isNaN(parseFloat(import.meta.env.VITE_DIVIDEND_RATE))
+    ? parseFloat(import.meta.env.VITE_DIVIDEND_RATE)
+    : 0.09
+  const MIL_RATE = !isNaN(parseFloat(import.meta.env.VITE_MILITARY_RATE))
+    ? parseFloat(import.meta.env.VITE_MILITARY_RATE)
+    : 0.05
+  const totalAmountUah = dividends.reduce((acc, d) => acc + d.amountUah, 0)
+  return {
+    dividends,
+    totalAmountUah,
+    pdfo: totalAmountUah * DIVIDEND_RATE,
+    militaryFee: totalAmountUah * MIL_RATE
+  }
+}
+
+export const getReport = (
+  deals: Deal[]
+): { total: number; totalMilitaryFee: number; totalTaxFee: number; isTaxFree: boolean } => {
   const total = deals.reduce((acc, deal) => acc + deal.total, 0)
-  const totalMilitaryFee = total > 0 ? total * MILITARY_RATE : 0
-  const totalTaxFee = total > 0 ? total * TAX_RATE : 0
+  // Інвестиційний прибуток не оподатковується, якщо сумарно не перевищує поріг (прожитковий мінімум × 1.4).
+  const isTaxable = total > TAX_FREE_THRESHOLD
+  const totalMilitaryFee = isTaxable ? total * MILITARY_RATE : 0
+  const totalTaxFee = isTaxable ? total * TAX_RATE : 0
 
   return {
     total,
     totalMilitaryFee,
-    totalTaxFee
+    totalTaxFee,
+    isTaxFree: total > 0 && !isTaxable
   }
 }

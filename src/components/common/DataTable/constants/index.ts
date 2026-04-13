@@ -30,90 +30,105 @@ export const resultHeaders: TableHeaders[] = [
     header: 'Дата покупки',
     field: 'purchase.date',
     type: FormatType.Date,
-    size: [TableSize.LG]
+    size: [TableSize.LG],
+    sortable: true
   },
   {
     header: 'Кількість',
     field: 'quantity',
     type: FormatType.Number,
-    size: [TableSize.LG]
+    size: [TableSize.LG],
+    sortable: true
   },
   {
     header: 'Ціна',
     field: 'purchase.price',
     type: FormatType.CurrencyUSD,
-    size: [TableSize.LG]
+    size: [TableSize.LG],
+    sortable: true
   },
   {
     header: 'Сума',
     field: 'purchase.sum',
     type: FormatType.CurrencyUSD,
-    size: [TableSize.LG]
+    size: [TableSize.LG],
+    sortable: true
   },
   {
     header: 'Комісія',
     field: 'purchase.commission',
     type: FormatType.CurrencyUSD,
-    size: [TableSize.LG]
+    size: [TableSize.LG],
+    sortable: true
   },
   {
     header: 'Курс',
     field: 'purchase.rate',
     type: FormatType.CurrencyUAH,
-    size: [TableSize.LG]
+    size: [TableSize.LG],
+    sortable: true
   },
   {
     header: 'Покупка',
     field: 'purchase.uah',
     type: FormatType.CurrencyUAH,
-    size: [TableSize.LG, TableSize.SM]
+    size: [TableSize.LG, TableSize.SM],
+    sortable: true
   },
   {
     header: 'Дата продажу',
     field: 'sale.date',
     type: FormatType.Date,
-    size: [TableSize.LG]
+    size: [TableSize.LG],
+    sortable: true
   },
   {
     header: 'Ціна',
     field: 'sale.price',
     type: FormatType.CurrencyUSD,
-    size: [TableSize.LG]
+    size: [TableSize.LG],
+    sortable: true
   },
   {
     header: 'Сума',
     field: 'sale.sum',
     type: FormatType.CurrencyUSD,
-    size: [TableSize.LG]
+    size: [TableSize.LG],
+    sortable: true
   },
   {
     header: 'Комісія',
     field: 'sale.commission',
     type: FormatType.CurrencyUSD,
-    size: [TableSize.LG]
+    size: [TableSize.LG],
+    sortable: true
   },
   {
     header: 'Курс',
     field: 'sale.rate',
     type: FormatType.CurrencyUAH,
-    size: [TableSize.LG]
+    size: [TableSize.LG],
+    sortable: true
   },
   {
     header: 'Продаж',
     field: 'sale.uah',
     type: FormatType.CurrencyUAH,
-    size: [TableSize.LG, TableSize.SM]
+    size: [TableSize.LG, TableSize.SM],
+    sortable: true
   },
   {
     header: 'Всього',
     field: 'total',
     type: FormatType.CurrencyUAH,
-    size: [TableSize.LG, TableSize.SM]
+    size: [TableSize.LG, TableSize.SM],
+    sortable: true
   },
   {
     header: '%',
     field: 'percent',
     type: FormatType.Percent,
-    size: [TableSize.LG]
+    size: [TableSize.LG],
+    sortable: true
   }
 ]

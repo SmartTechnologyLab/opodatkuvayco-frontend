@@ -1,6 +1,6 @@
 <template>
   <!-- Registration Modal -->
-  <div v-if="modelValue" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
+  <div v-if="modelValue" class="fixed inset-0 bg-gray-900/75 flex items-center justify-center z-50">
     <div class="bg-gray-800 p-8 rounded-lg w-full max-w-md relative border border-gray-700">
       <!-- Close button -->
       <button @click="closeModal" class="absolute top-4 right-4 text-gray-400 hover:text-white">

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import UiSelectButton from '@/components/common/UiSelectButton/UiSelectButton.vue'
 import { Currency } from '@/constants/currencies'
 
