@@ -166,12 +166,14 @@ describe('DataTable', () => {
   it('should render own slots', () => {
     const BTN_TEXT = '+'
     const TITLE = 'Title'
-    const button = wrapper.find('button')
+    // перша кнопка у DataTable — toolbar "Копіювати для Ф1"; slot-кнопка з addRow — остання
+    const buttons = wrapper.findAll('button')
+    const slotButton = buttons[buttons.length - 1]
     const title = wrapper.find('h1')
 
-    expect(button).toBeDefined()
+    expect(slotButton).toBeDefined()
     expect(title).toBeDefined()
-    expect(button.text()).toStrictEqual(BTN_TEXT)
+    expect(slotButton.text()).toStrictEqual(BTN_TEXT)
     expect(title.text()).toStrictEqual(TITLE)
   })
 })
