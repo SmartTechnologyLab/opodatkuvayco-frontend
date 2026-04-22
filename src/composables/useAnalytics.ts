@@ -85,6 +85,13 @@ export function useAnalytics() {
     })
   }
 
+  const trackTelegramClick = (location: string): void => {
+    trackEvent('telegram_click', {
+      event_category: 'engagement',
+      event_label: location
+    })
+  }
+
   return {
     isEnabled,
     trackPageView,
@@ -96,6 +103,7 @@ export function useAnalytics() {
     trackCtaClick,
     trackFaqExpanded,
     trackDonateModalOpened,
-    trackDonateAddressCopied
+    trackDonateAddressCopied,
+    trackTelegramClick
   }
 }

@@ -252,9 +252,11 @@ const dividendsReport = getDividendsReport()
 import { handleTelegramLink } from '@/helpers/telegram'
 import { useDonateModal } from '@/composables/useDonateModal'
 import { useClipboard } from '@/composables/useClipboard'
+import { useAnalytics } from '@/composables/useAnalytics'
 
 const { openModal: openDonateModal } = useDonateModal()
 const { copy, copiedKey } = useClipboard()
+const { trackTelegramClick } = useAnalytics()
 
 const activeTab = ref<'demo' | 'download'>('demo')
 
@@ -365,6 +367,7 @@ watch(isLoading, () => {
 })
 
 function handleTelegramClick(event: Event) {
+  trackTelegramClick('demo-disclaimer')
   handleTelegramLink(event, 'investuvayco')
 }
 </script>
