@@ -168,10 +168,13 @@
 <script setup lang="ts">
 import { handleTelegramLink } from '@/helpers/telegram'
 import { useDonateModal } from '@/composables/useDonateModal'
+import { useAnalytics } from '@/composables/useAnalytics'
 
 const { openModal: openDonateModal } = useDonateModal()
+const { trackTelegramClick } = useAnalytics()
 
 function handleTelegramChatClick(event: Event) {
+  trackTelegramClick('footer')
   handleTelegramLink(event, 'investuvayco')
 }
 </script>
