@@ -214,8 +214,12 @@
 import { handleTelegramLink } from '@/helpers/telegram'
 import { useSeo } from '@/composables/useSeo'
 import { seoConfig } from '@/config/seo'
+import { useAnalytics } from '@/composables/useAnalytics'
+
+const { trackTelegramClick } = useAnalytics()
 
 function handleTelegramClick(event: Event) {
+  trackTelegramClick('policy-page')
   handleTelegramLink(event, 'investuvayco')
 }
 
