@@ -355,6 +355,7 @@
             target="_blank"
             rel="noopener"
             class="text-neon-green underline hover:opacity-80"
+            @click="handleTelegramClick"
             >Telegram-канал</a
           >
           . Офіційний портал ДПС:
@@ -390,8 +391,14 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useAnalytics } from '@/composables/useAnalytics'
 
+const { trackTelegramClick } = useAnalytics()
 const openedSrc = ref<string | null>(null)
+
+function handleTelegramClick() {
+  trackTelegramClick('guide-page')
+}
 
 function openImage(event: MouseEvent) {
   const target = event.currentTarget as HTMLImageElement
