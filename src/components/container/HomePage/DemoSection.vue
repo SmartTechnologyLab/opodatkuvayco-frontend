@@ -195,7 +195,14 @@
             class="px-8 w-full flex justify-center py-3 bg-neon-green text-gray-900 font-medium hover:bg-neon-green-dark transition-all duration-300 shadow-neon rounded-md cursor-pointer"
           >
             Завантажити звіт
-            <input id="file-upload" type="file" multiple class="hidden" @change="onFileUpload" />
+            <input
+              id="file-upload"
+              type="file"
+              multiple
+              accept=".json,.xml,.csv"
+              class="hidden"
+              @change="onFileUpload"
+            />
           </label>
         </div>
 
@@ -321,6 +328,13 @@ watch(
 const errorMessage = ref('')
 const isLoading = ref(false)
 
+function detectStockExchange(files: FileList): string {
+  const ext = files[0]?.name.split('.').pop()?.toLowerCase()
+  if (ext === 'csv') return 'ibkr_csv'
+  if (ext === 'xml') return 'ibkr'
+  return 'freedom_finance'
+}
+
 const onFileUpload = async (event: Event) => {
   isLoading.value = true
 
@@ -337,8 +351,10 @@ const onFileUpload = async (event: Event) => {
       formData.append('files', file)
     })
 
+    const stockExchange = detectStockExchange(files)
+
     const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/report/create-report?fileType=json&stockExchange=freedom_finance`,
+      `${import.meta.env.VITE_API_URL}/report/create-report?stockExchange=${stockExchange}`,
       {
         method: 'POST',
         body: formData
