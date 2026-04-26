@@ -195,7 +195,7 @@
             class="px-8 w-full flex justify-center py-3 bg-neon-green text-gray-900 font-medium hover:bg-neon-green-dark transition-all duration-300 shadow-neon rounded-md cursor-pointer"
           >
             Завантажити звіт
-            <input id="file-upload" type="file" multiple class="hidden" @input="onFileUpload" />
+            <input id="file-upload" type="file" multiple class="hidden" @change="onFileUpload" />
           </label>
         </div>
 

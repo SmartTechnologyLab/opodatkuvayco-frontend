@@ -20,8 +20,8 @@
     "generate:types": "node ./generateTypes.mjs"
   },
   "lint-staged": {
-    "*.{js,ts,vue,html,css}": "prettier --check",
-    "*.{js,ts,vue}": "eslint"
+    "*.{js,ts,vue,html,css}": "prettier --check --write src/",
+    "*.{js,ts,vue}": "eslint --fix"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.2.0",

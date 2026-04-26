@@ -3,7 +3,12 @@
     <div class="container mx-auto px-6">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
         <div>
-          <h3 class="text-xl font-bold text-white mb-4">Оподаткувайко</h3>
+          <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+            <img :src="logoSrc" alt="" width="28" height="28" class="shrink-0" />
+            <span class="flex items-baseline">
+              <span class="text-white">Opodatkuv</span><span class="text-neon-green">.ayco</span>
+            </span>
+          </h3>
 
           <p class="text-gray-400 mb-4">
             Інноваційний інструмент для автоматизованого розрахунку податків з інвестиційної діяльності.
@@ -144,22 +149,25 @@
         </div>
       </div>
 
-      <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
-        <p class="text-gray-400 text-sm mb-4 md:mb-0">© 2025 Оподаткувайко. Всі права захищені.</p>
+      <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-gray-400 text-sm">© 2025 Opodatkuv.ayco. Всі права захищені.</p>
 
-        <!--        <div class="flex space-x-4">-->
-        <!--          <span class="text-gray-400 flex items-center text-sm">-->
-        <!--            <i class="fab fa-cc-visa mr-1 text-lg"></i> Visa-->
-        <!--          </span>-->
-
-        <!--          <span class="text-gray-400 flex items-center text-sm">-->
-        <!--            <i class="fab fa-cc-mastercard mr-1 text-lg"></i> Mastercard-->
-        <!--          </span>-->
-
-        <!--          <span class="text-gray-400 flex items-center text-sm">-->
-        <!--            <i class="fab fa-paypal mr-1 text-lg"></i> PayPal-->
-        <!--          </span>-->
-        <!--        </div>-->
+        <a
+          href="https://ayco.group"
+          target="_blank"
+          rel="noopener"
+          class="group flex items-center gap-2 text-gray-500 hover:text-neon-green transition-colors duration-300 text-sm"
+          aria-label="Ayco Group — материнський бренд"
+        >
+          <span>Частина</span>
+          <img
+            :src="aycoGroupLogoSrc"
+            alt="Ayco Group"
+            width="100"
+            height="30"
+            class="h-6 w-auto opacity-80 group-hover:opacity-100 transition-opacity"
+          />
+        </a>
       </div>
     </div>
   </footer>
@@ -172,6 +180,9 @@ import { useAnalytics } from '@/composables/useAnalytics'
 
 const { openModal: openDonateModal } = useDonateModal()
 const { trackTelegramClick } = useAnalytics()
+
+const logoSrc = '/brand/logo.svg'
+const aycoGroupLogoSrc = '/brand/ayco-group-logo.svg'
 
 function handleTelegramChatClick(event: Event) {
   trackTelegramClick('footer')

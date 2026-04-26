@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" width="320" height="80" shape-rendering="geometricPrecision">
+  <defs>
+    <linearGradient id="opo-h-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14ffa5"/>
+      <stop offset="100%" stop-color="#00d9b3"/>
+    </linearGradient>
+  </defs>
+  <!-- Mark (60x60, rx=14) -->
+  <g transform="translate(8 10)">
+    <rect x="0" y="0" width="60" height="60" rx="14" ry="14" fill="url(#opo-h-grad)"/>
+    <g fill="#05060c" transform="scale(0.234)">
+      <circle cx="112" cy="128" r="58" fill="none" stroke="#05060c" stroke-width="20"/>
+      <circle cx="200" cy="196" r="14"/>
+    </g>
+  </g>
+  <!-- Wordmark -->
+  <text x="84" y="51"
+        font-family="'Space Grotesk', 'Inter', system-ui, sans-serif"
+        font-size="26" font-weight="700"
+        fill="#ffffff" letter-spacing="-0.5">Оподаткувайко</text>
+</svg>
