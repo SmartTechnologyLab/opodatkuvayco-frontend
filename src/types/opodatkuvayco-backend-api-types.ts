@@ -19,12 +19,14 @@ export enum ReportTypeEnum {
 
 export enum FileTypeEnum {
   Json = 'json',
-  Xml = 'xml'
+  Xml = 'xml',
+  Csv = 'csv'
 }
 
 export enum StockExchangeEnum {
   FreedomFinance = 'freedom_finance',
-  Ibkr = 'ibkr'
+  Ibkr = 'ibkr',
+  IbkrCsv = 'ibkr_csv'
 }
 
 export interface TransactionDetails {
