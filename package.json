@@ -20,7 +20,7 @@
     "generate:types": "node ./generateTypes.mjs"
   },
   "lint-staged": {
-    "*.{js,ts,vue,html,css}": "prettier --check --write src/",
+    "*.{js,ts,vue,html,css,scss,json,md}": "prettier --write",
     "*.{js,ts,vue}": "eslint --fix"
   },
   "dependencies": {
