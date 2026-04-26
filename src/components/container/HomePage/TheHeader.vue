@@ -3,8 +3,16 @@
     <nav class="border-b border-gray-800 bg-gray-900 py-4 relative">
       <div class="container mx-auto flex items-center justify-between px-6">
         <div class="flex items-center">
-          <router-link to="/" @click="scrollToTop" class="text-2xl font-bold text-neon-green cursor-pointer">
-            Оподаткувайко
+          <router-link
+            to="/"
+            @click="scrollToTop"
+            class="text-2xl font-bold cursor-pointer flex items-center gap-2"
+            aria-label="Opodatkuv.ayco — головна"
+          >
+            <img :src="logoSrc" alt="" width="36" height="36" class="shrink-0" />
+            <span class="flex items-baseline">
+              <span class="text-white">Opodatkuv</span><span class="text-neon-green">.ayco</span>
+            </span>
           </router-link>
         </div>
 
@@ -120,6 +128,8 @@ const { openModal: openDonateModal } = useDonateModal()
 const mobileMenuOpen = ref(false)
 const headerRef = ref<HTMLElement | null>(null)
 const router = useRouter()
+
+const logoSrc = '/brand/logo.svg'
 
 function closeMobileMenu() {
   mobileMenuOpen.value = false
