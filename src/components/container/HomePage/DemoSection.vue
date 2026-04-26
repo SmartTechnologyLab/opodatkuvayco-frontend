@@ -260,6 +260,7 @@ import { handleTelegramLink } from '@/helpers/telegram'
 import { useDonateModal } from '@/composables/useDonateModal'
 import { useClipboard } from '@/composables/useClipboard'
 import { useAnalytics } from '@/composables/useAnalytics'
+import { StockExchangeEnum } from '@/types/opodatkuvayco-backend-api-types'
 
 const { openModal: openDonateModal } = useDonateModal()
 const { copy, copiedKey } = useClipboard()
@@ -328,11 +329,11 @@ watch(
 const errorMessage = ref('')
 const isLoading = ref(false)
 
-function detectStockExchange(files: FileList): string {
+function detectStockExchange(files: FileList): StockExchangeEnum {
   const ext = files[0]?.name.split('.').pop()?.toLowerCase()
-  if (ext === 'csv') return 'ibkr_csv'
-  if (ext === 'xml') return 'ibkr'
-  return 'freedom_finance'
+  if (ext === 'csv') return StockExchangeEnum.IbkrCsv
+  if (ext === 'xml') return StockExchangeEnum.Ibkr
+  return StockExchangeEnum.FreedomFinance
 }
 
 const onFileUpload = async (event: Event) => {
