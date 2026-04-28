@@ -329,13 +329,6 @@ watch(
 const errorMessage = ref('')
 const isLoading = ref(false)
 
-function detectStockExchange(files: FileList): StockExchangeEnum {
-  const ext = files[0]?.name.split('.').pop()?.toLowerCase()
-  if (ext === 'csv') return StockExchangeEnum.IbkrCsv
-  if (ext === 'xml') return StockExchangeEnum.Ibkr
-  return StockExchangeEnum.FreedomFinance
-}
-
 const onFileUpload = async (event: Event) => {
   isLoading.value = true
 
@@ -352,10 +345,8 @@ const onFileUpload = async (event: Event) => {
       formData.append('files', file)
     })
 
-    const stockExchange = detectStockExchange(files)
-
     const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/report/create-report?stockExchange=${stockExchange}`,
+      `${import.meta.env.VITE_API_URL}/report/create-report`,
       {
         method: 'POST',
         body: formData
