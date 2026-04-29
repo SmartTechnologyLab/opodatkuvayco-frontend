@@ -17,18 +17,6 @@ export enum ReportTypeEnum {
   Normal = 'normal'
 }
 
-export enum FileTypeEnum {
-  Json = 'json',
-  Xml = 'xml',
-  Csv = 'csv'
-}
-
-export enum StockExchangeEnum {
-  FreedomFinance = 'freedom_finance',
-  Ibkr = 'ibkr',
-  IbkrCsv = 'ibkr_csv'
-}
-
 export interface TransactionDetails {
   /** @format date-time */
   date: string

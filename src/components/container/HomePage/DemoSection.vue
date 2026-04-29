@@ -260,7 +260,6 @@ import { handleTelegramLink } from '@/helpers/telegram'
 import { useDonateModal } from '@/composables/useDonateModal'
 import { useClipboard } from '@/composables/useClipboard'
 import { useAnalytics } from '@/composables/useAnalytics'
-import { StockExchangeEnum } from '@/types/opodatkuvayco-backend-api-types'
 
 const { openModal: openDonateModal } = useDonateModal()
 const { copy, copiedKey } = useClipboard()
@@ -345,13 +344,10 @@ const onFileUpload = async (event: Event) => {
       formData.append('files', file)
     })
 
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/report/create-report`,
-      {
-        method: 'POST',
-        body: formData
-      }
-    )
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/report/create-report`, {
+      method: 'POST',
+      body: formData
+    })
 
     const data = await response.json()
 
